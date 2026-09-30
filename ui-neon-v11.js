@@ -1,31 +1,19 @@
-// Interface V11 — painel coach fiel à referência neon aprovada.
+// Interface coach neon — estrutura fiel à referência aprovada.
 (function(){
- const q=(s,r=document)=>r.querySelector(s), qa=(s,r=document)=>[...r.querySelectorAll(s)];
- function isCoach(){return /Painel do Coach/i.test(document.body.innerText)}
+ const q=(s,r=document)=>r.querySelector(s),qa=(s,r=document)=>[...r.querySelectorAll(s)];
+ const coach=()=>/Painel do Coach/i.test(document.body.innerText);
+ function clickRoute(r){q(`.bottomnav [data-route="${r}"]`)?.click()}
  function openNewStudent(){
-  q('.neon-student-modal')?.remove();
-  const m=document.createElement('div');m.className='neon-student-modal record-overlay';
-  m.innerHTML=`<div class="record-modal neon-add-card"><div class="record-modal-head"><div><div class="eyebrow">NOVO ALUNO</div><h2>Adicionar aluno</h2></div><button class="record-x" type="button">×</button></div><p class="sub">Envie o link do Evolução Corporal para o aluno criar a conta. Assim que ele concluir o cadastro, aparecerá no seu painel.</p><button class="btn btn-primary btn-full neon-copy-link" type="button">Copiar link para o aluno</button><button class="btn btn-ghost btn-full neon-close" type="button" style="margin-top:10px">Fechar</button></div>`;
+  q('.neon-student-modal')?.remove();const m=document.createElement('div');m.className='neon-student-modal record-overlay';
+  m.innerHTML=`<div class="record-modal neon-add-card"><div class="record-modal-head"><div><div class="eyebrow">NOVO ALUNO</div><h2>Adicionar aluno</h2></div><button class="record-x" type="button">×</button></div><p class="sub">Envie o link do Evolução Corporal para o aluno criar a conta. Depois do cadastro ele aparecerá automaticamente no painel.</p><button class="btn btn-primary btn-full neon-copy-link" type="button">Copiar link para o aluno</button><button class="btn btn-ghost btn-full neon-close" type="button">Fechar</button></div>`;
   document.body.appendChild(m);const close=()=>m.remove();q('.record-x',m).onclick=close;q('.neon-close',m).onclick=close;m.onclick=e=>{if(e.target===m)close()};q('.neon-copy-link',m).onclick=async()=>{try{await navigator.clipboard.writeText(location.origin+location.pathname);q('.neon-copy-link',m).textContent='Link copiado ✓'}catch(_){prompt('Copie este endereço:',location.href)}};
  }
- function upgradeNav(){
-  const nav=q('.bottomnav');if(!nav||!isCoach())return;
-  if(nav.dataset.layout==='reference')return;
-  const old={};qa('[data-route]',nav).forEach(b=>old[b.dataset.route]=b);
-  nav.dataset.layout='reference';nav.innerHTML=`<button class="navbtn active" data-neon="home"><span class="ico">⌂</span><span>Início</span></button><button class="navbtn" data-neon="measures"><span class="ico">▥</span><span>Medidas</span></button><button class="navbtn neon-add" type="button"><span class="plus">+</span><span>Novo aluno</span></button><button class="navbtn" data-neon="coach"><span class="ico">♟</span><span>Alunos</span></button><button class="navbtn" data-neon="records"><span class="ico">▤</span><span>Registros</span></button>`;
-  qa('[data-neon]',nav).forEach(b=>b.onclick=()=>{const r=b.dataset.neon;if(r==='records'){const x=qa('.card').find(x=>/Últimos registros/i.test(x.innerText));if(x){x.scrollIntoView({behavior:'smooth',block:'center'});return}}if(r==='coach'){const x=qa('.card').find(x=>/^Alunos|\nAlunos/i.test(x.innerText));if(x){x.scrollIntoView({behavior:'smooth',block:'center'});return}}(old[r]||old.home)?.click()});
-  q('.neon-add',nav).onclick=openNewStudent;
+ function nav(){const n=q('.bottomnav');if(!n||!coach())return;if(n.dataset.neon==='2')return;n.dataset.neon='2';const routes={};qa('[data-route]',n).forEach(b=>routes[b.dataset.route]=b);n.innerHTML=`<button class="navbtn active" data-ref="home"><span class="ico">⌂</span><span>Início</span></button><button class="navbtn" data-ref="measures"><span class="ico">▥</span><span>Medidas</span></button><button class="navbtn neon-add"><span class="plus">+</span><span>Novo aluno</span></button><button class="navbtn" data-ref="students"><span class="ico">♟</span><span>Alunos</span></button><button class="navbtn" data-ref="records"><span class="ico">▤</span><span>Registros</span></button>`;q('[data-ref="home"]',n).onclick=()=>routes.home?.click();q('[data-ref="measures"]',n).onclick=()=>routes.measures?.click();q('.neon-add',n).onclick=openNewStudent;q('[data-ref="students"]',n).onclick=()=>q('.ref-students')?.scrollIntoView({behavior:'smooth',block:'center'});q('[data-ref="records"]',n).onclick=()=>q('.ref-records')?.scrollIntoView({behavior:'smooth',block:'center'});}
+ function layout(){if(!coach())return;const main=q('#content');if(!main)return;const hero=q('.premium-brand',main),billing=q('.billing-v11',main),welcome=q('.coach-welcome',main);const cards=qa(':scope > .card',main);const featured=cards.find(c=>/Abrir ficha completa/i.test(c.innerText));const students=cards.find(c=>/Acompanhamento[\s\S]*Alunos/i.test(c.innerText));const records=cards.find(c=>/Últimos registros/i.test(c.innerText));if(hero){hero.classList.add('ref-hero');const h=q('h1',hero);if(h)h.textContent='Evolução Corporal';const names=q('.names',hero);if(names)names.textContent='André Salles • Silvana Salles';const tag=q('.tagline',hero);if(tag)tag.textContent='Disciplina gera resultados';}
+  if(welcome)welcome.classList.add('ref-welcome');if(billing)billing.classList.add('ref-billing','floating-card');if(featured){featured.classList.add('ref-featured','floating-card');const e=q('.eyebrow',featured);if(e)e.textContent='ALUNO EM DESTAQUE';}if(students)students.classList.add('ref-students','floating-card');if(records)records.classList.add('ref-records','floating-card');
+  if(students&&records){let grid=q('.ref-lower-grid',main);if(!grid){grid=document.createElement('div');grid.className='ref-lower-grid';students.before(grid);grid.append(students,records)}}
+  if(hero&&billing&&hero.nextElementSibling!==billing){hero.after(billing)}
  }
- function classify(){
-  if(!isCoach())return;
-  const hero=q('.premium-brand');if(hero)hero.classList.add('ref-hero');
-  qa('.card').forEach(c=>{const t=c.innerText||'';if(/Aluno em destaque|Carlos Roberto|Abrir ficha completa/i.test(t))c.classList.add('ref-featured');if(/^Alunos|\nAlunos/i.test(t))c.classList.add('ref-students');if(/Últimos registros/i.test(t))c.classList.add('ref-records')});
-  const billing=q('.billing-v11');if(billing)billing.classList.add('ref-billing');
-  // Ordem da referência: banner, mensalidades, destaque, alunos/registros.
-  const main=hero?.parentElement;
-  if(main&&billing&&hero.parentElement===billing.parentElement){main.insertBefore(hero,billing);hero.after(billing)}
- }
- function decorate(){upgradeNav();classify();qa('.card,.billing-v11,.metric').forEach(x=>x.classList.add('floating-card'))}
- let busy=false;const run=()=>{if(busy)return;busy=true;requestAnimationFrame(()=>{decorate();busy=false})};
- new MutationObserver(run).observe(document.documentElement,{childList:true,subtree:true});document.addEventListener('DOMContentLoaded',run);setTimeout(run,300);setTimeout(run,1200);
+ function run(){nav();layout()}
+ let lock=false;new MutationObserver(()=>{if(lock)return;lock=true;requestAnimationFrame(()=>{run();lock=false})}).observe(document.documentElement,{childList:true,subtree:true});document.addEventListener('DOMContentLoaded',run);setTimeout(run,250);setTimeout(run,1000);
 })();
