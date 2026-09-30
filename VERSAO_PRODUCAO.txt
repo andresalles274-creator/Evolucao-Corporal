@@ -1,4 +1,3 @@
-Evolução Corporal — versão de produção
-Base: v10.8 — Tema Claro Premium
-Data do pacote: 19/09/2026
-Origem: pacote de produção fornecido pelo proprietário do aplicativo.
+Evolução Corporal V10.8 — Tema Claro Premium
+Base: V10.7 treino direto nos exercícios
+Alteração: interface clara em branco/cinza-gelo, grafite e vermelho, preservando funcionalidades e dados.
