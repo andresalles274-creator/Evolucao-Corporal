@@ -3,6 +3,15 @@ import { SUPABASE_URL, SUPABASE_KEY } from './config.js';
 const supabaseBilling=createClient(SUPABASE_URL,SUPABASE_KEY);
 const money=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const dateBR=v=>v?new Date(v+'T12:00:00').toLocaleDateString('pt-BR'):'—';
+let billingHTML='';
+let billingObserver=null;
+function mountBilling(){
+ if(!billingHTML)return;
+ const main=document.querySelector('#app main');
+ if(!main)return;
+ let box=document.querySelector('.billing-v11');
+ if(!box){box=document.createElement('section');box.className='billing-v11';box.innerHTML=billingHTML;main.prepend(box)}
+}
 async function loadBilling(){
  const session=(await supabaseBilling.auth.getSession()).data.session;
  if(!session)return;
@@ -32,7 +41,9 @@ async function loadBilling(){
   const status=isPaid?'Em dia ✓':diff<0?`Vencida há ${Math.abs(diff)} dia${Math.abs(diff)===1?'':'s'}`:diff===0?'Vence hoje':`Vence em ${diff} dia${diff===1?'':'s'}`;
   html=`<div class="billing-title"><div><h3>Mensalidade da consultoria</h3><p>Vencimento: ${dateBR(payment?.due_date||dueISO)}${setting.monthly_amount?' · '+money(setting.monthly_amount):''}</p></div><span class="billing-icon">▣</span></div><span class="billing-status ${cls}">${status}</span>`;
  }
- const show=()=>{const main=document.querySelector('#app main');if(!main||document.querySelector('.billing-v11'))return;const box=document.createElement('section');box.className='billing-v11';box.innerHTML=html;main.prepend(box)};
- show();setTimeout(show,1200);setTimeout(show,3000);
+ billingHTML=html;
+ mountBilling();
+ if(!billingObserver){billingObserver=new MutationObserver(()=>mountBilling());billingObserver.observe(document.querySelector('#app'),{childList:true,subtree:true})}
 }
-setTimeout(loadBilling,700);
+setTimeout(loadBilling,500);
+supabaseBilling.auth.onAuthStateChange((_event,session)=>{if(session)setTimeout(loadBilling,250)});
