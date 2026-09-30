@@ -1,3 +1,3 @@
-Evolução Corporal V10.8 — Tema Claro Premium
-Base: V10.7 treino direto nos exercícios
-Alteração: interface clara em branco/cinza-gelo, grafite e vermelho, preservando funcionalidades e dados.
+Evolução Corporal V11.0 — Tema Claro + Mensalidades
+Base: V10.8 tema claro premium e treino direto nos exercícios
+Alterações: interface clara em branco/cinza-gelo, grafite e vermelho; painel de mensalidades para coach; lembrete individual de vencimento para alunos; estados em dia, a vencer e pendente; funcionalidades e dados existentes preservados.
