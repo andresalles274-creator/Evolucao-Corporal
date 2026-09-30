@@ -1,5 +1,5 @@
-const CACHE="evolucao-corporal-v10.3-production";
-const STATIC=["./","./index.html","./styles.css?v=10.3.0","./app.js?v=10.3.0","./config.js","./manifest.webmanifest?v=10.3.0","./icon-brand.png","./icon-192.png","./icon-512.png","./icon-maskable-512.png","./apple-touch-icon.png","./logo-brand.jpg","./brand-background.jpg"];
+const CACHE="evolucao-corporal-v11.0-production";
+const STATIC=["./","./index.html","./styles.css?v=10.8.0","./theme-v11.css?v=11.0.0","./app.js?v=10.6.0","./billing-v11.js?v=11.0.0","./config.js","./manifest.webmanifest?v=11.0.0","./icon-brand.png","./icon-192.png","./icon-512.png","./icon-maskable-512.png","./apple-touch-icon.png","./logo-brand.jpg","./brand-background.jpg"];
 
 self.addEventListener("install",event=>{
   self.skipWaiting();
@@ -39,6 +39,8 @@ self.addEventListener("fetch",event=>{
   const isCore =
     url.pathname.endsWith("/app.js") ||
     url.pathname.endsWith("/styles.css") ||
+    url.pathname.endsWith("/theme-v11.css") ||
+    url.pathname.endsWith("/billing-v11.js") ||
     url.pathname.endsWith("/config.js") ||
     url.pathname.endsWith("/manifest.webmanifest");
 
