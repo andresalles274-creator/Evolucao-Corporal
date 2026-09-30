@@ -1,33 +1,31 @@
-// Camada visual/navegação V11 neon. Mantém toda a lógica e dados do app principal.
+// Interface V11 — painel coach fiel à referência neon aprovada.
 (function(){
- const qs=(s,r=document)=>r.querySelector(s);
- function upgradeNav(){
-   const nav=qs('.bottomnav');
-   if(!nav||nav.dataset.neonReady)return;
-   const coach=!!qs('.brand')?.textContent?.includes('Coach');
-   if(!coach)return;
-   const originals={}; nav.querySelectorAll('[data-route]').forEach(b=>originals[b.dataset.route]=b);
-   nav.dataset.neonReady='1';
-   nav.innerHTML=`<button class="navbtn active" data-neon-route="home"><span class="ico">⌂</span>Início</button><button class="navbtn" data-neon-route="measures"><span class="ico">▥</span>Medidas</button><button class="navbtn neon-add" data-route="newStudent" aria-label="Novo aluno"><span class="ico">+</span><span>Novo aluno</span></button><button class="navbtn" data-neon-route="coach"><span class="ico">♟</span>Alunos</button><button class="navbtn" data-neon-route="records"><span class="ico">▤</span>Registros</button>`;
-   nav.querySelectorAll('[data-neon-route]').forEach(btn=>btn.onclick=()=>{
-     const r=btn.dataset.neonRoute;
-     if(r==='records'){
-       const recent=document.querySelector('.activity-item,.history-row');
-       if(recent){recent.scrollIntoView({behavior:'smooth',block:'center'});return;}
-       originals.home?.click(); return;
-     }
-     originals[r]?.click();
-   });
-   qs('.neon-add',nav).onclick=openNewStudent;
- }
+ const q=(s,r=document)=>r.querySelector(s), qa=(s,r=document)=>[...r.querySelectorAll(s)];
+ function isCoach(){return /Painel do Coach/i.test(document.body.innerText)}
  function openNewStudent(){
-   document.querySelector('.neon-student-modal')?.remove();
-   const modal=document.createElement('div'); modal.className='neon-student-modal record-overlay';
-   modal.innerHTML=`<div class="record-modal neon-add-card"><div class="record-modal-head"><div><div class="eyebrow">Novo aluno</div><h2>Adicionar aluno</h2></div><button class="record-x" type="button">×</button></div><p class="sub">O aluno entra na consultoria criando a conta com o próprio e-mail. Envie o endereço do Evolução Corporal para ele tocar em <strong>Criar conta</strong>. Assim que concluir o cadastro, ele aparece automaticamente no seu painel.</p><button class="btn btn-primary btn-full neon-copy-link" type="button">Copiar link para o aluno</button><button class="btn btn-ghost btn-full neon-close" style="margin-top:10px" type="button">Fechar</button></div>`;
-   document.body.appendChild(modal); const close=()=>modal.remove();
-   qs('.record-x',modal).onclick=close; qs('.neon-close',modal).onclick=close; modal.onclick=e=>{if(e.target===modal)close()};
-   qs('.neon-copy-link',modal).onclick=async()=>{try{await navigator.clipboard.writeText(location.origin+location.pathname);qs('.neon-copy-link',modal).textContent='Link copiado ✓';}catch(_){prompt('Copie este endereço:',location.origin+location.pathname)}};
+  q('.neon-student-modal')?.remove();
+  const m=document.createElement('div');m.className='neon-student-modal record-overlay';
+  m.innerHTML=`<div class="record-modal neon-add-card"><div class="record-modal-head"><div><div class="eyebrow">NOVO ALUNO</div><h2>Adicionar aluno</h2></div><button class="record-x" type="button">×</button></div><p class="sub">Envie o link do Evolução Corporal para o aluno criar a conta. Assim que ele concluir o cadastro, aparecerá no seu painel.</p><button class="btn btn-primary btn-full neon-copy-link" type="button">Copiar link para o aluno</button><button class="btn btn-ghost btn-full neon-close" type="button" style="margin-top:10px">Fechar</button></div>`;
+  document.body.appendChild(m);const close=()=>m.remove();q('.record-x',m).onclick=close;q('.neon-close',m).onclick=close;m.onclick=e=>{if(e.target===m)close()};q('.neon-copy-link',m).onclick=async()=>{try{await navigator.clipboard.writeText(location.origin+location.pathname);q('.neon-copy-link',m).textContent='Link copiado ✓'}catch(_){prompt('Copie este endereço:',location.href)}};
  }
- function decorate(){upgradeNav();const hero=qs('.premium-brand');if(hero)hero.classList.add('neon-hero');document.querySelectorAll('.card,.billing-v11,.metric').forEach(x=>x.classList.add('floating-card'))}
- const obs=new MutationObserver(decorate);obs.observe(document.documentElement,{childList:true,subtree:true});document.addEventListener('DOMContentLoaded',decorate);setTimeout(decorate,700);
+ function upgradeNav(){
+  const nav=q('.bottomnav');if(!nav||!isCoach())return;
+  if(nav.dataset.layout==='reference')return;
+  const old={};qa('[data-route]',nav).forEach(b=>old[b.dataset.route]=b);
+  nav.dataset.layout='reference';nav.innerHTML=`<button class="navbtn active" data-neon="home"><span class="ico">⌂</span><span>Início</span></button><button class="navbtn" data-neon="measures"><span class="ico">▥</span><span>Medidas</span></button><button class="navbtn neon-add" type="button"><span class="plus">+</span><span>Novo aluno</span></button><button class="navbtn" data-neon="coach"><span class="ico">♟</span><span>Alunos</span></button><button class="navbtn" data-neon="records"><span class="ico">▤</span><span>Registros</span></button>`;
+  qa('[data-neon]',nav).forEach(b=>b.onclick=()=>{const r=b.dataset.neon;if(r==='records'){const x=qa('.card').find(x=>/Últimos registros/i.test(x.innerText));if(x){x.scrollIntoView({behavior:'smooth',block:'center'});return}}if(r==='coach'){const x=qa('.card').find(x=>/^Alunos|\nAlunos/i.test(x.innerText));if(x){x.scrollIntoView({behavior:'smooth',block:'center'});return}}(old[r]||old.home)?.click()});
+  q('.neon-add',nav).onclick=openNewStudent;
+ }
+ function classify(){
+  if(!isCoach())return;
+  const hero=q('.premium-brand');if(hero)hero.classList.add('ref-hero');
+  qa('.card').forEach(c=>{const t=c.innerText||'';if(/Aluno em destaque|Carlos Roberto|Abrir ficha completa/i.test(t))c.classList.add('ref-featured');if(/^Alunos|\nAlunos/i.test(t))c.classList.add('ref-students');if(/Últimos registros/i.test(t))c.classList.add('ref-records')});
+  const billing=q('.billing-v11');if(billing)billing.classList.add('ref-billing');
+  // Ordem da referência: banner, mensalidades, destaque, alunos/registros.
+  const main=hero?.parentElement;
+  if(main&&billing&&hero.parentElement===billing.parentElement){main.insertBefore(hero,billing);hero.after(billing)}
+ }
+ function decorate(){upgradeNav();classify();qa('.card,.billing-v11,.metric').forEach(x=>x.classList.add('floating-card'))}
+ let busy=false;const run=()=>{if(busy)return;busy=true;requestAnimationFrame(()=>{decorate();busy=false})};
+ new MutationObserver(run).observe(document.documentElement,{childList:true,subtree:true});document.addEventListener('DOMContentLoaded',run);setTimeout(run,300);setTimeout(run,1200);
 })();
