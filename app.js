@@ -281,31 +281,8 @@ function savedPhotoFor(type,date){
 }
 
 async function saveProgressPhotoRow(targetId,photoDate,type,path,notes){
-  // Não usa UPSERT/ON CONFLICT porque projetos criados em versões anteriores
-  // podem não ter a constraint UNIQUE necessária.
-  const found=await supabase.from("progress_photos")
-    .select("id")
-    .eq("user_id",targetId)
-    .eq("photo_date",photoDate)
-    .eq("photo_type",type)
-    .maybeSingle();
-
-  if(found.error)throw found.error;
-
-  if(found.data?.id){
-    const updated=await supabase.from("progress_photos")
-      .update({
-        storage_path:path,
-        notes,
-        updated_at:new Date().toISOString()
-      })
-      .eq("id",found.data.id)
-      .select()
-      .single();
-    if(updated.error)throw updated.error;
-    return updated.data;
-  }
-
+  // Histórico fotográfico: uma nova foto nunca atualiza/apaga a anterior.
+  // Cada envio cria um registro próprio para preservar o antes e depois.
   const inserted=await supabase.from("progress_photos")
     .insert({
       user_id:targetId,
@@ -347,7 +324,7 @@ async function autoSaveProgressPhoto(type,file,source){
    }
 
    const blob=await compressPhoto(file);
-   const path=`${targetId}/${photoDate}/${type}.jpg`;
+   const path=`${targetId}/${photoDate}/${type}-${Date.now()}-${Math.random().toString(36).slice(2,8)}.jpg`;
 
    const up=await supabase.storage.from(PHOTO_BUCKET).upload(path,blob,{
      upsert:true,contentType:"image/jpeg",cacheControl:"3600"
@@ -415,7 +392,7 @@ async function uploadProgressPhotos(form){
  try{
    for(const [type,file] of picks){
      const blob=await compressPhoto(file);
-     const path=`${targetId}/${photoDate}/${type}.jpg`;
+     const path=`${targetId}/${photoDate}/${type}-${Date.now()}-${Math.random().toString(36).slice(2,8)}.jpg`;
      const up=await supabase.storage.from(PHOTO_BUCKET).upload(path,blob,{
        upsert:true,contentType:"image/jpeg",cacheControl:"3600"
      });
@@ -629,7 +606,7 @@ function photos(){
    <div class="eyebrow">Registro fotográfico</div><h2>Frente, lado e costas</h2>
    <p class="sub">As fotos são armazenadas em área privada no Supabase e vinculadas somente à conta do aluno.</p>
    ${studentSelect()}
-   <div class="field"><label>Data das fotos</label><input type="date" name="photo_date" value="${esc(photoDraft.photo_date||today())}" required></div>
+   <div class="field"><label>Data das fotos</label><input type="date" name="photo_date" value="${esc(photoDraft.photo_date||today())}" required></div><div class="notice photo-history-notice"><strong>Novo registro</strong><br><span class="small">As novas fotos serão adicionadas ao histórico. Fotos anteriores não serão substituídas.</span></div>
    <div class="photo-upload-grid">
      ${["front","side","back"].map(type=>`<div class="photo-picker">
        <span>${photoTypeLabel(type)}</span>
