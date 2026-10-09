@@ -1,0 +1,29 @@
+import {createClient} from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import {SUPABASE_URL,SUPABASE_KEY} from "./config.js";
+const db=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
+const escapeHTML=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let me=null,coach=false,selected=null,people=[],opened=false,busy=false;
+const style=document.createElement("style");style.textContent=`
+#coach-chat-launch{position:fixed;right:17px;bottom:91px;z-index:9000;border:1px solid #caff18;border-radius:50px;background:#caff18;color:#091009;font-weight:800;padding:13px 17px;box-shadow:0 8px 25px #000b;cursor:pointer}
+#coach-chat-panel{position:fixed;z-index:9001;right:12px;bottom:84px;width:min(420px,calc(100vw - 24px));height:min(630px,calc(100dvh - 115px));background:#080d0a;color:#f4fff2;border:1px solid #b9ec23;border-radius:22px;box-shadow:0 18px 55px #000e;display:flex;flex-direction:column;overflow:hidden;font-family:inherit}
+#coach-chat-panel[hidden],#coach-chat-launch[hidden]{display:none!important}
+.chat-head{display:flex;justify-content:space-between;align-items:center;background:#111c12;padding:15px 18px;border-bottom:1px solid #354b25}.chat-head strong{color:#caff18}.chat-head button,.chat-students button{background:#1a291c;color:#fff;border:1px solid #435d31;border-radius:10px;padding:8px;cursor:pointer}
+.chat-students{overflow:auto;max-height:155px;border-bottom:1px solid #34452a}.chat-students button{display:block;width:calc(100% - 20px);margin:7px 10px;text-align:left}.chat-students button.active{border-color:#caff18;color:#caff18}
+.chat-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:16px}.chat-bubble{max-width:85%;padding:11px 13px;border-radius:14px;background:#202b21;align-self:flex-start;overflow-wrap:anywhere;white-space:pre-wrap}.chat-bubble.mine{align-self:flex-end;background:#354b19}.chat-bubble small{display:block;opacity:.7;font-size:10px;margin-top:5px}.chat-compose{display:flex;gap:8px;padding:12px;border-top:1px solid #354b25}.chat-compose input{flex:1;min-width:0;background:#101b12;color:white;border:1px solid #4c603c;border-radius:12px;padding:12px}.chat-compose button{background:#caff18;color:#10160a;border:0;border-radius:12px;padding:0 15px;font-weight:800}.chat-empty{color:#abb8a8;text-align:center;margin:auto 12px}
+`;document.head.append(style);
+const launch=document.createElement("button");launch.id="coach-chat-launch";launch.textContent="✉ Chat";launch.hidden=true;
+const panel=document.createElement("section");panel.id="coach-chat-panel";panel.hidden=true;panel.innerHTML='<div class="chat-head"><strong>Conversas · Evolução Corporal</strong><button type="button" id="chat-close">✕</button></div><div class="chat-students" id="chat-students"></div><div class="chat-messages" id="chat-messages" aria-live="polite"></div><form class="chat-compose" id="chat-form"><input id="chat-text" maxlength="4000" placeholder="Escreva sua mensagem..." required autocomplete="off"><button type="submit">Enviar</button></form>';
+document.body.append(launch,panel);
+const studentBox=panel.querySelector("#chat-students"),messages=panel.querySelector("#chat-messages"),input=panel.querySelector("#chat-text");
+launch.onclick=()=>{opened=!opened;panel.hidden=!opened;if(opened)refresh()};
+panel.querySelector("#chat-close").onclick=()=>{opened=false;panel.hidden=true};
+async function init(){const {data:{user}}=await db.auth.getUser();me=user?.id||null;launch.hidden=!me;if(!me){opened=false;panel.hidden=true;return}const r=await db.from("coach_users").select("user_id").eq("user_id",me).maybeSingle();coach=!!r.data;studentBox.hidden=!coach;if(!coach)selected=me;await refresh()}
+async function refresh(){if(!me||!opened||busy)return;busy=true;try{
+if(coach){const r=await db.from("profiles").select("user_id,full_name").order("full_name");if(r.error)throw r.error;people=(r.data||[]).filter(p=>p.user_id!==me);if(!selected||!people.some(p=>p.user_id===selected))selected=people[0]?.user_id||null;studentBox.innerHTML=people.map(p=>'<button type="button" data-id="'+escapeHTML(p.user_id)+'" class="'+(p.user_id===selected?'active':'')+'">'+escapeHTML(p.full_name||"Aluno")+'</button>').join("")||'<p class="chat-empty">Nenhum aluno encontrado</p>';studentBox.querySelectorAll("button").forEach(b=>b.onclick=()=>{selected=b.dataset.id;refresh()})}
+if(!selected){messages.innerHTML='<p class="chat-empty">Selecione um aluno para conversar.</p>';return}
+const r=await db.from("coach_student_messages").select("id,body,sender_id,created_at").eq("student_id",selected).order("created_at",{ascending:true}).limit(300);if(r.error)throw r.error;
+const bottom=messages.scrollHeight-messages.scrollTop-messages.clientHeight<100;
+messages.innerHTML=(r.data||[]).map(m=>'<div class="chat-bubble '+(m.sender_id===me?'mine':'')+'">'+escapeHTML(m.body)+'<small>'+new Date(m.created_at).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"})+'</small></div>').join("")||'<p class="chat-empty">Nenhuma mensagem ainda. Comece a conversa!</p>';if(bottom)messages.scrollTop=messages.scrollHeight;
+}catch(e){messages.innerHTML='<p class="chat-empty">Não foi possível carregar o chat: '+escapeHTML(e.message)+'</p>'}finally{busy=false}}
+panel.querySelector("#chat-form").onsubmit=async e=>{e.preventDefault();const body=input.value.trim();if(!body||!selected||!me)return;const btn=panel.querySelector(".chat-compose button");btn.disabled=true;try{const r=await db.from("coach_student_messages").insert({student_id:selected,sender_id:me,body});if(r.error)throw r.error;input.value="";await refresh()}catch(e){alert("Mensagem não enviada: "+e.message)}finally{btn.disabled=false}};
+db.auth.onAuthStateChange(()=>setTimeout(init,100));init();setInterval(()=>{if(opened)refresh()},6000);
