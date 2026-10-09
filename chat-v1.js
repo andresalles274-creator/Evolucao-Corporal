@@ -11,13 +11,13 @@ const style=document.createElement("style");style.textContent=`
 .chat-students{overflow:auto;max-height:155px;border-bottom:1px solid #34452a}.chat-students button{display:block;width:calc(100% - 20px);margin:7px 10px;text-align:left}.chat-students button.active{border-color:#caff18;color:#caff18}
 .chat-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:16px}.chat-bubble{max-width:85%;padding:11px 13px;border-radius:14px;background:#202b21;align-self:flex-start;overflow-wrap:anywhere;white-space:pre-wrap}.chat-bubble.mine{align-self:flex-end;background:#354b19}.chat-bubble small{display:block;opacity:.7;font-size:10px;margin-top:5px}.chat-compose{display:flex;gap:8px;padding:12px;border-top:1px solid #354b25}.chat-compose input{flex:1;min-width:0;background:#101b12;color:white;border:1px solid #4c603c;border-radius:12px;padding:12px}.chat-compose button{background:#caff18;color:#10160a;border:0;border-radius:12px;padding:0 15px;font-weight:800}.chat-empty{color:#abb8a8;text-align:center;margin:auto 12px}
 `;document.head.append(style);
-const launch=document.createElement("button");launch.id="coach-chat-launch";launch.textContent="✉ Chat";launch.hidden=true;
+const launch=document.createElement("button");launch.id="coach-chat-launch";launch.textContent="✉ Chat";launch.hidden=false;
 const panel=document.createElement("section");panel.id="coach-chat-panel";panel.hidden=true;panel.innerHTML='<div class="chat-head"><strong>Conversas · Evolução Corporal</strong><button type="button" id="chat-close">✕</button></div><div class="chat-students" id="chat-students"></div><div class="chat-messages" id="chat-messages" aria-live="polite"></div><form class="chat-compose" id="chat-form"><input id="chat-text" maxlength="4000" placeholder="Escreva sua mensagem..." required autocomplete="off"><button type="submit">Enviar</button></form>';
 document.body.append(launch,panel);
 const studentBox=panel.querySelector("#chat-students"),messages=panel.querySelector("#chat-messages"),input=panel.querySelector("#chat-text");
 launch.onclick=()=>{opened=!opened;panel.hidden=!opened;if(opened)refresh()};
 panel.querySelector("#chat-close").onclick=()=>{opened=false;panel.hidden=true};
-async function init(){const {data:{user}}=await db.auth.getUser();me=user?.id||null;launch.hidden=!me;if(!me){opened=false;panel.hidden=true;return}const r=await db.from("coach_users").select("user_id").eq("user_id",me).maybeSingle();coach=!!r.data;studentBox.hidden=!coach;if(!coach)selected=me;await refresh()}
+async function init(){const {data:{user}}=await db.auth.getUser();me=user?.id||null;launch.hidden=!me;addChatNavigation();if(!me){opened=false;panel.hidden=true;return}const r=await db.from("coach_users").select("user_id").eq("user_id",me).maybeSingle();coach=!!r.data;studentBox.hidden=!coach;if(!coach)selected=me;await refresh()}
 async function refresh(){if(!me||!opened||busy)return;busy=true;try{
 if(coach){const r=await db.from("profiles").select("user_id,full_name").order("full_name");if(r.error)throw r.error;people=(r.data||[]).filter(p=>p.user_id!==me);if(!selected||!people.some(p=>p.user_id===selected))selected=people[0]?.user_id||null;studentBox.innerHTML=people.map(p=>'<button type="button" data-id="'+escapeHTML(p.user_id)+'" class="'+(p.user_id===selected?'active':'')+'">'+escapeHTML(p.full_name||"Aluno")+'</button>').join("")||'<p class="chat-empty">Nenhum aluno encontrado</p>';studentBox.querySelectorAll("button").forEach(b=>b.onclick=()=>{selected=b.dataset.id;refresh()})}
 if(!selected){messages.innerHTML='<p class="chat-empty">Selecione um aluno para conversar.</p>';return}
@@ -27,3 +27,17 @@ messages.innerHTML=(r.data||[]).map(m=>'<div class="chat-bubble '+(m.sender_id==
 }catch(e){messages.innerHTML='<p class="chat-empty">Não foi possível carregar o chat: '+escapeHTML(e.message)+'</p>'}finally{busy=false}}
 panel.querySelector("#chat-form").onsubmit=async e=>{e.preventDefault();const body=input.value.trim();if(!body||!selected||!me)return;const btn=panel.querySelector(".chat-compose button");btn.disabled=true;try{const r=await db.from("coach_student_messages").insert({student_id:selected,sender_id:me,body});if(r.error)throw r.error;input.value="";await refresh()}catch(e){alert("Mensagem não enviada: "+e.message)}finally{btn.disabled=false}};
 db.auth.onAuthStateChange(()=>setTimeout(init,100));init();setInterval(()=>{if(opened)refresh()},6000);
+
+function addChatNavigation(){
+ const nav=document.querySelector(".bottomnav");
+ if(!nav||!me)return;
+ if(!nav.querySelector('[data-chat-nav]')){
+  const b=document.createElement("button");
+  b.type="button";b.className="navbtn";b.dataset.chatNav="1";
+  b.innerHTML='<span class="ico">✉</span>Conversas';
+  b.onclick=()=>{opened=true;panel.hidden=false;refresh()};
+  nav.appendChild(b);
+ }
+}
+new MutationObserver(addChatNavigation).observe(document.getElementById("app")||document.body,{childList:true,subtree:true});
+setInterval(addChatNavigation,1500);
