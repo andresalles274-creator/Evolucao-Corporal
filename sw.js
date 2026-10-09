@@ -1,5 +1,5 @@
-const CACHE="evolucao-corporal-v11.14-chat-alert";
-const STATIC=["./","./index.html","./styles.css?v=10.8.0","./theme-v11.css?v=11.9.0","./app.js?v=10.6.1","./billing-v11.js?v=11.0.1","./ui-neon-v11.js?v=11.11.0","./config.js","./chat-v1.js?v=1.0.2","./brand-background.jpg"];
+const CACHE="evolucao-corporal-v11.15-chat-position";
+const STATIC=["./","./index.html","./styles.css?v=10.8.0","./theme-v11.css?v=11.9.0","./app.js?v=10.6.1","./billing-v11.js?v=11.0.1","./ui-neon-v11.js?v=11.11.0","./config.js","./chat-v1.js?v=1.0.3","./brand-background.jpg"];
 
 self.addEventListener("install",event=>{
   self.skipWaiting();
