@@ -5,7 +5,7 @@ const escapeHTML=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;"
 let me=null,coach=false,selected=null,people=[],opened=false,busy=false;
 let notificationBaseline=new Set(),notificationReady=false,unreadCount=0;
 const style=document.createElement("style");style.textContent=`
-#coach-chat-launch{display:none!important;position:fixed;right:17px;bottom:91px;z-index:9000;border:1px solid #caff18;border-radius:50px;background:#caff18;color:#091009;font-weight:800;padding:13px 17px;box-shadow:0 8px 25px #000b;cursor:pointer}
+#coach-chat-launch{position:fixed;right:16px;top:84px;bottom:auto;z-index:9000;border:1px solid #caff18;border-radius:50px;background:#caff18;color:#091009;font-weight:800;padding:13px 17px;box-shadow:0 8px 25px #000b;cursor:pointer}
 #coach-chat-panel{position:fixed;z-index:9001;right:12px;bottom:84px;width:min(420px,calc(100vw - 24px));height:min(630px,calc(100dvh - 115px));background:#080d0a;color:#f4fff2;border:1px solid #b9ec23;border-radius:22px;box-shadow:0 18px 55px #000e;display:flex;flex-direction:column;overflow:hidden;font-family:inherit}
 #coach-chat-panel[hidden],#coach-chat-launch[hidden]{display:none!important}
 .chat-head{display:flex;justify-content:space-between;align-items:center;background:#111c12;padding:15px 18px;border-bottom:1px solid #354b25}.chat-head strong{color:#caff18}.chat-head button,.chat-students button{background:#1a291c;color:#fff;border:1px solid #435d31;border-radius:10px;padding:8px;cursor:pointer}
@@ -18,7 +18,7 @@ document.body.append(launch,panel);
 const studentBox=panel.querySelector("#chat-students"),messages=panel.querySelector("#chat-messages"),input=panel.querySelector("#chat-text");
 launch.onclick=()=>{opened=!opened;panel.hidden=!opened;if(opened){unreadCount=0;updateUnreadBadge();refresh()}};
 panel.querySelector("#chat-close").onclick=()=>{opened=false;panel.hidden=true};
-async function init(){const {data:{user}}=await db.auth.getUser();me=user?.id||null;launch.hidden=true;addChatNavigation();if(!me){opened=false;panel.hidden=true;return}const r=await db.from("coach_users").select("user_id").eq("user_id",me).maybeSingle();coach=!!r.data;studentBox.hidden=!coach;if(!coach)selected=me;await refresh();checkNewMessages()}
+async function init(){const {data:{user}}=await db.auth.getUser();me=user?.id||null;launch.hidden=!me;addChatNavigation();if(!me){opened=false;panel.hidden=true;return}const r=await db.from("coach_users").select("user_id").eq("user_id",me).maybeSingle();coach=!!r.data;studentBox.hidden=!coach;if(!coach)selected=me;await refresh();checkNewMessages()}
 async function refresh(){if(!me||!opened||busy)return;busy=true;try{
 if(coach){const r=await db.from("profiles").select("user_id,full_name").order("full_name");if(r.error)throw r.error;people=(r.data||[]).filter(p=>p.user_id!==me);if(!selected||!people.some(p=>p.user_id===selected))selected=people[0]?.user_id||null;studentBox.innerHTML=people.map(p=>'<button type="button" data-id="'+escapeHTML(p.user_id)+'" class="'+(p.user_id===selected?'active':'')+'">'+escapeHTML(p.full_name||"Aluno")+'</button>').join("")||'<p class="chat-empty">Nenhum aluno encontrado</p>';studentBox.querySelectorAll("button").forEach(b=>b.onclick=()=>{selected=b.dataset.id;refresh()})}
 if(!selected){messages.innerHTML='<p class="chat-empty">Selecione um aluno para conversar.</p>';return}
