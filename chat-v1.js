@@ -5,7 +5,7 @@ const escapeHTML=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;"
 let me=null,coach=false,selected=null,people=[],opened=false,busy=false;
 let notificationBaseline=new Set(),notificationReady=false,unreadCount=0;
 const style=document.createElement("style");style.textContent=`
-#coach-chat-launch{position:fixed;right:16px;top:84px;bottom:auto;z-index:9000;border:1px solid #caff18;border-radius:50px;background:#caff18;color:#091009;font-weight:800;padding:13px 17px;box-shadow:0 8px 25px #000b;cursor:pointer}
+#coach-chat-launch{position:relative;right:auto;top:auto;bottom:auto;z-index:1;display:block;margin:12px 16px 8px auto;border:1px solid #caff18;border-radius:50px;background:#caff18;color:#091009;font-weight:800;padding:13px 17px;box-shadow:0 8px 25px #000b;cursor:pointer}
 #coach-chat-panel{position:fixed;z-index:9001;right:12px;bottom:84px;width:min(420px,calc(100vw - 24px));height:min(630px,calc(100dvh - 115px));background:#080d0a;color:#f4fff2;border:1px solid #b9ec23;border-radius:22px;box-shadow:0 18px 55px #000e;display:flex;flex-direction:column;overflow:hidden;font-family:inherit}
 #coach-chat-panel[hidden],#coach-chat-launch[hidden]{display:none!important}
 .chat-head{display:flex;justify-content:space-between;align-items:center;background:#111c12;padding:15px 18px;border-bottom:1px solid #354b25}.chat-head strong{color:#caff18}.chat-head button,.chat-students button{background:#1a291c;color:#fff;border:1px solid #435d31;border-radius:10px;padding:8px;cursor:pointer}
@@ -31,14 +31,11 @@ db.auth.onAuthStateChange(()=>setTimeout(init,100));init();setInterval(()=>{if(o
 
 function addChatNavigation(){
  const nav=document.querySelector(".bottomnav");
- if(!nav||!me)return;
- if(!nav.querySelector('[data-chat-nav]')){
-  const b=document.createElement("button");
-  b.type="button";b.className="navbtn";b.dataset.chatNav="1";
-  b.innerHTML='<span class="ico">✉</span>Conversas';
-  b.onclick=()=>{opened=true;panel.hidden=false;refresh()};
-  nav.appendChild(b);
- }
+ const main=document.querySelector("#content");
+ if(!me||!main)return;
+ const extra=nav?.querySelector('[data-chat-nav]');
+ if(extra)extra.remove();
+ if(launch.parentElement!==main)main.prepend(launch);
 }
 new MutationObserver(addChatNavigation).observe(document.getElementById("app")||document.body,{childList:true,subtree:true});
 setInterval(addChatNavigation,1500);
