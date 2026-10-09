@@ -166,10 +166,13 @@ async function loadStudentData(){
    ["measurements","meals","workouts","hormone_logs","skinfolds","progress_photos"].forEach(t=>data[t]=[]);
    return;
  }
- await Promise.all(["measurements","meals","workouts","hormone_logs","skinfolds"].map(t=>loadTable(t,selectedStudentId)));
- await loadPhotos(selectedStudentId);
- await loadTrainingData(selectedStudentId);
- await loadDietData(selectedStudentId);
+ const targetId=selectedStudentId;
+ await Promise.all([
+  ...["measurements","meals","workouts","hormone_logs","skinfolds"].map(t=>loadTable(t,targetId)),
+  loadPhotos(targetId),
+  loadTrainingData(targetId),
+  loadDietData(targetId)
+ ]);
 }
 
 
