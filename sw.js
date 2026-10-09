@@ -1,5 +1,5 @@
-const CACHE="evolucao-corporal-v11.11-student";
-const STATIC=["./","./index.html","./styles.css?v=10.8.0","./theme-v11.css?v=11.9.0","./app.js?v=10.6.1","./billing-v11.js?v=11.0.1","./ui-neon-v11.js?v=11.11.0","./config.js","./brand-background.jpg"];
+const CACHE="evolucao-corporal-v11.12-chat";
+const STATIC=["./","./index.html","./styles.css?v=10.8.0","./theme-v11.css?v=11.9.0","./app.js?v=10.6.1","./billing-v11.js?v=11.0.1","./ui-neon-v11.js?v=11.11.0","./config.js","./chat-v1.js?v=1.0.0","./brand-background.jpg"];
 
 self.addEventListener("install",event=>{
   self.skipWaiting();
@@ -39,6 +39,7 @@ self.addEventListener("fetch",event=>{
   const isCore =
     url.pathname.endsWith("/app.js") ||
     url.pathname.endsWith("/ui-neon-v11.js") ||
+    url.pathname.endsWith("/chat-v1.js") ||
     url.pathname.endsWith("/styles.css") ||
     url.pathname.endsWith("/theme-v11.css") ||
     url.pathname.endsWith("/billing-v11.js") ||
