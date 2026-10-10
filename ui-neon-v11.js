@@ -23,22 +23,22 @@
   if(!coach())return; const main=q('#content');if(!main)return;
   const hero=q('.premium-brand',main), billing=q('.billing-v11',main), welcome=q('.coach-welcome',main); const cards=qa(':scope > .card',main);
   const featured=cards.find(c=>/Abrir ficha completa/i.test(c.innerText)); const students=cards.find(c=>/Acompanhamento[\s\S]*Alunos/i.test(c.innerText)); const records=cards.find(c=>/Últimos registros/i.test(c.innerText));
-  if(welcome)welcome.classList.add('ref-welcome');
+  if(welcome){welcome.classList.add('ref-welcome','poster-coach-welcome');}
   if(hero){
     hero.classList.add('ref-hero','ref-hero-approved');
     const content=q('.premium-brand-content',hero);
     const logo=q('.premium-logo',hero); if(logo) logo.style.display='none';
-    const h=q('h1',hero);if(h)h.innerHTML='Evolução<br><span>Corporal</span>';
+    const h=q('h1',hero);if(h)h.innerHTML='<span class="poster-brand-name">EVOLUÇÃO</span><small>C O R P O R A L</small>';
     const names=q('.names',hero);if(names)names.textContent='André Salles • Silvana Salles';
-    const tag=q('.tagline',hero);if(tag)tag.textContent='COACHING ONLINE';
-    if(content&&!q('.hero-coach-kicker',hero)){const k=document.createElement('div');k.className='hero-coach-kicker';k.textContent='PAINEL DO COACH';content.prepend(k)}
-    if(!q('.hero-motto',hero)){const m=document.createElement('div');m.className='hero-motto';m.innerHTML='DISCIPLINA<br>GERA<br>RESULTADOS<span></span>';content?.appendChild(m)}
+    const tag=q('.tagline',hero);if(tag)tag.textContent='PAINEL PROFISSIONAL';
+    if(content&&!q('.poster-a-mark',hero)){const mark=document.createElement('div');mark.className='poster-a-mark';mark.setAttribute('aria-hidden','true');mark.innerHTML='<svg viewBox="0 0 100 100" role="img"><path d="M50 5 L94 91 H70 L50 46 L30 91 H6 Z" fill="#72ff36"/><path d="M42 70 H76 L67 84 H35 Z" fill="#72ff36"/><path d="M47 62 L65 62 L76 82 L64 82 Z" fill="#10220e"/></svg>';content.prepend(mark)}
+    q('.hero-coach-kicker',hero)?.remove();q('.hero-motto',hero)?.remove();
   }
   decorateBilling(billing);
   if(featured){featured.classList.add('ref-featured','floating-card');const e=q('.eyebrow',featured);if(e)e.textContent='★  ALUNO EM DESTAQUE';if(!q('.featured-profile',featured)){const b=document.createElement('button');b.className='featured-profile';b.type='button';b.textContent='Ver perfil  →';b.onclick=()=>q('.btn-primary',featured)?.click();featured.appendChild(b)}}
   if(students)students.classList.add('ref-students','floating-card'); if(records)records.classList.add('ref-records','floating-card');
   if(students&&records){let grid=q('.ref-lower-grid',main);if(!grid){grid=document.createElement('div');grid.className='ref-lower-grid';students.before(grid);grid.append(students,records);const promo=document.createElement('div');promo.className='ref-promo';promo.innerHTML='<b>↗</b><strong>Mais resultados<br>para seus alunos</strong><span>Acompanhe a evolução e mantenha todos no foco.</span>';grid.appendChild(promo)}}
-  if(hero&&billing&&hero.nextElementSibling!==billing)hero.after(billing);
+  if(hero&&welcome&&hero.nextElementSibling!==welcome)hero.after(welcome); if(welcome&&featured&&welcome.nextElementSibling!==featured)welcome.after(featured); if(featured&&billing&&featured.nextElementSibling!==billing)featured.after(billing);
  }
  function studentStyle(){
   if(q('#student-neon-style'))return;const s=document.createElement('style');s.id='student-neon-style';s.textContent=`
