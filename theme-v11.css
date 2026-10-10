@@ -31,3 +31,32 @@ body:has(.coach-welcome) .topbar .brand-wrap .small{font-size:11px!important;lin
 body:has(.coach-welcome) .topbar .brand{font-size:17px!important;line-height:1.15!important;font-weight:700!important;color:#f8faf8!important;white-space:nowrap!important}
 body:has(.coach-welcome) .topbar .version-badge{font-size:9px!important}
 @media(max-width:390px){body:has(.coach-welcome) .topbar{padding:10px 9px!important}body:has(.coach-welcome) .topbar .brand-mark{width:32px!important;height:32px!important;min-width:32px!important}body:has(.coach-welcome) .topbar .brand{font-size:15px!important}body:has(.coach-welcome) .topbar .brand-wrap .small{font-size:10px!important}}
+
+/* Painel do Coach: layout da referência aprovada (preto + verde neon) */
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved{
+ margin:14px 20px 12px!important;min-height:310px!important;border-radius:25px!important;
+ border:1px solid rgba(101,255,60,.75)!important;
+ background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.78)),url("./brand-background.jpg") center/cover no-repeat!important;
+ box-shadow:0 16px 35px #000b,0 0 20px #57ff231a!important
+}
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved .premium-brand-content{
+ min-height:310px!important;padding:24px 15px!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:5px!important
+}
+body:has(.poster-coach-welcome) .poster-a-mark{width:86px;height:88px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 14px #56ff3470)}
+body:has(.poster-coach-welcome) .poster-a-mark svg{width:100%;height:100%}
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved h1{display:flex!important;flex-direction:column!important;align-items:center!important;gap:0!important;margin:0!important;color:#fff!important;font-family:Arial,system-ui,sans-serif!important;font-weight:900!important;font-size:clamp(26px,7vw,40px)!important;line-height:1.05!important;letter-spacing:-1px!important;text-shadow:0 2px 10px #000!important}
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved h1 .poster-brand-name{color:#fff!important}
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved h1 small{font-size:clamp(11px,3vw,15px)!important;font-weight:500!important;letter-spacing:.13em!important;line-height:1.6!important;color:#fff!important}
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved .names{font-family:Georgia,serif!important;color:#fff!important;font-size:clamp(13px,3.8vw,18px)!important;margin-top:8px!important;text-align:center!important}
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved .tagline{color:#f3f5f3!important;letter-spacing:.28em!important;font-size:9px!important;text-align:center!important;margin-top:4px!important}
+body:has(.poster-coach-welcome) .ref-welcome{display:flex!important}
+body:has(.poster-coach-welcome) .coach-welcome{margin:10px 20px 12px!important;padding:8px 3px!important;align-items:center!important;gap:12px!important}
+body:has(.poster-coach-welcome) .coach-welcome .eyebrow{color:#78ff42!important;font-size:10px!important;letter-spacing:.18em!important}
+body:has(.poster-coach-welcome) .coach-welcome h2{font-family:Georgia,serif!important;font-size:clamp(26px,6.8vw,38px)!important;line-height:1.1!important;color:#fff!important;margin:4px 0 8px!important}
+body:has(.poster-coach-welcome) .coach-welcome .sub{font-size:13px!important;line-height:1.5!important}
+body:has(.poster-coach-welcome) .coach-total{flex-shrink:0!important;min-width:66px!important;border:1px solid #4f8843!important;border-radius:16px!important;background:#0a100b!important}
+body:has(.poster-coach-welcome) .coach-total span{color:#72ff36!important}
+body:has(.poster-coach-welcome) .ref-featured{margin-top:6px!important;border-color:rgba(101,255,60,.45)!important}
+body:has(.poster-coach-welcome) .ref-featured .eyebrow{color:#72ff36!important}
+body:has(.poster-coach-welcome) .ref-featured h2{font-family:Georgia,serif!important}
+@media(max-width:390px){body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved{margin-left:12px!important;margin-right:12px!important}body:has(.poster-coach-welcome) .coach-welcome{margin-left:12px!important;margin-right:12px!important}}
