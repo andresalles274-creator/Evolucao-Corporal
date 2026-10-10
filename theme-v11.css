@@ -23,3 +23,11 @@
 .ref-lower-grid .ref-promo strong{display:block!important;position:static!important;max-width:100%!important;font-size:clamp(17px,4.4vw,23px)!important;line-height:1.2!important;margin:0!important;white-space:normal!important}
 .ref-lower-grid .ref-promo span{display:block!important;position:static!important;max-width:100%!important;font-size:clamp(13px,3.5vw,16px)!important;line-height:1.45!important;margin:0!important;white-space:normal!important}
 .ref-lower-grid{min-width:0!important}
+
+/* Cabeçalho compacto do Coach inspirado na identidade neon aprovada */
+body:has(.coach-welcome) .topbar .brand-wrap{display:flex!important;align-items:center!important;gap:9px!important;min-width:0!important}
+body:has(.coach-welcome) .topbar .brand-mark{width:38px!important;height:38px!important;min-width:38px!important;object-fit:cover!important;border-radius:50%!important;border:1px solid #80ff39!important;box-shadow:0 0 0 2px rgba(80,255,57,.12),0 0 12px rgba(80,255,57,.2)!important}
+body:has(.coach-welcome) .topbar .brand-wrap .small{font-size:11px!important;line-height:1.2!important;color:#d9e0da!important;white-space:nowrap!important}
+body:has(.coach-welcome) .topbar .brand{font-size:17px!important;line-height:1.15!important;font-weight:700!important;color:#f8faf8!important;white-space:nowrap!important}
+body:has(.coach-welcome) .topbar .version-badge{font-size:9px!important}
+@media(max-width:390px){body:has(.coach-welcome) .topbar{padding:10px 9px!important}body:has(.coach-welcome) .topbar .brand-mark{width:32px!important;height:32px!important;min-width:32px!important}body:has(.coach-welcome) .topbar .brand{font-size:15px!important}body:has(.coach-welcome) .topbar .brand-wrap .small{font-size:10px!important}}
