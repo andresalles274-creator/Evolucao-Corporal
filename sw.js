@@ -1,5 +1,5 @@
-const CACHE="evolucao-corporal-v11.23-real-gym";
-const STATIC=["./","./index.html","./styles.css?v=10.8.0","./theme-v11.css?v=11.10.2","./app.js?v=10.6.2","./billing-v11.js?v=11.0.1","./ui-neon-v11.js?v=11.12.1","./config.js","./chat-v1.js?v=1.0.5","./brand-background.jpg"];
+const CACHE="evolucao-corporal-v11.24-banner-bright";
+const STATIC=["./","./index.html","./styles.css?v=10.8.0","./theme-v11.css?v=11.10.3","./app.js?v=10.6.2","./billing-v11.js?v=11.0.1","./ui-neon-v11.js?v=11.12.1","./config.js","./chat-v1.js?v=1.0.5","./brand-background.jpg"];
 
 self.addEventListener("install",event=>{
   self.skipWaiting();
