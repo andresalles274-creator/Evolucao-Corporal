@@ -60,3 +60,8 @@ body:has(.poster-coach-welcome) .ref-featured{margin-top:6px!important;border-co
 body:has(.poster-coach-welcome) .ref-featured .eyebrow{color:#72ff36!important}
 body:has(.poster-coach-welcome) .ref-featured h2{font-family:Georgia,serif!important}
 @media(max-width:390px){body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved{margin-left:12px!important;margin-right:12px!important}body:has(.poster-coach-welcome) .coach-welcome{margin-left:12px!important;margin-right:12px!important}}
+
+/* Substituição definitiva da marca antiga no painel coach */
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved{background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.55)),url("./coach-gym-neon.svg") center/cover no-repeat!important}
+body:has(.poster-coach-welcome) .poster-a-mark img{width:100%;height:100%;object-fit:contain;display:block}
+body:has(.poster-coach-welcome) .topbar .brand-mark{object-fit:contain!important;background:#071008!important;padding:4px!important;border:1px solid #63ff37!important}
