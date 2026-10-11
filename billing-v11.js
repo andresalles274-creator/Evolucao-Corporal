@@ -27,7 +27,7 @@ async function loadBilling(){
   const paid=new Set(monthly.filter(x=>x.status==='paid').map(x=>x.user_id));
   const overdue=new Set(monthly.filter(x=>x.status!=='paid'&&new Date(x.due_date+'T23:59:59')<now).map(x=>x.user_id));
   const pending=Math.max(0,ids.length-paid.size-overdue.size);
-  html=`<div class="billing-title"><div><h3>Mensalidades</h3><p>Resumo da consultoria neste mês</p></div><span class="billing-icon">▣</span></div><div class="billing-summary"><div class="billing-kpi"><strong>${paid.size}</strong><span>Em dia</span></div><div class="billing-kpi"><strong>${pending}</strong><span>A vencer</span></div><div class="billing-kpi"><strong>${overdue.size}</strong><span>Pendentes</span></div></div>`;
+  html=`<div class="billing-title"><div><h3>Mensalidades</h3><p>Resumo da consultoria neste mês</p></div><span class="billing-icon">▣</span></div><div class="billing-summary"><div class="billing-kpi"><span class="billing-kpi-symbol">♟</span><strong>${ids.length}</strong><span>Total de alunos</span></div><div class="billing-kpi"><span class="billing-kpi-symbol">✓</span><strong>${paid.size}</strong><span>Em dia</span></div><div class="billing-kpi"><span class="billing-kpi-symbol">◷</span><strong>${pending}</strong><span>Vencendo</span></div><div class="billing-kpi"><span class="billing-kpi-symbol">×</span><strong>${overdue.size}</strong><span>Atrasados</span></div></div>`;
  }else{
   const setting=(await supabaseBilling.from('student_billing_settings').select('billing_day,monthly_amount,reminders_enabled').eq('user_id',userId).maybeSingle()).data;
   if(!setting||setting.reminders_enabled===false)return;
