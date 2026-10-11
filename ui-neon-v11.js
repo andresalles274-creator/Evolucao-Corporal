@@ -11,8 +11,17 @@
  function nav(){
   const n=q('.bottomnav'); if(!n||!coach())return; if(n.dataset.neon==='3')return; n.dataset.neon='3';
   const routes={};qa('[data-route]',n).forEach(b=>routes[b.dataset.route]=b);
+  // Keep the original bound route buttons in the DOM so their app.js handlers remain alive.
+  const original=document.createElement('div');original.className='neon-original-routes';original.style.cssText='display:none!important';Object.values(routes).forEach(b=>original.appendChild(b));
   n.innerHTML=`<button class="navbtn active" data-ref="home"><span class="ico">⌂</span><span>Início</span></button><button class="navbtn" data-ref="measures"><span class="ico">▥</span><span>Medidas</span></button><button class="navbtn neon-add"><span class="plus">+</span><span>Novo aluno</span></button><button class="navbtn" data-ref="students"><span class="ico">♟</span><span>Alunos</span></button><button class="navbtn" data-ref="records"><span class="ico">▤</span><span>Registros</span></button>`;
-  q('[data-ref="home"]',n).onclick=()=>routes.home?.click(); q('[data-ref="measures"]',n).onclick=()=>routes.measures?.click(); q('.neon-add',n).onclick=openNewStudent; q('[data-ref="students"]',n).onclick=()=>q('.ref-students')?.scrollIntoView({behavior:'smooth',block:'center'}); q('[data-ref="records"]',n).onclick=()=>q('.ref-records')?.scrollIntoView({behavior:'smooth',block:'center'});
+  n.appendChild(original);
+  const go=(route,selector)=>{const btn=routes[route];if(!btn)return;btn.click();if(selector){setTimeout(()=>q(selector)?.scrollIntoView({behavior:'smooth',block:'start'}),180)}};
+  q('[data-ref="home"]',n).onclick=()=>go('home');
+  q('[data-ref="measures"]',n).onclick=()=>go('measures');
+  q('.neon-add',n).onclick=openNewStudent;
+  q('[data-ref="students"]',n).onclick=()=>go('coach','.ref-students');
+  q('[data-ref="records"]',n).onclick=()=>go('coach','.ref-records');
+
  }
  function decorateBilling(b){
   if(!b)return;b.classList.add('ref-billing','floating-card');
