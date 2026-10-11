@@ -171,3 +171,35 @@ body:has(.poster-coach-welcome) #content .billing-v11{display:none!important}
 
 /* Ocultar cartão de mensalidades também nas fichas dos alunos, preservando dados */
 #content > .billing-v11{display:none!important}
+
+/* Área do aluno: identidade visual igual ao painel profissional */
+body.student-neon .topbar .brand-mark{content:url("./coach-a-neon.svg")!important;border-color:#65ff36!important}
+body.student-neon .student-hero-neon.premium-brand{
+ position:relative!important;min-height:clamp(245px,76vw,340px)!important;height:auto!important;
+ margin:8px 6px 12px!important;border-radius:24px!important;
+ border:1px solid #65ff36!important;
+ background:linear-gradient(180deg,rgba(0,0,0,.16),rgba(0,0,0,.30)),url("./coach-gym-banner.jpg") center center/cover no-repeat!important;
+ overflow:hidden!important;box-shadow:0 14px 35px #000b!important
+}
+body.student-neon .student-hero-neon .premium-brand-content{
+ position:relative!important;z-index:2!important;box-sizing:border-box!important;
+ min-height:clamp(245px,76vw,340px)!important;height:100%!important;
+ padding:18px 12px!important;display:flex!important;flex-direction:column!important;
+ justify-content:center!important;align-items:center!important;text-align:center!important;
+ background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.13) 70%,rgba(0,0,0,.32) 100%)!important
+}
+body.student-neon .student-hero-neon .student-a-mark{width:clamp(72px,25vw,115px)!important;height:clamp(72px,25vw,115px)!important;margin:0 auto 8px!important}
+body.student-neon .student-hero-neon .student-a-mark img{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;filter:drop-shadow(0 2px 12px #0008)}
+body.student-neon .student-hero-neon h1{font-family:Inter,Arial,sans-serif!important;font-size:clamp(24px,7vw,35px)!important;font-weight:850!important;line-height:1.04!important;margin:0!important;color:white!important}
+body.student-neon .student-hero-neon h1 span{display:block!important}
+body.student-neon .student-hero-neon h1 small{display:block!important;font-size:.38em!important;letter-spacing:.45em!important;font-weight:500!important;margin-top:4px!important}
+body.student-neon .student-hero-neon .names{font-size:clamp(13px,3.5vw,17px)!important;margin-top:14px!important;color:#fff!important;font-weight:700!important}
+body.student-neon .student-hero-neon .tagline{font-size:clamp(8px,2.3vw,10px)!important;color:#fff!important;letter-spacing:.26em!important;margin-top:8px!important}
+body.student-neon .student-billing-card{display:none!important}
+@media(max-width:620px){
+ body.student-neon #content{padding-left:6px!important;padding-right:6px!important}
+ body.student-neon .welcome-row,body.student-neon .metric-grid,body.student-neon .student-main-actions{margin-left:6px!important;margin-right:6px!important}
+ body.student-neon .student-main-actions{padding:14px 10px!important}
+ body.student-neon .student-main-actions .quick-action{min-width:0!important;padding:12px 8px!important;box-sizing:border-box!important}
+ body.student-neon .student-main-actions .quick-action strong,body.student-neon .student-main-actions .quick-action small{overflow-wrap:anywhere!important;white-space:normal!important}
+}
