@@ -96,3 +96,39 @@ body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved::before{
  body:has(.poster-coach-welcome) .ref-lower-grid .ref-students,
  body:has(.poster-coach-welcome) .ref-lower-grid .ref-records{margin-left:0!important;margin-right:0!important}
 }
+
+/* Layout responsivo: ganhar largura horizontal real sem esticar os cards verticalmente */
+@media(max-width:620px){
+ .app>main#content{padding-left:6px!important;padding-right:6px!important}
+ #content>.card,#content>.active-student-card,#content>.billing-v11,
+ #content>.student-main-actions,#content>.student-billing-card,
+ #content>.metric-grid,#content>.welcome-row,#content>.student-banner{
+   margin-left:2px!important;margin-right:2px!important;max-width:calc(100% - 4px)!important;
+ }
+ body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved,
+ body:has(.poster-coach-welcome) .coach-welcome,
+ body:has(.poster-coach-welcome) .ref-featured,
+ body:has(.poster-coach-welcome) .ref-students,
+ body:has(.poster-coach-welcome) .ref-records,
+ body:has(.poster-coach-welcome) .billing-v11,
+ body:has(.poster-coach-welcome) .ref-billing{
+   margin-left:2px!important;margin-right:2px!important;max-width:calc(100% - 4px)!important
+ }
+ body:has(.poster-coach-welcome) .ref-lower-grid{margin-left:2px!important;margin-right:2px!important;max-width:calc(100% - 4px)!important}
+ #content .card,#content .active-student-card,#content .billing-v11,
+ #content .student-main-actions{min-width:0!important;box-sizing:border-box!important}
+ #content .quick-actions{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:5px!important;min-width:0!important}
+ #content .quick-action{min-width:0!important;max-width:100%!important;box-sizing:border-box!important;padding:10px 5px!important;overflow:hidden!important}
+ #content .quick-action strong,#content .quick-action small{
+   max-width:100%!important;overflow-wrap:anywhere!important;word-break:normal!important;
+   white-space:normal!important;hyphens:auto!important
+ }
+ #content .quick-action strong{font-size:clamp(10px,2.8vw,13px)!important;line-height:1.22!important}
+ #content .quick-action small{font-size:clamp(9px,2.4vw,11px)!important;line-height:1.3!important}
+ #content .quick-action>span{font-size:19px!important}
+ #content .featured-profile{display:block!important;box-sizing:border-box!important;width:100%!important;margin-top:8px!important;padding:10px 12px!important;border-radius:12px!important}
+ #content .active-student-head>div,#content .student-profile-hero>div{min-width:0!important}
+ #content .active-student-head strong,#content .student-profile-hero strong{
+   overflow-wrap:anywhere!important;white-space:normal!important
+ }
+}
