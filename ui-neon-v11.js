@@ -62,8 +62,12 @@
  }
  function studentHome(){
   if(!student())return;const main=q('#content');if(!main)return;const hero=q('.premium-brand',main);if(!hero)return;document.body.classList.add('student-neon');studentStyle();
-  const h=q('h1',hero);if(h)h.textContent='Evolução Corporal';const names=q('.names',hero);if(names)names.textContent='André Salles • Silvana Salles';const tag=q('.tagline',hero);if(tag)tag.textContent='CONSULTORIA ONLINE · HIPERTROFIA & EMAGRECIMENTO';
-  if(!q('.student-billing-card',main)){const bill=document.createElement('section');bill.className='student-billing-card';bill.innerHTML='<div class="eyebrow">MENSALIDADE DA CONSULTORIA</div><div class="student-billing-row"><div class="student-billing-status">Em dia</div><div class="student-billing-date">Acompanhamento ativo</div></div>';hero.after(bill)}
+  const headerLogo=q('.topbar .brand-mark');if(headerLogo)headerLogo.src='./coach-a-neon.svg';
+  hero.classList.add('student-hero-neon');
+  const content=q('.premium-brand-content',hero);
+  if(content&&!q('.student-a-mark',hero)){const mark=document.createElement('div');mark.className='student-a-mark';mark.innerHTML='<img src="./coach-a-neon.svg" alt="Evolução Corporal">';content.prepend(mark)}
+  const h=q('h1',hero);if(h)h.innerHTML='<span>EVOLUÇÃO</span><small>C O R P O R A L</small>';const names=q('.names',hero);if(names)names.textContent='André Salles • Silvana Salles';const tag=q('.tagline',hero);if(tag)tag.textContent='ACOMPANHAMENTO PERSONALIZADO';
+  q('.student-billing-card',main)?.remove();
   const quick=qa(':scope > .card',main).find(c=>/Registrar hoje/i.test(c.innerText));if(quick){quick.classList.add('student-main-actions');const e=q('.eyebrow',quick);if(e)e.textContent='ACESSO RÁPIDO';const hh=q('h2',quick);if(hh)hh.textContent='Seu acompanhamento';const bs=qa('.quick-action',quick),labels=[['Meu Treino','Acessar ficha'],['Minha Alimentação','Plano alimentar'],['Minha Evolução','Medidas e avaliações'],['Minhas Fotos','Evolução visual']];if(bs.length>=4){const order=[2,1,0,3];const wrap=q('.quick-actions',quick);order.forEach((idx,pos)=>{const b=bs[idx];const strong=q('strong',b),small=q('small',b);if(strong)strong.textContent=labels[pos][0];if(small)small.textContent=labels[pos][1];wrap.appendChild(b)})}}
  }
  function run(){nav();layout();studentHome()}
