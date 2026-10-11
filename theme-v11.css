@@ -71,3 +71,14 @@ body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved{
  background-image:linear-gradient(180deg,rgba(0,0,0,.30) 0%,rgba(0,0,0,.50) 55%,rgba(0,0,0,.72) 100%),url("https://myfitnesstrainer.in/assets/hero-functional-Cb5Kcdiz.jpg")!important;
  background-position:center!important;background-size:cover!important;background-repeat:no-repeat!important
 }
+
+/* Banner coach: remover escurecimento excessivo da metade superior */
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved{
+ background-image:linear-gradient(180deg,rgba(0,0,0,.06) 0%,rgba(0,0,0,.14) 45%,rgba(0,0,0,.38) 100%),url("https://myfitnesstrainer.in/assets/hero-functional-Cb5Kcdiz.jpg")!important
+}
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved::after{
+ background:linear-gradient(180deg,transparent,rgba(0,0,0,.12))!important;height:20%!important
+}
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved::before{
+ background:radial-gradient(circle at 90% 15%,rgba(202,255,24,.09),transparent 28%)!important
+}
