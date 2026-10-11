@@ -97,9 +97,11 @@ async function init(){
  try{
  $("#app").innerHTML=loading();
  ({data:{session}}=await supabase.auth.getSession()); user=session?.user||null;
- if(user) await hydrate();
+ if(user && !location.hash.includes("type=recovery")) await hydrate();
  supabase.auth.onAuthStateChange(async(ev,s)=>{
    session=s;user=s?.user||null;
+   if(ev==="PASSWORD_RECOVERY"){showPasswordRecovery();return;}
+   if(recoveryMode)return;
 
    // Ao voltar da câmera/galeria o Supabase pode renovar o token.
    // Não redesenhar a página nesses eventos, pois isso apagava
@@ -118,7 +120,7 @@ async function init(){
    await hydrate();
    render();
  });
- render();
+ if(!recoveryMode && !location.hash.includes("type=recovery"))render();
  }catch(err){console.error(err);fatalScreen(err?.message||String(err));}
 }
 async function hydrate(){
@@ -806,6 +808,27 @@ function render(){
  root.innerHTML=shell();bindShell();drawRoute();
 }
 
+const CANONICAL_APP_URL="https://andresalles274-creator.github.io/Evolucao-Corporal/";
+let recoveryMode=false;
+function passwordRecoveryView(){
+ return `<section class="auth"><div class="authbox"><img src="./coach-a-neon.svg" class="auth-logo" alt="Evolução Corporal"><div class="eyebrow">Evolução Corporal · Recuperação de acesso</div><h1>Definir nova senha</h1><p class="sub">Crie uma senha nova para entrar na sua conta. Seus treinos e dados continuam preservados.</p><form id="recoveryForm"><div class="field"><label>Nova senha</label><input name="password" type="password" minlength="6" autocomplete="new-password" required></div><div class="field"><label>Confirmar nova senha</label><input name="confirm" type="password" minlength="6" autocomplete="new-password" required></div><button class="btn btn-primary btn-full">Salvar nova senha</button></form></div></section>`;
+}
+function showPasswordRecovery(){
+ recoveryMode=true;
+ $("#app").innerHTML=passwordRecoveryView();
+ $("#recoveryForm").onsubmit=async e=>{
+  e.preventDefault();const f=new FormData(e.currentTarget),password=String(f.get("password")),confirm=String(f.get("confirm"));
+  if(password!==confirm)return toast("As senhas não coincidem.",true);
+  const button=e.currentTarget.querySelector("button");button.disabled=true;
+  const result=await supabase.auth.updateUser({password});
+  button.disabled=false;
+  if(result.error)return toast("Não foi possível atualizar a senha: "+result.error.message,true);
+  recoveryMode=false;
+  history.replaceState(null,"",location.pathname);
+  toast("Senha atualizada. Seu acesso foi recuperado.");
+  await hydrate();render();
+ };
+}
 function authView(){return `<section class="auth"><div class="authbox">
 <img src="./logo-brand.jpg" class="auth-logo" alt="Logo Evolução Corporal">
 <div class="eyebrow">Consultoria online · v${APP_VERSION}</div><h1>Evolução Corporal</h1>
@@ -829,7 +852,7 @@ function bindAuth(){
  $$(".tabs button").forEach(b=>b.onclick=()=>{$$(".tabs button").forEach(x=>x.classList.toggle("active",x===b));$("#loginForm").hidden=b.dataset.tab!=="login";$("#signupForm").hidden=b.dataset.tab!=="signup"});
  $("#loginForm").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.currentTarget);let r=await supabase.auth.signInWithPassword({email:String(f.get("email")).trim(),password:String(f.get("password"))});if(r.error)toast("Erro ao entrar: "+r.error.message,true)};
  $("#signupForm").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.currentTarget);let r=await supabase.auth.signUp({email:String(f.get("email")).trim(),password:String(f.get("password")),options:{data:{full_name:String(f.get("name")).trim(),goal:String(f.get("goal"))},emailRedirectTo:location.origin+location.pathname}});if(r.error)return toast("Erro no cadastro: "+r.error.message,true);toast(r.data.session?"Conta criada com sucesso.":"Conta criada. Confira seu e-mail para confirmar.")};
- $("#forgot").onclick=async()=>{let email=prompt("Digite seu e-mail:");if(!email)return;let r=await supabase.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});toast(r.error?r.error.message:"Link de recuperação enviado.",!!r.error)};
+ $("#forgot").onclick=async()=>{let email=prompt("Digite seu e-mail:");if(!email)return;let r=await supabase.auth.resetPasswordForEmail(email,{redirectTo:CANONICAL_APP_URL});toast(r.error?r.error.message:"Link de recuperação enviado.",!!r.error)};
 }
 
 function shell(){
