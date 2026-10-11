@@ -210,8 +210,9 @@ body.student-neon .student-billing-card{display:none!important}
  display:block!important;margin:8px 5px 12px!important;
  min-height:clamp(235px,72vw,325px)!important;
  border-radius:25px!important;border:1px solid rgba(104,255,55,.75)!important;
- background:#070d08 linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.33)),
- url("https://myfitnesstrainer.in/assets/hero-functional-Cb5Kcdiz.jpg") center center/cover no-repeat!important;
+ background-color:#070d08!important;
+ background-image:linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.33)),url("https://myfitnesstrainer.in/assets/hero-functional-Cb5Kcdiz.jpg")!important;
+ background-position:center center!important;background-size:cover!important;background-repeat:no-repeat!important;
  box-shadow:0 14px 38px rgba(0,0,0,.65),0 0 18px rgba(104,255,55,.08)!important
 }
 .app.student-app .student-hero-neon.premium-brand::after{
