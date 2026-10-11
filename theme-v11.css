@@ -132,3 +132,36 @@ body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved::before{
    overflow-wrap:anywhere!important;white-space:normal!important
  }
 }
+
+/* Painel de referência: cartões largos, compactos e com textos contidos */
+@media(max-width:620px){
+ body:has(.poster-coach-welcome) #content{padding:7px 6px 28px!important}
+ body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved{min-height:190px!important;height:clamp(185px,48vw,250px)!important;margin:4px 2px 10px!important;border-radius:22px!important}
+ body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved .premium-brand-content{min-height:100%!important;height:100%!important;box-sizing:border-box!important;padding:10px 14px!important}
+ body:has(.poster-coach-welcome) .poster-a-mark{width:clamp(52px,16vw,82px)!important;height:clamp(52px,16vw,82px)!important}
+ body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved h1{font-size:clamp(22px,6vw,31px)!important}
+ body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved .names{font-size:clamp(12px,3.2vw,16px)!important;margin-top:3px!important}
+ body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved .tagline{font-size:8px!important;margin-top:2px!important}
+ body:has(.poster-coach-welcome) .coach-welcome{margin:6px 2px 10px!important;padding:10px 12px!important;border:1px solid rgba(101,255,60,.35)!important;border-radius:20px!important;min-width:0!important;box-sizing:border-box!important}
+ body:has(.poster-coach-welcome) .coach-welcome>div:first-child{min-width:0!important;flex:1!important}
+ body:has(.poster-coach-welcome) .coach-welcome h2{font-size:clamp(24px,6.2vw,33px)!important}
+ body:has(.poster-coach-welcome) .coach-welcome .sub{font-size:clamp(11px,3vw,14px)!important}
+ body:has(.poster-coach-welcome) .coach-total{min-width:62px!important;padding:9px!important}
+ body:has(.poster-coach-welcome) .ref-featured{margin:7px 2px 10px!important;padding:14px 12px!important}
+ body:has(.poster-coach-welcome) .ref-featured .active-student-head{gap:10px!important;min-width:0!important}
+ body:has(.poster-coach-welcome) .ref-featured .active-student-head>div:last-child{flex:1!important;min-width:0!important}
+ body:has(.poster-coach-welcome) .ref-featured h2{font-size:clamp(23px,6.3vw,32px)!important;line-height:1.12!important;overflow-wrap:break-word!important}
+ body:has(.poster-coach-welcome) .ref-featured .student-avatar-lg{width:52px!important;height:52px!important;flex-basis:52px!important}
+ body:has(.poster-coach-welcome) .ref-featured .quick-actions{gap:5px!important}
+ body:has(.poster-coach-welcome) .ref-featured .quick-action{min-height:96px!important;padding:9px 5px!important}
+ body:has(.poster-coach-welcome) .ref-featured .quick-action strong{font-size:clamp(10px,2.7vw,12px)!important}
+ body:has(.poster-coach-welcome) .ref-featured .quick-action small{font-size:9px!important}
+ body:has(.poster-coach-welcome) .ref-featured .btn-full{box-sizing:border-box!important;width:100%!important;max-width:100%!important}
+ body:has(.poster-coach-welcome) .billing-v11{margin:7px 2px 10px!important;padding:14px 10px!important}
+ body:has(.poster-coach-welcome) .billing-summary{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:5px!important}
+ body:has(.poster-coach-welcome) .billing-v11 .billing-kpi{padding:9px 3px!important;min-width:0!important;align-items:center!important;text-align:center!important;gap:4px!important}
+ body:has(.poster-coach-welcome) .billing-v11 .billing-kpi strong{font-size:clamp(17px,5vw,25px)!important}
+ body:has(.poster-coach-welcome) .billing-v11 .billing-kpi span{white-space:normal!important;overflow-wrap:anywhere!important;font-size:clamp(8px,2.3vw,10px)!important}
+ body:has(.poster-coach-welcome) .billing-v11 .billing-kpi .billing-kpi-symbol{display:block!important;color:#75ff3a!important;font-size:15px!important;line-height:1!important}
+ body:has(.poster-coach-welcome) .ref-lower-grid{margin:7px 2px!important}
+}
