@@ -1,8 +1,11 @@
 // Evolução Corporal v11 — composição neon do Coach + painel visual dos alunos.
 (function(){
  const q=(s,r=document)=>r.querySelector(s),qa=(s,r=document)=>[...r.querySelectorAll(s)];
- const coach=()=>/Painel do Coach/i.test(document.body.innerText);
- const student=()=>!!q('.topbar')&&!coach();
+ const coach=()=>!!q('.app:not(.student-app) .topbar')&&/Painel do Coach/i.test(q('.topbar')?.innerText||'');
+ const student=()=>!!q('.app.student-app .topbar');
+ const setText=(el,value)=>{if(el&&el.textContent!==value)el.textContent=value};
+ const setHTML=(el,value)=>{if(el&&el.innerHTML!==value)el.innerHTML=value};
+ const setSrc=(el,url)=>{if(el&&el.getAttribute('src')!==url)el.setAttribute('src',url)};
  function openNewStudent(){
   q('.neon-student-modal')?.remove(); const m=document.createElement('div'); m.className='neon-student-modal record-overlay';
   m.innerHTML=`<div class="record-modal neon-add-card"><div class="record-modal-head"><div><div class="eyebrow">NOVO ALUNO</div><h2>Adicionar aluno</h2></div><button class="record-x" type="button">×</button></div><p class="sub">Envie o link do Evolução Corporal para o aluno criar a conta. Após o cadastro ele aparecerá no painel.</p><button class="btn btn-primary btn-full neon-copy-link" type="button">Copiar link para o aluno</button><button class="btn btn-ghost btn-full neon-close" type="button">Fechar</button></div>`;
@@ -32,19 +35,19 @@
   if(!coach())return; const main=q('#content');if(!main)return;
   const hero=q('.premium-brand',main), billing=q('.billing-v11',main), welcome=q('.coach-welcome',main); const cards=qa(':scope > .card',main);
   const featured=cards.find(c=>/Abrir ficha completa/i.test(c.innerText)); const students=cards.find(c=>/Acompanhamento[\s\S]*Alunos/i.test(c.innerText)); const records=cards.find(c=>/Últimos registros/i.test(c.innerText));
-  if(welcome){welcome.classList.add('ref-welcome','poster-coach-welcome');} const headerLogo=q('.topbar .brand-mark');if(headerLogo&&coach())headerLogo.src='./coach-a-neon.svg';
+  if(welcome){welcome.classList.add('ref-welcome','poster-coach-welcome');} const headerLogo=q('.topbar .brand-mark');if(coach())setSrc(headerLogo,'./coach-a-neon.svg');
   if(hero){
     hero.classList.add('ref-hero','ref-hero-approved');
     const content=q('.premium-brand-content',hero);
     const logo=q('.premium-logo',hero); if(logo) logo.style.display='none';
-    const h=q('h1',hero);if(h)h.innerHTML='<span class="poster-brand-name">EVOLUÇÃO</span><small>C O R P O R A L</small>';
-    const names=q('.names',hero);if(names)names.textContent='André Salles • Silvana Salles';
-    const tag=q('.tagline',hero);if(tag)tag.textContent='PAINEL PROFISSIONAL';
+    const h=q('h1',hero);setHTML(h,'<span class="poster-brand-name">EVOLUÇÃO</span><small>C O R P O R A L</small>');
+    const names=q('.names',hero);setText(names,'André Salles • Silvana Salles');
+    const tag=q('.tagline',hero);setText(tag,'PAINEL PROFISSIONAL');
     if(content&&!q('.poster-a-mark',hero)){const mark=document.createElement('div');mark.className='poster-a-mark';mark.setAttribute('aria-hidden','true');mark.innerHTML='<img src="./coach-a-neon.svg" alt="Logo Evolução Corporal" />';content.prepend(mark)}
     q('.hero-coach-kicker',hero)?.remove();q('.hero-motto',hero)?.remove();
   }
   decorateBilling(billing);
-  if(featured){featured.classList.add('ref-featured','floating-card');const e=q('.eyebrow',featured);if(e)e.textContent='★  ALUNO EM DESTAQUE';if(!q('.featured-profile',featured)){const b=document.createElement('button');b.className='featured-profile';b.type='button';b.textContent='Ver perfil  →';b.onclick=()=>q('.btn-primary',featured)?.click();featured.appendChild(b)}}
+  if(featured){featured.classList.add('ref-featured','floating-card');const e=q('.eyebrow',featured);setText(e,'★  ALUNO EM DESTAQUE');if(!q('.featured-profile',featured)){const b=document.createElement('button');b.className='featured-profile';b.type='button';b.textContent='Ver perfil  →';b.onclick=()=>q('.btn-primary',featured)?.click();featured.appendChild(b)}}
   if(students)students.classList.add('ref-students','floating-card'); if(records)records.classList.add('ref-records','floating-card');
   if(students&&records){let grid=q('.ref-lower-grid',main);if(!grid){grid=document.createElement('div');grid.className='ref-lower-grid';students.before(grid);grid.append(students,records);const promo=document.createElement('div');promo.className='ref-promo';promo.innerHTML='<b>↗</b><strong>Mais resultados<br>para seus alunos</strong><span>Acompanhe a evolução e mantenha todos no foco.</span>';grid.appendChild(promo)}}
   if(hero&&welcome&&hero.nextElementSibling!==welcome)hero.after(welcome); if(welcome&&featured&&welcome.nextElementSibling!==featured)welcome.after(featured); if(featured&&billing&&featured.nextElementSibling!==billing)featured.after(billing);
@@ -62,13 +65,20 @@
  }
  function studentHome(){
   if(!student())return;const main=q('#content');if(!main)return;const hero=q('.premium-brand',main);if(!hero)return;document.body.classList.add('student-neon');studentStyle();
-  const headerLogo=q('.topbar .brand-mark');if(headerLogo)headerLogo.src='./coach-a-neon.svg';
+  const headerLogo=q('.topbar .brand-mark');setSrc(headerLogo,'./coach-a-neon.svg');
   hero.classList.add('student-hero-neon');
   const content=q('.premium-brand-content',hero);
   if(content&&!q('.student-a-mark',hero)){const mark=document.createElement('div');mark.className='student-a-mark';mark.innerHTML='<img src="./coach-a-neon.svg" alt="Evolução Corporal">';content.prepend(mark)}
-  const h=q('h1',hero);if(h)h.innerHTML='<span>EVOLUÇÃO</span><small>C O R P O R A L</small>';const names=q('.names',hero);if(names)names.textContent='André Salles • Silvana Salles';const tag=q('.tagline',hero);if(tag)tag.textContent='ACOMPANHAMENTO PERSONALIZADO';
+  const h=q('h1',hero);setHTML(h,'<span>EVOLUÇÃO</span><small>C O R P O R A L</small>');const names=q('.names',hero);setText(names,'André Salles • Silvana Salles');const tag=q('.tagline',hero);setText(tag,'ACOMPANHAMENTO PERSONALIZADO');
   q('.student-billing-card',main)?.remove();
-  const quick=qa(':scope > .card',main).find(c=>/Registrar hoje/i.test(c.innerText));if(quick){quick.classList.add('student-main-actions');const e=q('.eyebrow',quick);if(e)e.textContent='ACESSO RÁPIDO';const hh=q('h2',quick);if(hh)hh.textContent='Seu acompanhamento';const bs=qa('.quick-action',quick),labels=[['Meu Treino','Acessar ficha'],['Minha Alimentação','Plano alimentar'],['Minha Evolução','Medidas e avaliações'],['Minhas Fotos','Evolução visual']];if(bs.length>=4){const order=[2,1,0,3];const wrap=q('.quick-actions',quick);order.forEach((idx,pos)=>{const b=bs[idx];const strong=q('strong',b),small=q('small',b);if(strong)strong.textContent=labels[pos][0];if(small)small.textContent=labels[pos][1];wrap.appendChild(b)})}}
+  const quick=qa(':scope > .card',main).find(c=>/Registrar hoje/i.test(c.innerText));if(quick){quick.classList.add('student-main-actions');const e=q('.eyebrow',quick);if(e)e.textContent='ACESSO RÁPIDO';const hh=q('h2',quick);if(hh)hh.textContent='Seu acompanhamento';const labels={workouts:['Meu Treino','Acessar ficha'],food:['Minha Alimentação','Plano alimentar'],measures:['Minha Evolução','Medidas e avaliações'],photos:['Minhas Fotos','Evolução visual']};
+    const wrap=q('.quick-actions',quick);
+    if(wrap){['workouts','food','measures','photos'].forEach((route,pos)=>{
+      const button=q('.quick-action[data-go="'+route+'"]',wrap);if(!button)return;
+      const strong=q('strong',button),small=q('small',button);
+      setText(strong,labels[route][0]);setText(small,labels[route][1]);
+      if(wrap.children[pos]!==button)wrap.insertBefore(button,wrap.children[pos]||null);
+    })}
  }
  function run(){nav();layout();studentHome()}
  let lock=false;new MutationObserver(()=>{if(lock)return;lock=true;requestAnimationFrame(()=>{run();lock=false})}).observe(document.documentElement,{childList:true,subtree:true});document.addEventListener('DOMContentLoaded',run);setTimeout(run,200);setTimeout(run,900);
