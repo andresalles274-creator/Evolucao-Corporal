@@ -165,3 +165,6 @@ body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved::before{
  body:has(.poster-coach-welcome) .billing-v11 .billing-kpi .billing-kpi-symbol{display:block!important;color:#75ff3a!important;font-size:15px!important;line-height:1!important}
  body:has(.poster-coach-welcome) .ref-lower-grid{margin:7px 2px!important}
 }
+
+/* Ocultar somente a seção Mensalidades no painel do Coach, sem afetar dados nem outras telas */
+body:has(.poster-coach-welcome) #content .billing-v11{display:none!important}
