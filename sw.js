@@ -1,5 +1,5 @@
-const CACHE="evolucao-corporal-v11.32-password-recovery";
-const STATIC=["./","./index.html","./styles.css?v=10.8.0","./theme-v11.css?v=11.10.8","./app.js?v=10.6.3","./billing-v11.js?v=11.0.2","./ui-neon-v11.js?v=11.12.2","./config.js","./chat-v1.js?v=1.0.6","./brand-background.jpg"];
+const CACHE="evolucao-corporal-v11.33-student-neon";
+const STATIC=["./","./index.html","./styles.css?v=10.8.0","./theme-v11.css?v=11.10.9","./app.js?v=10.6.3","./billing-v11.js?v=11.0.2","./ui-neon-v11.js?v=11.12.3","./config.js","./chat-v1.js?v=1.0.6","./brand-background.jpg"];
 
 self.addEventListener("install",event=>{
   self.skipWaiting();
