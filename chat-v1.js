@@ -35,10 +35,24 @@ function addChatNavigation(){
  if(!me||!main)return;
  const extra=nav?.querySelector('[data-chat-nav]');
  if(extra)extra.remove();
- if(launch.parentElement!==main)main.prepend(launch);
+ const hero=main.querySelector('.ref-hero.ref-hero-approved')||main.querySelector('.premium-brand');
+ const target=coach&&hero?hero:main;
+ if(launch.parentElement!==target){if(target===main)main.prepend(launch);else target.appendChild(launch)}
+ launch.classList.toggle('chat-in-hero',target!==main);
 }
 new MutationObserver(addChatNavigation).observe(document.getElementById("app")||document.body,{childList:true,subtree:true});
 setInterval(addChatNavigation,1500);
+const heroChatStyle=document.createElement('style');
+heroChatStyle.textContent=`
+.ref-hero.ref-hero-approved{position:relative!important}
+.ref-hero.ref-hero-approved #coach-chat-launch.chat-in-hero{
+ position:absolute!important;top:12px!important;right:12px!important;bottom:auto!important;left:auto!important;
+ z-index:12!important;margin:0!important;padding:9px 13px!important;
+ border-radius:24px!important;font-size:13px!important;line-height:1.2!important;
+ box-shadow:0 4px 18px #0009!important;max-width:calc(100% - 24px)!important
+}
+`;
+document.head.append(heroChatStyle);
 
 const notificationStyle=document.createElement("style");
 notificationStyle.textContent='#coach-chat-launch .chat-count,.chat-nav-count{display:inline-block;background:#e33;color:white;border-radius:50px;padding:2px 6px;font-size:11px;margin-left:5px}#chat-notice{position:fixed;top:75px;left:12px;right:12px;z-index:10020;background:#18291b;color:#fff;border:1px solid #caff18;padding:14px;border-radius:15px;box-shadow:0 12px 35px #0009;cursor:pointer}';
