@@ -2,7 +2,7 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 
-const APP_VERSION="10.4";
+const APP_VERSION="10.5";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -75,7 +75,7 @@ function fatalScreen(message){
  const root=document.querySelector("#app");
  if(!root)return;
  root.innerHTML=`<section class="auth"><div class="authbox" style="text-align:center">
- <img src="./logo-brand.jpg" class="auth-logo" alt="Logo Evolução Corporal">
+ <img src="./coach-a-neon.svg" class="auth-logo" alt="Logo Evolução Corporal">
  <div class="eyebrow">Evolução Corporal · v${APP_VERSION}</div>
  <h1>Não foi possível iniciar</h1>
  <p class="sub">${esc(message||"Erro inesperado ao carregar o aplicativo.")}</p>
@@ -794,7 +794,7 @@ function openRecordDetail(table,index){
 
 function inactiveView(){
  return `<section class="auth"><div class="authbox" style="text-align:center">
- <img src="./logo-brand.jpg" class="auth-logo" alt="Logo Evolução Corporal">
+ <img src="./coach-a-neon.svg" class="auth-logo" alt="Logo Evolução Corporal">
  <div class="eyebrow">Consultoria online</div><h1>Conta desativada</h1>
  <p class="sub">Seu acesso à consultoria foi encerrado. Entre em contato com seu coach caso precise reativar a conta.</p>
  <button id="inactiveLogout" class="btn btn-ghost btn-full">Sair</button>
@@ -830,7 +830,7 @@ function showPasswordRecovery(){
  };
 }
 function authView(){return `<section class="auth"><div class="authbox">
-<img src="./logo-brand.jpg" class="auth-logo" alt="Logo Evolução Corporal">
+<img src="./coach-a-neon.svg" class="auth-logo" alt="Logo Evolução Corporal">
 <div class="eyebrow">Consultoria online · v${APP_VERSION}</div><h1>Evolução Corporal</h1>
 <p class="sub">André Salles • Silvana Salles<br>Hipertrofia & emagrecimento</p>
 <div class="tabs"><button class="active" data-tab="login">Entrar</button><button data-tab="signup">Criar conta</button></div>
@@ -857,8 +857,8 @@ function bindAuth(){
 
 function shell(){
  const name=profile?.full_name||user.email;
- return `<div class="app"><header class="topbar">
- <div class="brand-wrap">${backTarget()?`<button type="button" class="top-back" data-back aria-label="Voltar">←</button>`:""}<img src="./logo-brand.jpg" class="brand-mark" alt="Logo"><div><div class="small">Evolução Corporal <span class="version-badge">v${APP_VERSION}</span></div><div class="brand">${isCoach?"Painel do Coach":"Olá, "+esc(name.split(" ")[0])}</div></div></div>
+ return `<div class="app${isCoach?"":" student-app"}"><header class="topbar">
+ <div class="brand-wrap">${backTarget()?`<button type="button" class="top-back" data-back aria-label="Voltar">←</button>`:""}<img src="./coach-a-neon.svg" class="brand-mark" alt="Logo Evolução Corporal"><div><div class="small">Evolução Corporal <span class="version-badge">v${APP_VERSION}</span></div><div class="brand">${isCoach?"Painel do Coach":"Olá, "+esc(name.split(" ")[0])}</div></div></div>
  <div class="top-actions">${isCoach&&selectedStudentId?`<div class="active-student-chip"><span>${studentInitials(selectedStudentName())}</span><div><small>Aluno ativo</small><strong>${esc(selectedStudentName().split(" ")[0])}</strong></div></div>`:""}<div class="user-chip"><span class="avatar">${esc(name[0])}</span><button id="logout" class="btn btn-ghost" style="padding:7px 10px">Sair</button></div></div></header>
  <main id="content"></main>
  <nav class="bottomnav">${nav("home","⌂","Visão geral")}${nav("measures","▥","Medidas")}${nav("food","◉","Alimentação")}${nav("training","✦","Meu treino")}${nav("hormones","⌁","Uso hormonal")}${nav(isCoach?"coach":"profile","♟",isCoach?"Alunos":"Meu perfil")}</nav></div>`;
@@ -932,10 +932,10 @@ function home(){
  const target=2300, pct=Math.max(0,Math.min(100,Math.round((kcal/target)*100)));
  const first=esc((profile.full_name||"Atleta").split(" ")[0]);
  const dateTxt=new Date().toLocaleDateString("pt-BR",{weekday:"short",day:"2-digit",month:"short"});
- return `<section class="premium-brand"><div class="premium-brand-content">
- <img src="./logo-brand.jpg" class="premium-logo" alt="Logo da consultoria">
- <h1>Evolução Corporal</h1><div class="names">André Salles • Silvana Salles</div>
- <div class="tagline">Consultoria online · Hipertrofia & emagrecimento</div></div></section>
+ return `<section class="premium-brand student-hero-neon"><div class="premium-brand-content">
+ <div class="student-a-mark"><img src="./coach-a-neon.svg" alt="Evolução Corporal"></div>
+ <h1><span>EVOLUÇÃO</span><small>C O R P O R A L</small></h1><div class="names">André Salles • Silvana Salles</div>
+ <div class="tagline">ACOMPANHAMENTO PERSONALIZADO</div></div></section>
  <div class="welcome-row"><div><div class="eyebrow">Evolua todos os dias</div><h2>Olá, ${first}!</h2><p class="sub" style="margin:5px 0 0">Disciplina hoje. Uma versão mais forte de você amanhã.</p></div><div class="date-pill">${esc(dateTxt)}</div></div>
  <div class="metric-grid">
  <div class="metric"><div class="metric-icon">◎</div><span class="small">OBJETIVO</span><strong style="font-size:20px">${esc(profile.goal||"Definir meta")}</strong></div>
