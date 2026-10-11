@@ -82,3 +82,17 @@ body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved::after{
 body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved::before{
  background:radial-gradient(circle at 90% 15%,rgba(202,255,24,.09),transparent 28%)!important
 }
+
+/* Coach: ampliar discretamente a largura útil dos cartões nas laterais */
+@media(max-width:620px){
+ body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved{margin-left:10px!important;margin-right:10px!important}
+ body:has(.poster-coach-welcome) .coach-welcome{margin-left:10px!important;margin-right:10px!important}
+ body:has(.poster-coach-welcome) .ref-featured,
+ body:has(.poster-coach-welcome) .ref-students,
+ body:has(.poster-coach-welcome) .ref-records,
+ body:has(.poster-coach-welcome) .billing-v11,
+ body:has(.poster-coach-welcome) .ref-billing{margin-left:10px!important;margin-right:10px!important}
+ body:has(.poster-coach-welcome) .ref-lower-grid{margin-left:10px!important;margin-right:10px!important}
+ body:has(.poster-coach-welcome) .ref-lower-grid .ref-students,
+ body:has(.poster-coach-welcome) .ref-lower-grid .ref-records{margin-left:0!important;margin-right:0!important}
+}
