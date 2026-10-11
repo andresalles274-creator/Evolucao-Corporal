@@ -79,6 +79,7 @@
       setText(strong,labels[route][0]);setText(small,labels[route][1]);
       if(wrap.children[pos]!==button)wrap.insertBefore(button,wrap.children[pos]||null);
     })}
+  }
  }
  function run(){nav();layout();studentHome()}
  let lock=false;new MutationObserver(()=>{if(lock)return;lock=true;requestAnimationFrame(()=>{run();lock=false})}).observe(document.documentElement,{childList:true,subtree:true});document.addEventListener('DOMContentLoaded',run);setTimeout(run,200);setTimeout(run,900);
