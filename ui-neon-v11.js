@@ -23,7 +23,7 @@
   if(!coach())return; const main=q('#content');if(!main)return;
   const hero=q('.premium-brand',main), billing=q('.billing-v11',main), welcome=q('.coach-welcome',main); const cards=qa(':scope > .card',main);
   const featured=cards.find(c=>/Abrir ficha completa/i.test(c.innerText)); const students=cards.find(c=>/Acompanhamento[\s\S]*Alunos/i.test(c.innerText)); const records=cards.find(c=>/Últimos registros/i.test(c.innerText));
-  if(welcome){welcome.classList.add('ref-welcome','poster-coach-welcome');}
+  if(welcome){welcome.classList.add('ref-welcome','poster-coach-welcome');} const headerLogo=q('.topbar .brand-mark');if(headerLogo&&coach())headerLogo.src='./coach-a-neon.svg';
   if(hero){
     hero.classList.add('ref-hero','ref-hero-approved');
     const content=q('.premium-brand-content',hero);
@@ -31,7 +31,7 @@
     const h=q('h1',hero);if(h)h.innerHTML='<span class="poster-brand-name">EVOLUÇÃO</span><small>C O R P O R A L</small>';
     const names=q('.names',hero);if(names)names.textContent='André Salles • Silvana Salles';
     const tag=q('.tagline',hero);if(tag)tag.textContent='PAINEL PROFISSIONAL';
-    if(content&&!q('.poster-a-mark',hero)){const mark=document.createElement('div');mark.className='poster-a-mark';mark.setAttribute('aria-hidden','true');mark.innerHTML='<svg viewBox="0 0 100 100" role="img"><path d="M50 5 L94 91 H70 L50 46 L30 91 H6 Z" fill="#72ff36"/><path d="M42 70 H76 L67 84 H35 Z" fill="#72ff36"/><path d="M47 62 L65 62 L76 82 L64 82 Z" fill="#10220e"/></svg>';content.prepend(mark)}
+    if(content&&!q('.poster-a-mark',hero)){const mark=document.createElement('div');mark.className='poster-a-mark';mark.setAttribute('aria-hidden','true');mark.innerHTML='<img src="./coach-a-neon.svg" alt="Logo Evolução Corporal" />';content.prepend(mark)}
     q('.hero-coach-kicker',hero)?.remove();q('.hero-motto',hero)?.remove();
   }
   decorateBilling(billing);
