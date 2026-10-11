@@ -168,3 +168,6 @@ body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved::before{
 
 /* Ocultar somente a seção Mensalidades no painel do Coach, sem afetar dados nem outras telas */
 body:has(.poster-coach-welcome) #content .billing-v11{display:none!important}
+
+/* Ocultar cartão de mensalidades também nas fichas dos alunos, preservando dados */
+#content > .billing-v11{display:none!important}
