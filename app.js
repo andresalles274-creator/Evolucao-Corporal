@@ -747,10 +747,10 @@ async function toggleStudentSuspension(id,suspend){
   ?`Suspender temporariamente o acesso de ${name}?\n\nEle não poderá usar o aplicativo enquanto o pagamento estiver pendente. Os dados, dietas e treinos serão preservados.`
   :`Reativar o acesso de ${name}?\n\nO aluno poderá voltar a acessar a mesma conta e todos os seus dados.`;
  if(!confirm(message))return;
- $(".student-suspend").forEach(b=>b.disabled=true);
+ document.querySelectorAll(".student-suspend").forEach(b=>b.disabled=true);
  const result=await supabase.rpc("set_student_suspension",{target_user_id:id,suspend_access:suspend});
  if(result.error){
-  $(".student-suspend").forEach(b=>b.disabled=false);
+  document.querySelectorAll(".student-suspend").forEach(b=>b.disabled=false);
   return toast("Não foi possível alterar o acesso: "+result.error.message,true);
  }
  if(suspend)suspendedStudentIds.add(id);
@@ -1251,7 +1251,7 @@ function bindRoute(){
  $$(".student-select").forEach(s=>s.onchange=()=>chooseStudent(s.value,route));
  $$("[data-back]").forEach(b=>b.onclick=goBack);
  $(".student-delete").forEach(b=>b.onclick=e=>{e.stopPropagation();deleteStudent(b.dataset.student)});
- $(".student-suspend").forEach(b=>b.onclick=e=>{e.stopPropagation();toggleStudentSuspension(b.dataset.student,b.dataset.suspend==="1")});
+ document.querySelectorAll(".student-suspend").forEach(b=>b.onclick=e=>{e.stopPropagation();toggleStudentSuspension(b.dataset.student,b.dataset.suspend==="1")});
 $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.dataset.index));
  $$(".photo-delete").forEach(b=>b.onclick=()=>deleteProgressPhoto(b.dataset.photoId,b.dataset.photoPath));
  $$(".photo-open").forEach(b=>b.onclick=e=>{
