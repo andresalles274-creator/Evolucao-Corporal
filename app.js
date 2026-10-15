@@ -1250,7 +1250,7 @@ function bindRoute(){
  $$(".student-open").forEach(b=>b.onclick=()=>chooseStudent(b.dataset.student,b.dataset.next||"student"));
  $$(".student-select").forEach(s=>s.onchange=()=>chooseStudent(s.value,route));
  $$("[data-back]").forEach(b=>b.onclick=goBack);
- $(".student-delete").forEach(b=>b.onclick=e=>{e.stopPropagation();deleteStudent(b.dataset.student)});
+ $$(".student-delete").forEach(b=>b.onclick=e=>{e.stopPropagation();deleteStudent(b.dataset.student)});
  document.querySelectorAll(".student-suspend").forEach(b=>b.onclick=e=>{e.stopPropagation();toggleStudentSuspension(b.dataset.student,b.dataset.suspend==="1")});
 $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.dataset.index));
  $$(".photo-delete").forEach(b=>b.onclick=()=>deleteProgressPhoto(b.dataset.photoId,b.dataset.photoPath));
