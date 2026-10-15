@@ -1,5 +1,5 @@
-const CACHE="evolucao-corporal-v11.36-student-suspension";
-const STATIC=["./","./index.html","./styles.css?v=10.8.0","./theme-v11.css?v=11.11.2","./app.js?v=10.6.6","./billing-v11.js?v=11.0.2","./ui-neon-v11.js?v=11.12.5","./config.js","./chat-v1.js?v=1.0.6","./brand-background.jpg","./coach-a-neon.svg","./coach-gym-neon.svg"];
+const CACHE="evolucao-corporal-v11.37-startup-fix";
+const STATIC=["./","./index.html","./styles.css?v=10.8.0","./theme-v11.css?v=11.11.2","./app.js?v=10.6.7","./billing-v11.js?v=11.0.2","./ui-neon-v11.js?v=11.12.5","./config.js","./chat-v1.js?v=1.0.6","./brand-background.jpg","./coach-a-neon.svg","./coach-gym-neon.svg"];
 
 self.addEventListener("install",event=>{
   self.skipWaiting();
