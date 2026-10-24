@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Evolução Corporal</string>
+    <string name="loading">Abrindo sua consultoria…</string>
+    <string name="retry">Tentar novamente</string>
+</resources>
