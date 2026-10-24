@@ -64,6 +64,16 @@ public class MainActivity extends Activity {
 
         FrameLayout root = new FrameLayout(this);
         root.setBackgroundColor(DARK);
+        // Android 15/16 can enforce edge-to-edge with targetSdk 35.
+        // Respect system bars so login fields and navigation stay reachable.
+        if (Build.VERSION.SDK_INT >= 35) {
+            root.setOnApplyWindowInsetsListener((view, insets) -> {
+                android.graphics.Insets bars = insets.getInsets(
+                    android.view.WindowInsets.Type.systemBars());
+                view.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+                return insets;
+            });
+        }
         webView = new WebView(this);
         webView.setBackgroundColor(DARK);
         root.addView(webView, new FrameLayout.LayoutParams(
