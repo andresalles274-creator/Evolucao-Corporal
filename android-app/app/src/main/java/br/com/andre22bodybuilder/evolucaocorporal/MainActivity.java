@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
     private Button retryButton;
     private ValueCallback<Uri[]> fileCallback;
     private Uri cameraUri;
-    private boolean firstPageLoaded = false;
+    private boolean mainFrameFailed = false;
 
     private int dp(float value) {
         return Math.round(value * getResources().getDisplayMetrics().density);
@@ -178,15 +178,20 @@ public class MainActivity extends Activity {
             }
 
             @Override
+            public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon) {
+                mainFrameFailed = false;
+            }
+
+            @Override
             public void onPageFinished(WebView view, String url) {
-                firstPageLoaded = true;
-                hideOverlay();
+                if (!mainFrameFailed) hideOverlay();
             }
 
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request,
                     WebResourceError error) {
                 if (request.isForMainFrame()) {
+                    mainFrameFailed = true;
                     showError("Não foi possível conectar. Verifique a internet e tente novamente.");
                 }
             }
@@ -195,6 +200,7 @@ public class MainActivity extends Activity {
             public void onReceivedHttpError(WebView view,
                     WebResourceRequest request, android.webkit.WebResourceResponse response) {
                 if (request.isForMainFrame() && response.getStatusCode() >= 400) {
+                    mainFrameFailed = true;
                     showError("O aplicativo está temporariamente indisponível. Tente novamente.");
                 }
             }
