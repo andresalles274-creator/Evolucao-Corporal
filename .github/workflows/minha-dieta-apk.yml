@@ -11,6 +11,10 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+
+concurrency:
+  group: minha-dieta-neon-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   android:
     runs-on: ubuntu-latest
@@ -31,6 +35,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p diet-apk/app/src/main/assets
+          cp brand-background.jpg diet-apk/app/src/main/assets/brand-background.jpg
           curl --fail --location --silent --show-error --retry 3 --max-time 30 'https://images.unsplash.com/photo-1762631383628-77f92d18b184?auto=format&fit=crop&w=700&q=75' -o diet-apk/app/src/main/assets/meal.jpg || true
           curl --fail --location --silent --show-error --retry 3 --max-time 30 'https://images.unsplash.com/photo-1610970881699-44a5587cabec?auto=format&fit=crop&w=700&q=75' -o diet-apk/app/src/main/assets/shake.jpg || true
       - name: Compilar APK offline
