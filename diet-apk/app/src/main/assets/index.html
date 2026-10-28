@@ -150,7 +150,18 @@ window.receiveDietSync=function(json){
     if(!Number.isSafeInteger(d.revision)||d.revision<1||d.revision>1000000)throw Error('Versão inválida');
     const remoteFoods=parseFoodCatalogue(d.catalogue);
     if(!validState(d,{...catalogue,...remoteFoods}))throw Error('Plano inválido');
-    if((state.remoteRevision||0)>=d.revision){syncMessage('Dieta sincronizada • versão '+d.revision);return;}
+    if((state.remoteRevision||0)>=d.revision){
+      // Ao migrar de APK antigo, também recebe o catálogo mesmo se a dieta já tiver esta revisão.
+      const saved=state.foodCatalogue||{};
+      const changed=Object.entries(remoteFoods).some(([key,food])=>JSON.stringify(saved[key])!==JSON.stringify(food));
+      if(changed){
+        Object.assign(catalogue,remoteFoods);
+        state.foodCatalogue={...saved,...remoteFoods};
+        save();render();
+        syncMessage('✓ Alimentos atualizados • versão '+d.revision);
+      }else syncMessage('Dieta sincronizada • versão '+d.revision);
+      return;
+    }
     const completed=state.checks||{};
     const meals=d.meals.map((m,i)=>({id:String(m.id||('m'+(i+1))).slice(0,40),title:String(m.title).slice(0,80),time:String(m.time||((i+1)+'ª REFEIÇÃO')).slice(0,40),kind:m.kind==='food'?'food':'shake',foods:m.foods.map(f=>({key:f.key,qty:Number(f.qty)}))}));
     Object.assign(catalogue,remoteFoods);
