@@ -31,21 +31,19 @@ jobs:
           gradle-version: '8.10.2'
       - name: Instalar Android SDK
         run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
-      - name: Incorporar retrato original no APK
+      - name: Incorporar fotografia original de alta resolução no APK
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p diet-apk/app/src/main/assets
-          FULL='https://media.canva.com/v2/image-resize/format:JPG/height:1536/quality:95/uri:ifs%3A%2F%2FM%2Fe973b2fc-6349-4f4a-b820-f80ce5b16154/watermark:F/width:864?csig=AAAAAAAAAAAAAAAAAAAAAAo4YVGWLHomd-b-Xpyx1bbQTUs7dyw1slpH4ArKd6-O&exp=1793227755&osig=AAAAAAAAAAAAAAAAAAAAAOnVFB3qe9blZstcWF4elbhhI7-GgBwZU9LXtOIs_uvO&signer=media-rpc&token=AAIAAU0AJGU5NzNiMmZjLTYzNDktNGY0YS1iODIwLWY4MGNlNWIxNjE1NAAAAAABoYS0DfjMx9yxJ6OVVmhZs6xaJ8pvOrCzu7cpOYY3lkbb6Pa6fQ&x-canva-quality=thumbnail'
-          THUMB='https://media.canva.com/v2/image-resize/format:JPG/height:200/quality:75/uri:ifs%3A%2F%2FM%2Fe973b2fc-6349-4f4a-b820-f80ce5b16154/watermark:F/width:112?csig=AAAAAAAAAAAAAAAAAAAAAAo4YVGWLHomd-b-Xpyx1bbQTUs7dyw1slpH4ArKd6-O&exp=1793227755&osig=AAAAAAAAAAAAAAAAAAAAAOnVFB3qe9blZstcWF4elbhhI7-GgBwZU9LXtOIs_uvO&signer=media-rpc&token=AAIAAU0AJGU5NzNiMmZjLTYzNDktNGY0YS1iODIwLWY4MGNlNWIxNjE1NAAAAAABoYS0DfjMx9yxJ6OVVmhZs6xaJ8pvOrCzu7cpOYY3lkbb6Pa6fQ&x-canva-quality=thumbnail'
           OUT='diet-apk/app/src/main/assets/personal-background.jpg'
-          if ! curl --fail --location --silent --show-error --max-time 35 "$FULL" -o "$OUT"; then
-            echo 'Canva não autorizou a imagem no tamanho original; tentando a versão de pré-visualização.'
-            curl --fail --location --silent --show-error --max-time 35 "$THUMB" -o "$OUT"
+          if ! curl --fail --location --silent --show-error --retry 2 --max-time 45 'https://58cdefee-024f-4072-8b65-14ddfceb18d2.sandbox.floot.app/_cdn/static/2b8a7f99-856e-4344-b7aa-5661b7e01d91-andre-fundo-minha-dieta.jpg' -o "$OUT"; then
+            curl --fail --location --silent --show-error --retry 2 --max-time 45 'https://floot.com/_cdn/static/2b8a7f99-856e-4344-b7aa-5661b7e01d91-andre-fundo-minha-dieta.jpg' -o "$OUT"
           fi
-          test -s "$OUT"
+          BYTES=$(wc -c < "$OUT")
           file "$OUT"
-          echo "Tamanho da foto: $(wc -c < "$OUT") bytes"
+          echo "Tamanho da foto: $BYTES bytes"
+          test "$BYTES" -gt 100000
       - name: Incorporar fotos para funcionar offline
         shell: bash
         run: |
