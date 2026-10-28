@@ -1,0 +1,157 @@
+{
+  "revision": 1,
+  "version": 2,
+  "updated_at": "2026-10-28",
+  "targets": {
+    "kcal": 2670,
+    "protein": 210,
+    "carbs": 310,
+    "fat": 57
+  },
+  "meals": [
+    {
+      "id": "m1",
+      "title": "Shake da manhã",
+      "kind": "shake",
+      "time": "1ª REFEIÇÃO",
+      "foods": [
+        {
+          "key": "whey",
+          "qty": 15
+        },
+        {
+          "key": "riceflour",
+          "qty": 30
+        },
+        {
+          "key": "neston",
+          "qty": 20
+        },
+        {
+          "key": "milkyflour",
+          "qty": 10
+        },
+        {
+          "key": "milk",
+          "qty": 200
+        },
+        {
+          "key": "peanut",
+          "qty": 10
+        }
+      ]
+    },
+    {
+      "id": "m2",
+      "title": "Almoço",
+      "kind": "food",
+      "time": "2ª REFEIÇÃO",
+      "foods": [
+        {
+          "key": "rice",
+          "qty": 200
+        },
+        {
+          "key": "chicken",
+          "qty": 190
+        },
+        {
+          "key": "veggies",
+          "qty": 150
+        },
+        {
+          "key": "oil",
+          "qty": 10
+        }
+      ]
+    },
+    {
+      "id": "m3",
+      "title": "Shake do treino",
+      "kind": "shake",
+      "time": "3ª REFEIÇÃO",
+      "foods": [
+        {
+          "key": "whey",
+          "qty": 15
+        },
+        {
+          "key": "riceflour",
+          "qty": 30
+        },
+        {
+          "key": "neston",
+          "qty": 20
+        },
+        {
+          "key": "milkyflour",
+          "qty": 10
+        },
+        {
+          "key": "milk",
+          "qty": 200
+        },
+        {
+          "key": "peanut",
+          "qty": 10
+        }
+      ]
+    },
+    {
+      "id": "m4",
+      "title": "Jantar",
+      "kind": "food",
+      "time": "4ª REFEIÇÃO",
+      "foods": [
+        {
+          "key": "rice",
+          "qty": 200
+        },
+        {
+          "key": "chicken",
+          "qty": 190
+        },
+        {
+          "key": "veggies",
+          "qty": 150
+        },
+        {
+          "key": "oil",
+          "qty": 10
+        }
+      ]
+    },
+    {
+      "id": "m5",
+      "title": "Shake da noite",
+      "kind": "shake",
+      "time": "5ª REFEIÇÃO",
+      "foods": [
+        {
+          "key": "whey",
+          "qty": 15
+        },
+        {
+          "key": "riceflour",
+          "qty": 30
+        },
+        {
+          "key": "neston",
+          "qty": 20
+        },
+        {
+          "key": "milkyflour",
+          "qty": 10
+        },
+        {
+          "key": "milk",
+          "qty": 200
+        },
+        {
+          "key": "peanut",
+          "qty": 10
+        }
+      ]
+    }
+  ]
+}
