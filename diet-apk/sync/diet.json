@@ -1,5 +1,5 @@
 {
-  "revision": 2,
+  "revision": 3,
   "version": 3,
   "updated_at": "2026-10-28",
   "targets": {
@@ -153,5 +153,111 @@
         }
       ]
     }
-  ]
+  ],
+  "catalogue": {
+    "whey": {
+      "n": "Whey protein",
+      "unit": "g",
+      "k": 4,
+      "p": 0.8,
+      "c": 0.08,
+      "f": 0.05
+    },
+    "riceflour": {
+      "n": "Farinha de arroz pré-cozida",
+      "unit": "g",
+      "k": 3.6,
+      "p": 0.06,
+      "c": 0.8,
+      "f": 0.005
+    },
+    "neston": {
+      "n": "Mucilon Multicereais",
+      "unit": "g",
+      "k": 3.81,
+      "p": 0.086,
+      "c": 0.857,
+      "f": 0
+    },
+    "milkyflour": {
+      "n": "Farinha láctea",
+      "unit": "g",
+      "k": 4.1,
+      "p": 0.09,
+      "c": 0.77,
+      "f": 0.05
+    },
+    "milk": {
+      "n": "Leite desnatado",
+      "unit": "ml",
+      "k": 0.35,
+      "p": 0.035,
+      "c": 0.05,
+      "f": 0.001
+    },
+    "peanut": {
+      "n": "Amendoim torrado moído",
+      "unit": "g",
+      "k": 6,
+      "p": 0.25,
+      "c": 0.2,
+      "f": 0.5
+    },
+    "rice": {
+      "n": "Arroz branco cozido",
+      "unit": "g",
+      "k": 1.3,
+      "p": 0.026,
+      "c": 0.28,
+      "f": 0.003
+    },
+    "chicken": {
+      "n": "Peito de frango cozido",
+      "unit": "g",
+      "k": 1.65,
+      "p": 0.31,
+      "c": 0,
+      "f": 0.036
+    },
+    "veggies": {
+      "n": "Legumes e verduras",
+      "unit": "g",
+      "k": 0.35,
+      "p": 0.02,
+      "c": 0.06,
+      "f": 0.002
+    },
+    "oil": {
+      "n": "Azeite",
+      "unit": "g",
+      "k": 9,
+      "p": 0,
+      "c": 0,
+      "f": 1
+    },
+    "banana": {
+      "n": "Banana",
+      "unit": "g",
+      "k": 0.89,
+      "p": 0.011,
+      "c": 0.23,
+      "f": 0.003
+    },
+    "oats": {
+      "n": "Aveia",
+      "unit": "g",
+      "k": 3.89,
+      "p": 0.17,
+      "c": 0.66,
+      "f": 0.07
+    },
+    "egg": {
+      "n": "Ovos inteiros cozidos (2 un. ≈ 100 g)",
+      "unit": "g",
+      "k": 1.55,
+      "p": 0.13,
+      "c": 0.01,
+      "f": 0.11
+    }
+  }
 }
