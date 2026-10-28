@@ -77,8 +77,38 @@ const shakes=[{key:'egg',qty:100},{key:'riceflour',qty:30},{key:'neston',qty:20}
 const solids=[{key:'rice',qty:200},{key:'chicken',qty:190},{key:'veggies',qty:150},{key:'oil',qty:10}];
 function defaults(){return {version:1,targets:{kcal:2670,protein:210,carbs:310,fat:57},meals:[{id:'m1',title:'Shake da manhã + ovos',kind:'shake',time:'1ª REFEIÇÃO',foods:structuredCloneSafe(shakes)},{id:'m2',title:'Almoço',kind:'food',time:'2ª REFEIÇÃO',foods:structuredCloneSafe(solids)},{id:'m3',title:'Shake do treino + ovos',kind:'shake',time:'3ª REFEIÇÃO',foods:structuredCloneSafe(shakes)},{id:'m4',title:'Jantar',kind:'food',time:'4ª REFEIÇÃO',foods:structuredCloneSafe(solids)},{id:'m5',title:'Shake da noite + ovos',kind:'shake',time:'5ª REFEIÇÃO',foods:structuredCloneSafe(shakes)}],checks:{}};}
 function structuredCloneSafe(v){return JSON.parse(JSON.stringify(v));}
-function load(){try{const d=JSON.parse(localStorage.getItem('minhadieta-v1'));return validState(d)?d:defaults();}catch(e){return defaults();}}
-function validState(v){return v&&Array.isArray(v.meals)&&v.meals.length>=1&&v.meals.length<=15&&v.meals.every(m=>m&&typeof m.title==='string'&&Array.isArray(m.foods)&&m.foods.every(f=>catalogue[f.key]&&Number.isFinite(+f.qty)&&+f.qty>=0&&+f.qty<=3000));}
+// O catálogo é baixado junto com a dieta e guardado no aparelho para uso offline.
+// Assim, novos alimentos, nomes e valores nutricionais não exigem novo APK.
+function parseFoodCatalogue(source){
+  if(source==null)return {};
+  if(typeof source!=='object'||Array.isArray(source))throw Error('Catálogo inválido');
+  const entries=Object.entries(source);
+  if(entries.length>200)throw Error('Catálogo muito grande');
+  const parsed=Object.create(null);
+  for(const [key,item] of entries){
+    if(!/^[a-z][a-z0-9_-]{0,39}$/.test(key)||['__proto__','prototype','constructor'].includes(key))throw Error('Chave inválida');
+    if(!item||typeof item!=='object'||Array.isArray(item)||typeof item.n!=='string'||!item.n.trim()||item.n.length>90||!['g','ml','un'].includes(item.unit))throw Error('Alimento inválido');
+    const x={n:item.n.trim(),unit:item.unit};
+    for(const k of ['k','p','c','f']){
+      if(typeof item[k]!=='number'||!Number.isFinite(item[k])||item[k]<0||item[k]>(k==='k'?100:10))throw Error('Nutriente inválido');
+      x[k]=item[k];
+    }
+    parsed[key]=x;
+  }
+  return parsed;
+}
+function load(){
+  try{
+    const d=JSON.parse(localStorage.getItem('minhadieta-v1'));
+    const savedFoods=parseFoodCatalogue(d&&d.foodCatalogue);
+    if(validState(d,{...catalogue,...savedFoods})){
+      Object.assign(catalogue,savedFoods);
+      return d;
+    }
+  }catch(e){}
+  return defaults();
+}
+function validState(v,knownFoods=catalogue){return v&&Array.isArray(v.meals)&&v.meals.length>=1&&v.meals.length<=15&&v.meals.every(m=>m&&typeof m.title==='string'&&Array.isArray(m.foods)&&m.foods.every(f=>knownFoods[f.key]&&Number.isFinite(+f.qty)&&+f.qty>=0&&+f.qty<=3000));}
 let state=load(),page='today',currentMeal=null;const n=v=>Math.round(v),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const day=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 function save(){localStorage.setItem('minhadieta-v1',JSON.stringify(state));}
 function macros(meal){return meal.foods.reduce((m,f)=>{const x=catalogue[f.key];for(const k of ['k','p','c','f'])m[k]+=(+f.qty||0)*x[k];return m},{k:0,p:0,c:0,f:0});}
@@ -106,7 +136,7 @@ function addFood(){const key=document.getElementById('newfood').value;if(!key||!
 function openSheet(){document.querySelector('.sheetBackdrop').classList.add('show');document.getElementById('sheet').classList.add('show');}function closeSheet(){document.querySelector('.sheetBackdrop').classList.remove('show');document.getElementById('sheet').classList.remove('show');}function showSettings(){navigate('settings')}
 function importDiet(){if(window.Android&&Android.importDiet){Android.importDiet();}else{alert('A importação funciona no APK Android.');}}
 function exportDiet(){const json=JSON.stringify(state,null,2);if(window.Android&&Android.exportDiet){Android.exportDiet(json);}else{alert('Exportação disponível no APK Android.');}}
-window.receiveDietImport=function(json){try{const d=JSON.parse(json);if(!validState(d))throw Error('Formato inválido');const original=(d.checks&&typeof d.checks==='object'&&!Array.isArray(d.checks))?d.checks:(state.checks||{});state={version:2,remoteRevision:Number.isSafeInteger(d.remoteRevision)?d.remoteRevision:0,meals:d.meals.map((m,i)=>({id:String(m.id||('m'+(i+1))),title:String(m.title).slice(0,80),time:String(m.time||`${i+1}ª REFEIÇÃO`).slice(0,30),kind:m.kind==='food'?'food':'shake',foods:m.foods.map(f=>({key:f.key,qty:+f.qty}))})),targets:{...defaults().targets,...(d.targets||{})},checks:original};save();navigate('today');alert('Backup restaurado. Suas refeições e registros foram recuperados; novos ajustes chegam automaticamente.');}catch(e){alert('Não foi possível importar este arquivo de dieta.');}};
+window.receiveDietImport=function(json){try{const d=JSON.parse(json);const foods=parseFoodCatalogue(d.foodCatalogue);if(!validState(d,{...catalogue,...foods}))throw Error('Formato inválido');const original=(d.checks&&typeof d.checks==='object'&&!Array.isArray(d.checks))?d.checks:(state.checks||{});Object.assign(catalogue,foods);state={version:3,remoteRevision:Number.isSafeInteger(d.remoteRevision)?d.remoteRevision:0,meals:d.meals.map((m,i)=>({id:String(m.id||('m'+(i+1))),title:String(m.title).slice(0,80),time:String(m.time||`${i+1}ª REFEIÇÃO`).slice(0,30),kind:m.kind==='food'?'food':'shake',foods:m.foods.map(f=>({key:f.key,qty:+f.qty}))})),foodCatalogue:{...(state.foodCatalogue||{}),...foods},targets:{...defaults().targets,...(d.targets||{})},checks:original};save();navigate('today');alert('Backup restaurado. Suas refeições e registros foram recuperados; novos ajustes chegam automaticamente.');}catch(e){alert('Não foi possível importar este arquivo de dieta.');}};
 
 function syncMessage(msg){const el=document.getElementById('sync-status');if(el)el.textContent=msg;}
 window.requestDietSync=function(){
@@ -117,11 +147,14 @@ window.requestDietSync=function(){
 window.receiveDietSync=function(json){
   try{
     const d=JSON.parse(json);
-    if(!validState(d)||!Number.isSafeInteger(d.revision)||d.revision<1||d.revision>1000000)throw Error('Plano inválido');
+    if(!Number.isSafeInteger(d.revision)||d.revision<1||d.revision>1000000)throw Error('Versão inválida');
+    const remoteFoods=parseFoodCatalogue(d.catalogue);
+    if(!validState(d,{...catalogue,...remoteFoods}))throw Error('Plano inválido');
     if((state.remoteRevision||0)>=d.revision){syncMessage('Dieta sincronizada • versão '+d.revision);return;}
     const completed=state.checks||{};
     const meals=d.meals.map((m,i)=>({id:String(m.id||('m'+(i+1))).slice(0,40),title:String(m.title).slice(0,80),time:String(m.time||((i+1)+'ª REFEIÇÃO')).slice(0,40),kind:m.kind==='food'?'food':'shake',foods:m.foods.map(f=>({key:f.key,qty:Number(f.qty)}))}));
-    state={version:2,remoteRevision:d.revision,meals,targets:{...defaults().targets,...d.targets},checks:completed};
+    Object.assign(catalogue,remoteFoods);
+    state={version:3,remoteRevision:d.revision,meals,foodCatalogue:{...(state.foodCatalogue||{}),...remoteFoods},targets:{...defaults().targets,...d.targets},checks:completed};
     save();render();syncMessage('✓ Nova dieta aplicada • versão '+d.revision);
   }catch(e){syncMessage('Dieta salva no aparelho • falha na atualização');}
 };
