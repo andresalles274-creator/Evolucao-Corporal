@@ -31,6 +31,21 @@ jobs:
           gradle-version: '8.10.2'
       - name: Instalar Android SDK
         run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+      - name: Incorporar retrato original no APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p diet-apk/app/src/main/assets
+          FULL='https://media.canva.com/v2/image-resize/format:JPG/height:1536/quality:95/uri:ifs%3A%2F%2FM%2Fe973b2fc-6349-4f4a-b820-f80ce5b16154/watermark:F/width:864?csig=AAAAAAAAAAAAAAAAAAAAAAo4YVGWLHomd-b-Xpyx1bbQTUs7dyw1slpH4ArKd6-O&exp=1793227755&osig=AAAAAAAAAAAAAAAAAAAAAOnVFB3qe9blZstcWF4elbhhI7-GgBwZU9LXtOIs_uvO&signer=media-rpc&token=AAIAAU0AJGU5NzNiMmZjLTYzNDktNGY0YS1iODIwLWY4MGNlNWIxNjE1NAAAAAABoYS0DfjMx9yxJ6OVVmhZs6xaJ8pvOrCzu7cpOYY3lkbb6Pa6fQ&x-canva-quality=thumbnail'
+          THUMB='https://media.canva.com/v2/image-resize/format:JPG/height:200/quality:75/uri:ifs%3A%2F%2FM%2Fe973b2fc-6349-4f4a-b820-f80ce5b16154/watermark:F/width:112?csig=AAAAAAAAAAAAAAAAAAAAAAo4YVGWLHomd-b-Xpyx1bbQTUs7dyw1slpH4ArKd6-O&exp=1793227755&osig=AAAAAAAAAAAAAAAAAAAAAOnVFB3qe9blZstcWF4elbhhI7-GgBwZU9LXtOIs_uvO&signer=media-rpc&token=AAIAAU0AJGU5NzNiMmZjLTYzNDktNGY0YS1iODIwLWY4MGNlNWIxNjE1NAAAAAABoYS0DfjMx9yxJ6OVVmhZs6xaJ8pvOrCzu7cpOYY3lkbb6Pa6fQ&x-canva-quality=thumbnail'
+          OUT='diet-apk/app/src/main/assets/personal-background.jpg'
+          if ! curl --fail --location --silent --show-error --max-time 35 "$FULL" -o "$OUT"; then
+            echo 'Canva não autorizou a imagem no tamanho original; tentando a versão de pré-visualização.'
+            curl --fail --location --silent --show-error --max-time 35 "$THUMB" -o "$OUT"
+          fi
+          test -s "$OUT"
+          file "$OUT"
+          echo "Tamanho da foto: $(wc -c < "$OUT") bytes"
       - name: Incorporar fotos para funcionar offline
         shell: bash
         run: |
@@ -60,9 +75,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          TAG='minha-dieta-v2.1.0'
+          TAG='minha-dieta-v2.2.0'
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" Minha-Dieta-Neon.apk --clobber
           else
-            gh release create "$TAG" Minha-Dieta-Neon.apk --target "$GITHUB_SHA" --title 'Minha Dieta Neon Android v2.1.0' --notes 'APK Android de uso pessoal. Sem login, refeições funcionam offline e sincronizam automaticamente ao abrir com internet. Cabeçalho inspirado no Evolução Corporal, em vermelho neon. Assinatura de desenvolvimento.' --prerelease --latest=false
+            gh release create "$TAG" Minha-Dieta-Neon.apk --target "$GITHUB_SHA" --title 'Minha Dieta Neon Android v2.2.0' --notes 'APK Android de uso pessoal. Sem login, refeições funcionam offline e sincronizam automaticamente ao abrir com internet. Cabeçalho inspirado no Evolução Corporal, em vermelho neon. Assinatura de desenvolvimento.' --prerelease --latest=false
           fi
