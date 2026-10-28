@@ -1,0 +1,57 @@
+name: Minha Dieta Neon - APK Android
+on:
+  push:
+    branches: [minha-dieta-apk]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v4
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Instalar Android SDK
+        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+      - name: Incorporar fotos para funcionar offline
+        shell: bash
+        run: |
+          mkdir -p diet-apk/app/src/main/assets
+          curl --fail --location --silent --show-error --retry 3 --max-time 30 'https://images.unsplash.com/photo-1762631383628-77f92d18b184?auto=format&fit=crop&w=700&q=75' -o diet-apk/app/src/main/assets/meal.jpg || true
+          curl --fail --location --silent --show-error --retry 3 --max-time 30 'https://images.unsplash.com/photo-1610970881699-44a5587cabec?auto=format&fit=crop&w=700&q=75' -o diet-apk/app/src/main/assets/shake.jpg || true
+      - name: Compilar APK offline
+        run: gradle -p diet-apk --no-daemon --stacktrace assembleDebug
+      - name: Verificar assinatura APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK='diet-apk/app/build/outputs/apk/debug/app-debug.apk'
+          test -s "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose "$APK"
+          cp "$APK" Minha-Dieta-Neon.apk
+          sha256sum Minha-Dieta-Neon.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Minha-Dieta-Neon-Android
+          path: Minha-Dieta-Neon.apk
+          retention-days: 90
+      - name: Publicar APK para instalar diretamente
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG='minha-dieta-v1.0.0'
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" Minha-Dieta-Neon.apk --clobber
+          else
+            gh release create "$TAG" Minha-Dieta-Neon.apk --target "$GITHUB_SHA" --title 'Minha Dieta Neon Android v1.0.0' --notes 'APK Android de uso pessoal. Sem login, sem internet; cinco refeições, edição das quantidades e importação/exportação de dieta JSON. Assinatura de desenvolvimento.' --prerelease --latest=false
+          fi
