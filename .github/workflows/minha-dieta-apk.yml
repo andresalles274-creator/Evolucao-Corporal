@@ -44,6 +44,23 @@ jobs:
           file "$OUT"
           echo "Tamanho da foto: $BYTES bytes"
           test "$BYTES" -gt 100000
+          # Recortar somente as duas faixas com textos, sem alterar o rosto ou físico.
+          python3 -m pip install --quiet Pillow
+          python3 - <<'PY'
+          from PIL import Image
+          src='diet-apk/app/src/main/assets/personal-background.jpg'
+          dst='diet-apk/app/src/main/assets/personal-background-crop.png'
+          im=Image.open(src).convert('RGB')
+          w,h=im.size
+          if w<700 or h<1200:
+              raise ValueError(f'Imagem inesperada: {w} x {h}')
+          # Foto fornecida (864 x 1536): sem nome superior e sem slogan inferior.
+          cropped=im.crop((0,265,w,1040))
+          cropped.save(dst,format='PNG',optimize=True)
+          print('Recorte sem legendas:', cropped.size)
+          PY
+          test -s diet-apk/app/src/main/assets/personal-background-crop.png
+          rm "$OUT"
       - name: Incorporar fotos para funcionar offline
         shell: bash
         run: |
@@ -73,9 +90,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          TAG='minha-dieta-v2.2.0'
+          TAG='minha-dieta-v2.3.0'
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" Minha-Dieta-Neon.apk --clobber
           else
-            gh release create "$TAG" Minha-Dieta-Neon.apk --target "$GITHUB_SHA" --title 'Minha Dieta Neon Android v2.2.0' --notes 'APK Android de uso pessoal. Sem login, refeições funcionam offline e sincronizam automaticamente ao abrir com internet. Cabeçalho inspirado no Evolução Corporal, em vermelho neon. Assinatura de desenvolvimento.' --prerelease --latest=false
+            gh release create "$TAG" Minha-Dieta-Neon.apk --target "$GITHUB_SHA" --title 'Minha Dieta Neon Android v2.3.0' --notes 'APK Android de uso pessoal. Sem login, refeições funcionam offline e sincronizam automaticamente ao abrir com internet. Cabeçalho inspirado no Evolução Corporal, em vermelho neon. Assinatura de desenvolvimento.' --prerelease --latest=false
           fi
