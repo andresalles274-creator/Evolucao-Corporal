@@ -23,6 +23,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.net.URL;
+import java.net.HttpURLConnection;
 
 public class MainActivity extends Activity {
     private static final int PICK_DIET = 101;
@@ -60,13 +62,55 @@ public class MainActivity extends Activity {
             s.setAllowFileAccessFromFileURLs(false);
             s.setAllowUniversalAccessFromFileURLs(false);
         }
-        web.setWebViewClient(new WebViewClient());
+        web.setWebViewClient(new WebViewClient() {
+            @Override public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                view.evaluateJavascript("if(window.requestDietSync)window.requestDietSync()", null);
+            }
+        });
         web.setWebChromeClient(new WebChromeClient());
         web.addJavascriptInterface(new LocalBridge(), "Android");
         web.loadUrl("file:///android_asset/index.html");
     }
 
     private class LocalBridge {
+        private static final String DIET_URL =
+            "https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/minha-dieta-apk/diet-apk/sync/diet.json";
+
+        @JavascriptInterface public void syncDiet() {
+            new Thread(() -> {
+                HttpURLConnection connection = null;
+                try {
+                    URL url = new URL(DIET_URL + "?t=" + (System.currentTimeMillis() / 60000L));
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("GET");
+                    connection.setConnectTimeout(10000);
+                    connection.setReadTimeout(10000);
+                    connection.setRequestProperty("Accept", "application/json");
+                    connection.setUseCaches(false);
+                    int status = connection.getResponseCode();
+                    if (status != 200) throw new Exception("HTTP " + status);
+                    ByteArrayOutputStream output = new ByteArrayOutputStream();
+                    try (InputStream input = connection.getInputStream()) {
+                        byte[] buffer = new byte[4096];
+                        int count;
+                        while ((count = input.read(buffer)) != -1) {
+                            output.write(buffer, 0, count);
+                            if (output.size() > 200000) throw new Exception("Dieta maior que o limite");
+                        }
+                    }
+                    String json = output.toString("UTF-8");
+                    web.post(() -> web.evaluateJavascript(
+                        "if(window.receiveDietSync)window.receiveDietSync(" + JSONObject.quote(json) + ")", null));
+                } catch (Exception e) {
+                    web.post(() -> web.evaluateJavascript(
+                        "if(window.receiveDietSyncError)window.receiveDietSyncError()", null));
+                } finally {
+                    if (connection != null) connection.disconnect();
+                }
+            }).start();
+        }
+
         @JavascriptInterface public void importDiet() {
             runOnUiThread(() -> {
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
@@ -115,5 +159,11 @@ public class MainActivity extends Activity {
     }
 
     private void toast(String text) {runOnUiThread(() -> Toast.makeText(this, text, Toast.LENGTH_LONG).show());}
+    @Override protected void onResume() {
+        super.onResume();
+        if (web != null) web.post(() -> web.evaluateJavascript(
+            "if(window.requestDietSync)window.requestDietSync()", null));
+    }
+
     @Override public void onBackPressed() {if (web != null) web.evaluateJavascript("window.onAndroidBack()", null); else super.onBackPressed();}
 }
