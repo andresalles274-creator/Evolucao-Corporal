@@ -218,6 +218,17 @@ a:focus-visible,summary:focus-visible{outline:3px solid #b1ffa0;outline-offset:4
 @media(max-width:400px){.evo-carousel-instructions{max-width:170px;font-size:11px}.evo-single-pair{padding:8px}.evo-single-pair .evo-before-after{grid-template-columns:minmax(0,1fr) 15px minmax(0,1fr);gap:3px}.evo-single-pair .evo-arrow{font-size:20px}}
 @media(prefers-reduced-motion:reduce){.evo-pagination button{transition:none}}
 
+
+/* Padrão verde neon dos registros de evolução */
+.evo-reference-card{width:min(100%,490px);border-color:#46764a;box-shadow:0 8px 25px #050c062e}
+.evo-reference-photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.evo-reference-photos .evo-photo{width:100%;height:310px;min-height:0;border:1px solid #46764a;background:#0a110c;box-shadow:inset 0 0 10px #62ff360b}
+.evo-reference-photos .evo-photo img{width:100%;height:100%;object-fit:contain}
+.evo-reference-photos .evo-label{padding:6px 8px;font-size:9px;letter-spacing:.03em}
+.evolution-section .evolution-pair{border-color:#436447}
+.evolution-section .evo-mini-marker{color:#62ff36}
+@media(max-width:640px){.evo-reference-photos{gap:7px}.evo-reference-photos .evo-photo{height:235px}.evo-reference-photos .evo-label{font-size:8px;padding:5px 6px}}
+
 </style>
 </head>
 <body>
@@ -321,8 +332,13 @@ a:focus-visible,summary:focus-visible{outline:3px solid #b1ffa0;outline-offset:4
     <img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-02/comparativo-original.jpg" alt="Foto posterior do comparativo: Transformação física" loading="lazy" decoding="async" style="left:0"><span class="evo-label after-label">DEPOIS</span>
   </button>
 </div></article></div></div></div>
-<div class="evo-slide" role="group" aria-roledescription="slide" aria-label="Evolução 3 de 4 — Rafaela"><div class="evo-student" data-student="03" data-student-name="Rafaela"><div class="evo-student-heading"><div><span class="evo-subtitle">EVOLUÇÃO #03</span><h3>Rafaela</h3><p>Comparativo com registros de momentos diferentes.</p></div><span class="evo-student-badge">EVOLUÇÃO FEMININA</span></div><div class="evo-pair-grid evo-single-grid">
-<article class="evolution-pair evo-single-pair"><div class="evo-pair-top"><span class="evo-mini-marker">01</span><div><h4>Transformação e autoestima</h4><p>Antes e depois • comparativo original</p></div></div>
+<div class="evo-slide" role="group" aria-roledescription="slide" aria-label="Evolução 3 de 4 — Rafaela"><div class="evo-student" data-student="03" data-student-name="Rafaela"><div class="evo-student-heading"><div><span class="evo-subtitle">EVOLUÇÃO #03</span><h3>Rafaela</h3><p>Comparativo com registros de momentos diferentes.</p></div><span class="evo-student-badge">EVOLUÇÃO FEMININA</span></div><div class="evo-pair-grid evo-single-grid"><article class="evolution-pair evo-single-pair evo-reference-card">
+<div class="evo-pair-top"><span class="evo-mini-marker">01</span><div><h4>Registros anteriores</h4><p>Frente e lateral • fotos originais</p></div></div>
+<div class="evo-reference-photos">
+<button type="button" class="evo-photo" data-zoom-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-03/antes-frente-original.jpg" data-zoom-label="Rafaela — antes, frente" aria-label="Ampliar foto anterior de frente de Rafaela"><img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-03/antes-frente-original.jpg" alt="Rafaela em registro inicial de frente" loading="lazy" decoding="async"><span class="evo-label before-label">ANTES • FRENTE</span></button>
+<button type="button" class="evo-photo" data-zoom-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-03/antes-lateral-original.jpg" data-zoom-label="Rafaela — antes, lateral" aria-label="Ampliar foto anterior lateral de Rafaela"><img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-03/antes-lateral-original.jpg" alt="Rafaela em registro inicial lateral" loading="lazy" decoding="async"><span class="evo-label before-label">ANTES • LATERAL</span></button>
+</div></article>
+<article class="evolution-pair evo-single-pair"><div class="evo-pair-top"><span class="evo-mini-marker">02</span><div><h4>Transformação e autoestima</h4><p>Antes e depois • comparativo original</p></div></div>
 <div class="evo-before-after evo-split-compare" style="--half-ratio:0.28125">
   <button type="button" class="evo-photo evo-split-photo" data-zoom-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-03/comparativo-original.jpg" data-zoom-label="Transformação e autoestima — Comparativo original" aria-label="Ampliar comparação original: Transformação e autoestima">
     <img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-03/comparativo-original.jpg" alt="Foto anterior do comparativo: Transformação e autoestima" loading="lazy" decoding="async" style="left:0"><span class="evo-label before-label">ANTES</span>
