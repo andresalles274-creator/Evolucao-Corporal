@@ -143,10 +143,24 @@ a:focus-visible,summary:focus-visible{outline:3px solid #b1ffa0;outline-offset:4
 @media(max-width:710px){.contact-grid{grid-template-columns:1fr}.contact-card{padding:21px}.contact-link{font-size:14px}}
 @media(prefers-reduced-motion:reduce){.contact-link{transition:none}}
 
+
+/* Acesso permanente ao portfólio de trabalhos */
+.nav-gallery-link{color:#bafba5;font-size:12px;font-weight:900;letter-spacing:.04em;white-space:nowrap}
+.nav-gallery-link:hover{color:var(--green)}
+.works-teaser{background:#0d140e;border-block:1px solid #2e4731}
+.works-teaser .split-header{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}
+.works-teaser .teaser-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:29px 0 22px}
+.works-teaser .teaser-photo{border:1px solid #395a3d;border-radius:16px;background:#101612;overflow:hidden;position:relative}
+.works-teaser .teaser-photo img{display:block;max-width:100%;width:100%;height:290px;object-fit:contain;object-position:center}
+.works-teaser .teaser-photo span{display:block;color:#c8dbc3;text-align:center;padding:13px;font-size:12px;font-weight:750}
+.works-teaser .btn{white-space:nowrap}
+@media(max-width:710px){.nav-gallery-link{font-size:10px}.nav{gap:9px}.nav>.btn{padding:9px 10px}.works-teaser .teaser-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.works-teaser .teaser-photo img{height:160px}.works-teaser .teaser-photo span{font-size:10px;padding:8px 3px}}
+@media(max-width:400px){.nav-gallery-link{font-size:9px}.nav>.btn{font-size:10px;padding:9px 8px}}
+
 </style>
 </head>
 <body>
-<header><div class="container nav"><a class="brand" href="#inicio" aria-label="Evolução Corporal, início"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="#62ff36" d="M50 4 96 94H72L50 49 28 94H4Z"/><path fill="#62ff36" d="M37 72h41l-8 17H29Z"/><path fill="#0a120c" d="M48 61h18l10 21H63Z"/></svg><div class="brand-name">EVOLUÇÃO <span>C O R P O R A L</span></div></a><nav aria-label="Navegação principal"><a href="#servicos">Consultoria</a><a href="#resultados">Resultados</a><a href="#depoimentos">Depoimentos</a><a href="#planos">Planos</a><a href="#contato">Contato</a></nav><a class="btn small" href="#planos">COMEÇAR AGORA ↗</a></div></header>
+<header><div class="container nav"><a class="brand" href="#inicio" aria-label="Evolução Corporal, início"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="#62ff36" d="M50 4 96 94H72L50 49 28 94H4Z"/><path fill="#62ff36" d="M37 72h41l-8 17H29Z"/><path fill="#0a120c" d="M48 61h18l10 21H63Z"/></svg><div class="brand-name">EVOLUÇÃO <span>C O R P O R A L</span></div></a><nav aria-label="Navegação principal"><a href="#servicos">Consultoria</a><a href="#resultados">Resultados</a><a href="#depoimentos">Depoimentos</a><a href="#planos">Planos</a><a href="/trabalhos">Nossos Trabalhos</a><a href="#contato">Contato</a></nav><a class="nav-gallery-link" href="/trabalhos">GALERIA ↗</a><a class="btn small" href="#planos">PLANOS ↗</a></div></header>
 <main>
 <section class="hero" id="inicio"><div class="container hero-inner"><div class="hero-layout">
 <div class="hero-copy">
@@ -171,6 +185,17 @@ a:focus-visible,summary:focus-visible{outline:3px solid #b1ffa0;outline-offset:4
 <div class="gym-photo" role="img" aria-label="Academia moderna com aparelhos e equipamentos de musculação"><div class="photo-caption">EVOLUÇÃO CORPORAL · ACOMPANHAMENTO ONLINE</div></div>
 <div><div class="eyebrow">MÉTODO E CONSTÂNCIA</div><h2>Treine com direção.<br>Não por tentativa.</h2><p class="lead">Nosso foco é tornar seu planejamento mais claro, acompanhar os resultados e ajustar o caminho com orientação individualizada.</p><ul class="benefits"><li>Treinos desenvolvidos conforme sua rotina e objetivo</li><li>Registro de medidas, fotos e evolução no aplicativo</li><li>Avaliação pessoal de cada novo aluno antes da entrega do planejamento</li><li>Atendimento online, com praticidade para a sua rotina</li></ul><a class="btn outline" href="#planos">ESCOLHER MEU PLANO ↗</a></div>
 </div></section>
+
+<section class="section works-teaser" id="trabalhos-preview">
+<div class="container">
+<div class="split-header"><div><div class="eyebrow">PORTFÓLIO • EVOLUÇÃO CORPORAL</div><h2>Conheça nossos trabalhos.</h2><p class="lead">Treinos, campanhas, bastidores e dedicação no dia a dia. Uma galeria separada da evolução dos alunos, com fotografias originais.</p></div><a class="btn outline" href="/trabalhos">ABRIR GALERIA COMPLETA ↗</a></div>
+<div class="teaser-grid">
+<a class="teaser-photo" href="/trabalhos" aria-label="Ver portfólio de André Salles"><img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/08-andre-alta-performance.jpg" width="864" height="1536" alt="André Salles na academia" loading="lazy"><span>André Salles</span></a>
+<a class="teaser-photo" href="/trabalhos" aria-label="Ver portfólio de Silvana Salles"><img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/06-silvana-academia.jpg" width="864" height="1536" alt="Silvana Salles na academia" loading="lazy"><span>Silvana Salles</span></a>
+<a class="teaser-photo" href="/trabalhos" aria-label="Ver campanhas da consultoria"><img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/01-foco-disciplina.jpg" width="707" height="1536" alt="Campanha sobre foco, disciplina e resultados" loading="lazy"><span>Treinos e campanhas</span></a>
+</div>
+</div>
+</section>
 <section class="section alt" id="resultados"><div class="container">
 <div class="section-title-centered"><div class="eyebrow">TRANSFORMAÇÕES REAIS</div><h2>Cada evolução tem uma história.</h2><p class="lead">Em breve, uma seleção dos resultados dos nossos alunos. As imagens serão adicionadas com autorização, preservando as fotos originais de antes e depois.</p></div>
 <div class="results-grid">
@@ -226,5 +251,5 @@ a:focus-visible,summary:focus-visible{outline:3px solid #b1ffa0;outline-offset:4
 </section>
 
 </main>
-<footer><div class="container foot-inner"><span>© 2026 Evolução Corporal · André Salles • Silvana Salles</span><span><a href="#contato">WhatsApp e Instagram</a> · Matrículas automáticas em preparação</span></div></footer>
+<footer><div class="container foot-inner"><span>© 2026 Evolução Corporal · André Salles • Silvana Salles</span><span><a href="/trabalhos">Nossos Trabalhos</a> · <a href="#contato">WhatsApp e Instagram</a> · Matrículas automáticas em preparação</span></div></footer>
 </body></html>
