@@ -1,0 +1,6 @@
+.student-payment-notice{position:relative;width:calc(100% - 28px);max-width:530px;margin:16px auto 4px;padding:6px 6px 12px;background:linear-gradient(135deg,#211518,#121416);border:1px solid rgba(248,102,94,.62);border-radius:20px;box-shadow:0 12px 36px #0008;text-align:center;overflow:hidden}
+.student-payment-notice img{display:block;width:100%;height:auto;border-radius:15px;user-select:none}
+.student-payment-notice p{margin:9px 10px 0;font-size:13px;font-weight:650;color:#e2d2cf;line-height:1.5}
+.student-payment-dismiss{position:absolute;z-index:4;right:12px;top:12px;width:40px;height:40px;display:grid;place-items:center;background:rgba(17,17,17,.7);border:1px solid #fff7;border-radius:50%;color:white;font-size:29px;line-height:1;cursor:pointer;box-shadow:0 4px 18px #0008}
+.student-payment-dismiss:focus-visible{outline:3px solid #ffb5a6;outline-offset:2px}
+@media(max-width:360px){.student-payment-notice{width:calc(100% - 16px);margin-top:9px}.student-payment-notice p{font-size:12px}}
