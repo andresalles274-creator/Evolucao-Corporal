@@ -1,5 +1,5 @@
-const CACHE="evolucao-corporal-v11.38-payment-lock";
-const STATIC=["./","./index.html","./styles.css?v=10.8.0","./payment-lock.css?v=1.0.0","./theme-v11.css?v=11.11.2","./app.js?v=10.6.8","./billing-v11.js?v=11.0.2","./ui-neon-v11.js?v=11.12.5","./config.js","./chat-v1.js?v=1.0.6","./brand-background.jpg","./coach-a-neon.svg","./coach-gym-neon.svg"];
+const CACHE="evolucao-corporal-v11.39-nonblocking-notice";
+const STATIC=["./","./index.html","./styles.css?v=10.8.0","./payment-lock.css?v=1.0.0","./payment-notice.css?v=1.0.0","./payment-notice.svg","./theme-v11.css?v=11.11.2","./app.js?v=10.6.9","./billing-v11.js?v=11.0.2","./ui-neon-v11.js?v=11.12.5","./config.js","./chat-v1.js?v=1.0.6","./brand-background.jpg","./coach-a-neon.svg","./coach-gym-neon.svg"];
 
 self.addEventListener("install",event=>{
   self.skipWaiting();
@@ -42,6 +42,8 @@ self.addEventListener("fetch",event=>{
     url.pathname.endsWith("/chat-v1.js") ||
     url.pathname.endsWith("/styles.css") ||
     url.pathname.endsWith("/payment-lock.css") ||
+    url.pathname.endsWith("/payment-notice.css") ||
+    url.pathname.endsWith("/payment-notice.svg") ||
     url.pathname.endsWith("/theme-v11.css") ||
     url.pathname.endsWith("/billing-v11.js") ||
     url.pathname.endsWith("/config.js") ||
