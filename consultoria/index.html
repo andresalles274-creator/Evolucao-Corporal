@@ -126,10 +126,27 @@ a:focus-visible,summary:focus-visible{outline:3px solid #b1ffa0;outline-offset:4
 @media(max-width:800px){.hero-layout{grid-template-columns:1fr;gap:30px}.hero-inner{padding:42px 0 35px}.hero-copy{padding:12px 0 0}.hero h1{font-size:clamp(43px,10.2vw,70px)}.hero-media{max-width:680px;width:100%;margin:auto}.hero-media img{max-height:none}.plans{grid-template-columns:1fr;gap:21px}.plan{min-height:auto}.results-grid{grid-template-columns:1fr 1fr}.testimonial-shelf{grid-template-columns:1fr}}
 @media(max-width:540px){.results-grid{grid-template-columns:1fr}.result-placeholder{min-height:210px}.hero h1{font-size:clamp(41px,10.2vw,58px)}.media-tag{font-size:10px}.signatures{flex-wrap:wrap;gap:7px}.stat{min-width:0}}
 
+
+/* Contato — WhatsApp e Instagram */
+.contact-section{background:radial-gradient(ellipse at 52% 0%,#21432025,transparent 65%),#0b110c;border-top:1px solid #273b28}
+.contact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:36px auto 0;max-width:940px}
+.contact-card{background:linear-gradient(145deg,#1a241a,#111811);border:1px solid #3a573c;border-radius:20px;padding:26px;box-shadow:0 14px 42px #0003}
+.contact-head{display:flex;align-items:center;gap:14px;margin-bottom:24px}
+.contact-head h3{font-size:23px;margin:0 0 3px}
+.contact-head p{font-size:12px;color:#becabd;margin:0}
+.contact-mark{flex:none;width:48px;height:48px;display:grid;place-items:center;border:1px solid #4a8348;border-radius:15px;background:#1c341e;color:#80ff63;font-size:30px;font-weight:bold;line-height:1}
+.contact-mark.instagram-mark{font-size:38px}
+.contact-buttons{display:grid;gap:12px}
+.contact-link{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #3a5c3a;border-radius:12px;background:#101710;padding:15px 17px;color:#e8f6e6;font-weight:750;font-size:15px;transition:background .18s,border-color .18s,transform .18s;overflow-wrap:anywhere}
+.contact-link:hover{background:#1e3420;border-color:var(--green);transform:translateY(-1px)}
+.contact-link span:last-child{color:var(--green);font-size:24px;font-weight:400;line-height:1}
+@media(max-width:710px){.contact-grid{grid-template-columns:1fr}.contact-card{padding:21px}.contact-link{font-size:14px}}
+@media(prefers-reduced-motion:reduce){.contact-link{transition:none}}
+
 </style>
 </head>
 <body>
-<header><div class="container nav"><a class="brand" href="#inicio" aria-label="Evolução Corporal, início"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="#62ff36" d="M50 4 96 94H72L50 49 28 94H4Z"/><path fill="#62ff36" d="M37 72h41l-8 17H29Z"/><path fill="#0a120c" d="M48 61h18l10 21H63Z"/></svg><div class="brand-name">EVOLUÇÃO <span>C O R P O R A L</span></div></a><nav aria-label="Navegação principal"><a href="#servicos">Consultoria</a><a href="#resultados">Resultados</a><a href="#depoimentos">Depoimentos</a><a href="#planos">Planos</a></nav><a class="btn small" href="#planos">COMEÇAR AGORA ↗</a></div></header>
+<header><div class="container nav"><a class="brand" href="#inicio" aria-label="Evolução Corporal, início"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="#62ff36" d="M50 4 96 94H72L50 49 28 94H4Z"/><path fill="#62ff36" d="M37 72h41l-8 17H29Z"/><path fill="#0a120c" d="M48 61h18l10 21H63Z"/></svg><div class="brand-name">EVOLUÇÃO <span>C O R P O R A L</span></div></a><nav aria-label="Navegação principal"><a href="#servicos">Consultoria</a><a href="#resultados">Resultados</a><a href="#depoimentos">Depoimentos</a><a href="#planos">Planos</a><a href="#contato">Contato</a></nav><a class="btn small" href="#planos">COMEÇAR AGORA ↗</a></div></header>
 <main>
 <section class="hero" id="inicio"><div class="container hero-inner"><div class="hero-layout">
 <div class="hero-copy">
@@ -181,6 +198,33 @@ a:focus-visible,summary:focus-visible{outline:3px solid #b1ffa0;outline-offset:4
 <details><summary>Os pagamentos já são automáticos?</summary><p>Ainda não. Neste momento, a matrícula é solicitada por e-mail. A contratação automática será disponibilizada após os testes do sistema de pagamento.</p></details>
 <details><summary>Já sou aluno. Preciso me matricular novamente?</summary><p>Não. Os alunos atuais mantêm os acessos existentes.</p></details>
 </div><div class="closer"><div><div class="eyebrow">SUA PRÓXIMA EVOLUÇÃO</div><h2>O primeiro passo é decidir começar.</h2><p class="lead">André Salles • Silvana Salles</p></div><a class="btn" href="#planos">VER PLANOS ↗</a></div></div></section>
+
+<section class="section contact-section" id="contato" aria-labelledby="titulo-contato">
+<div class="container">
+<div class="section-title-centered">
+<div class="eyebrow">FALE COM A GENTE</div>
+<h2 id="titulo-contato">Sua evolução começa com uma conversa.</h2>
+<p class="lead">Quer tirar dúvidas sobre nossos planos? Entre em contato diretamente pelo WhatsApp ou acompanhe nosso trabalho no Instagram.</p>
+</div>
+<div class="contact-grid">
+<article class="contact-card">
+  <div class="contact-head"><span class="contact-mark whatsapp-mark" aria-hidden="true">✆</span><div><h3>WhatsApp</h3><p>Atendimento e informações sobre matrículas</p></div></div>
+  <div class="contact-buttons">
+    <a class="contact-link" href="https://wa.me/5532988619666?text=Ol%C3%A1%21%20Gostaria%20de%20saber%20mais%20sobre%20a%20consultoria%20Evolu%C3%A7%C3%A3o%20Corporal." target="_blank" rel="noopener noreferrer" aria-label="Conversar pelo WhatsApp no número 32 98861-9666"><span>(32) 98861-9666</span><span aria-hidden="true">↗</span></a>
+    <a class="contact-link" href="https://wa.me/5532991598033?text=Ol%C3%A1%21%20Gostaria%20de%20saber%20mais%20sobre%20a%20consultoria%20Evolu%C3%A7%C3%A3o%20Corporal." target="_blank" rel="noopener noreferrer" aria-label="Conversar pelo WhatsApp no número 32 99159-8033"><span>(32) 99159-8033</span><span aria-hidden="true">↗</span></a>
+  </div>
+</article>
+<article class="contact-card">
+  <div class="contact-head"><span class="contact-mark instagram-mark" aria-hidden="true">◎</span><div><h3>Instagram</h3><p>Treinos, conteúdo e novidades da consultoria</p></div></div>
+  <div class="contact-buttons">
+    <a class="contact-link" href="https://www.instagram.com/andre22bodybuilder/" target="_blank" rel="noopener noreferrer" aria-label="Abrir Instagram de André Salles, andre22bodybuilder"><span>@andre22bodybuilder</span><span aria-hidden="true">↗</span></a>
+    <a class="contact-link" href="https://www.instagram.com/silvannasallesss/" target="_blank" rel="noopener noreferrer" aria-label="Abrir Instagram de Silvana Salles, silvannasallesss"><span>@silvannasallesss</span><span aria-hidden="true">↗</span></a>
+  </div>
+</article>
+</div>
+</div>
+</section>
+
 </main>
-<footer><div class="container foot-inner"><span>© 2026 Evolução Corporal · André Salles • Silvana Salles</span><span><a href="mailto:andresalles274@gmail.com">Contato</a> · Matrículas automáticas em preparação</span></div></footer>
+<footer><div class="container foot-inner"><span>© 2026 Evolução Corporal · André Salles • Silvana Salles</span><span><a href="#contato">WhatsApp e Instagram</a> · Matrículas automáticas em preparação</span></div></footer>
 </body></html>
