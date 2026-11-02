@@ -1,0 +1,18 @@
+/* Aviso de mensalidade: tela exclusiva para alunos com acesso suspenso. */
+.payment-lock{min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:calc(22px + env(safe-area-inset-top)) 18px calc(26px + env(safe-area-inset-bottom));background:radial-gradient(circle at 50% 0%,rgba(209,35,40,.20),transparent 42%),radial-gradient(circle at 50% 100%,rgba(255,115,55,.08),transparent 44%),#08090b;color:#fff}
+.payment-lock__panel{position:relative;width:min(100%,490px);padding:clamp(24px,6vw,40px);text-align:center;background:linear-gradient(150deg,#17191b,#101112 64%,#170e0f);border:1px solid rgba(239,96,86,.38);border-radius:28px;box-shadow:0 30px 75px rgba(0,0,0,.55),0 0 48px rgba(196,29,34,.10)}
+.payment-lock__brand{display:flex;justify-content:center;align-items:center;gap:9px;color:#d7d5d1;font-size:12px;font-weight:750;letter-spacing:.08em;text-transform:uppercase}
+.payment-lock__brand img{width:36px;height:36px;object-fit:contain}
+.payment-lock__symbol{width:144px;height:144px;margin:24px auto 14px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle,rgba(255,104,81,.16),rgba(229,42,46,.07) 58%,transparent 69%);border:1px solid rgba(255,118,98,.27);box-shadow:0 0 0 10px rgba(235,65,55,.035)}
+.payment-lock__symbol svg{width:87px;height:87px;filter:drop-shadow(0 6px 18px rgba(247,57,51,.25))}
+.payment-lock__eyebrow{color:#ff837a;font-size:12px;font-weight:850;letter-spacing:.23em;text-transform:uppercase}
+.payment-lock__title{margin:12px 0 10px;font-size:clamp(30px,8vw,43px);line-height:1.07;font-weight:950;letter-spacing:-.05em;color:#fff}
+.payment-lock__title strong{display:block;color:#ff776c}
+.payment-lock__description{font-size:15px;line-height:1.65;color:#d8d5d3;margin:18px 0}
+.payment-lock__safe{padding:14px 15px;margin:23px 0;border:1px solid rgba(255,255,255,.09);border-radius:14px;background:rgba(255,255,255,.035);color:#b9b9b8;font-size:13px;line-height:1.5}
+.payment-lock__actions{display:grid;gap:10px}
+.payment-lock__check{min-height:52px;border:0;border-radius:14px;padding:14px 18px;background:linear-gradient(110deg,#e94443,#b31e29);color:white;font-weight:850;box-shadow:0 8px 25px rgba(184,23,32,.23)}
+.payment-lock__check:disabled{opacity:.65;cursor:wait}
+.payment-lock__logout{min-height:44px;background:transparent;color:#adaba8;border:0;border-radius:12px}
+.payment-lock__hint{display:block;margin:14px 0 0;color:#a09b99;font-size:12px;line-height:1.5}
+@media(max-width:370px){.payment-lock__panel{padding:23px 17px}.payment-lock__symbol{width:122px;height:122px;margin-top:18px}.payment-lock__title{font-size:30px}}
