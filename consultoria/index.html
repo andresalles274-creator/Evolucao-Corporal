@@ -242,6 +242,13 @@ a:focus-visible,summary:focus-visible{outline:3px solid #b1ffa0;outline-offset:4
 .evo-rafaela-grid .after-label{color:#071305;background:#62ff36;border:1px solid #62ff36}
 @media(max-width:640px){.evo-rafaela-grid{gap:14px}.evo-rafaela-grid .evo-rafaela-pair{padding:11px}.evo-rafaela-grid .evo-before-after{grid-template-columns:minmax(0,1fr) 15px minmax(0,1fr);gap:3px}.evo-rafaela-grid .evo-photo{aspect-ratio:0.47}.evo-rafaela-grid .evo-label{font-size:9px;letter-spacing:.02em;padding:6px 8px}.evo-rafaela-grid .evo-arrow{font-size:20px;letter-spacing:-7px;padding-right:5px}}
 
+
+/* Matrículas: selecionar plano e escolher um dos WhatsApps no rodapé */
+#contato{scroll-margin-top:94px}
+.matricula-contato-info{margin:24px auto 0;max-width:940px;padding:15px 18px;background:#182919;border:1px solid #62ff36;border-radius:12px;color:#e8ffe4;font-size:14px;line-height:1.55}
+.matricula-contato-info strong{color:var(--green)}
+.matricula-contato-info[hidden]{display:none}
+
 </style>
 </head>
 <body>
@@ -435,9 +442,9 @@ a:focus-visible,summary:focus-visible{outline:3px solid #b1ffa0;outline-offset:4
 <section class="section" id="planos"><div class="container">
 <div class="section-title-centered"><div class="eyebrow">PLANOS EVOLUÇÃO CORPORAL</div><h2>Seu compromisso com a evolução.</h2><p class="lead">Escolha o período ideal para começar. O pagamento automático ainda está em preparação; por enquanto a matrícula é solicitada diretamente.</p></div>
 <div class="plans">
-<article class="plan"><div class="tag">PLANO MENSAL</div><h3>Comece agora</h3><div class="price">R$ 129,90 <small>/ 1 mês</small></div><p class="equivalent">Pagamento mensal</p><ul><li>Aplicativo Evolução Corporal</li><li>Avaliação e treino individualizado</li><li>Registro da sua evolução</li><li>Acompanhamento online</li></ul><a class="btn outline" href="mailto:andresalles274@gmail.com?subject=Matricula%20Evolucao%20Corporal%20-%20Mensal%20R%24129%2C90">SOLICITAR MATRÍCULA ↗</a></article>
-<article class="plan recommended"><div class="flag">MENOR VALOR MENSAL</div><div class="tag">PLANO TRIMESTRAL</div><h3>Mantenha o foco</h3><div class="price">R$ 229,90 <small>/ 3 meses</small></div><p class="equivalent">Equivalente a R$ 76,63 por mês</p><ul><li>Aplicativo Evolução Corporal</li><li>Avaliação e treino individualizado</li><li>Registro da sua evolução</li><li>Acompanhamento online</li></ul><a class="btn" href="mailto:andresalles274@gmail.com?subject=Matricula%20Evolucao%20Corporal%20-%20Trimestral%20R%24229%2C90">SOLICITAR MATRÍCULA ↗</a></article>
-<article class="plan"><div class="tag">PLANO SEMESTRAL</div><h3>Uma jornada mais longa</h3><div class="price">R$ 549,90 <small>/ 6 meses</small></div><p class="equivalent">Equivalente a R$ 91,65 por mês</p><ul><li>Aplicativo Evolução Corporal</li><li>Avaliação e treino individualizado</li><li>Registro da sua evolução</li><li>Acompanhamento online</li></ul><a class="btn outline" href="mailto:andresalles274@gmail.com?subject=Matricula%20Evolucao%20Corporal%20-%20Semestral%20R%24549%2C90">SOLICITAR MATRÍCULA ↗</a></article>
+<article class="plan"><div class="tag">PLANO MENSAL</div><h3>Comece agora</h3><div class="price">R$ 129,90 <small>/ 1 mês</small></div><p class="equivalent">Pagamento mensal</p><ul><li>Aplicativo Evolução Corporal</li><li>Avaliação e treino individualizado</li><li>Registro da sua evolução</li><li>Acompanhamento online</li></ul><a class="btn outline" href="#contato" data-matricula-plano="Mensal" data-matricula-preco="R$ 129,90">SOLICITAR MATRÍCULA ↗</a></article>
+<article class="plan recommended"><div class="flag">MENOR VALOR MENSAL</div><div class="tag">PLANO TRIMESTRAL</div><h3>Mantenha o foco</h3><div class="price">R$ 229,90 <small>/ 3 meses</small></div><p class="equivalent">Equivalente a R$ 76,63 por mês</p><ul><li>Aplicativo Evolução Corporal</li><li>Avaliação e treino individualizado</li><li>Registro da sua evolução</li><li>Acompanhamento online</li></ul><a class="btn" href="#contato" data-matricula-plano="Trimestral" data-matricula-preco="R$ 229,90">SOLICITAR MATRÍCULA ↗</a></article>
+<article class="plan"><div class="tag">PLANO SEMESTRAL</div><h3>Uma jornada mais longa</h3><div class="price">R$ 549,90 <small>/ 6 meses</small></div><p class="equivalent">Equivalente a R$ 91,65 por mês</p><ul><li>Aplicativo Evolução Corporal</li><li>Avaliação e treino individualizado</li><li>Registro da sua evolução</li><li>Acompanhamento online</li></ul><a class="btn outline" href="#contato" data-matricula-plano="Semestral" data-matricula-preco="R$ 549,90">SOLICITAR MATRÍCULA ↗</a></article>
 </div><p class="disclaimer">Os valores apresentados são por período contratado. A compra online e a ativação automática ainda não estão disponíveis; não há cobrança por esta página. Os treinos personalizados dependem da análise individual da consultoria.</p></div></section>
 
 <section class="section alt"><div class="container"><div class="eyebrow">SEU CAMINHO</div><h2>Da inscrição à evolução.</h2><div class="flow"><div class="step"><b>01</b><h3>Escolha o plano</h3><p>Selecione o acompanhamento e solicite sua matrícula.</p></div><div class="step"><b>02</b><h3>Faça sua avaliação</h3><p>Envie seus dados iniciais com privacidade. O planejamento será preparado após revisão individual.</p></div><div class="step"><b>03</b><h3>Evolua no aplicativo</h3><p>Após a liberação do acesso, acompanhe treinos, medidas e progresso no Evolução Corporal.</p></div></div></div></section>
@@ -456,12 +463,13 @@ a:focus-visible,summary:focus-visible{outline:3px solid #b1ffa0;outline-offset:4
 <h2 id="titulo-contato">Sua evolução começa com uma conversa.</h2>
 <p class="lead">Quer tirar dúvidas sobre nossos planos? Entre em contato diretamente pelo WhatsApp ou acompanhe nosso trabalho no Instagram.</p>
 </div>
+<p id="matricula-contato-info" class="matricula-contato-info" hidden aria-live="polite"></p>
 <div class="contact-grid">
 <article class="contact-card">
   <div class="contact-head"><span class="contact-mark whatsapp-mark" aria-hidden="true">✆</span><div><h3>WhatsApp</h3><p>Atendimento e informações sobre matrículas</p></div></div>
   <div class="contact-buttons">
-    <a class="contact-link" href="https://wa.me/5532988619666?text=Ol%C3%A1%21%20Gostaria%20de%20saber%20mais%20sobre%20a%20consultoria%20Evolu%C3%A7%C3%A3o%20Corporal." target="_blank" rel="noopener noreferrer" aria-label="Conversar pelo WhatsApp no número 32 98861-9666"><span>(32) 98861-9666</span><span aria-hidden="true">↗</span></a>
-    <a class="contact-link" href="https://wa.me/5532991598033?text=Ol%C3%A1%21%20Gostaria%20de%20saber%20mais%20sobre%20a%20consultoria%20Evolu%C3%A7%C3%A3o%20Corporal." target="_blank" rel="noopener noreferrer" aria-label="Conversar pelo WhatsApp no número 32 99159-8033"><span>(32) 99159-8033</span><span aria-hidden="true">↗</span></a>
+    <a class="contact-link" data-whatsapp="5532988619666" href="https://wa.me/5532988619666?text=Ol%C3%A1%21%20Gostaria%20de%20saber%20mais%20sobre%20a%20consultoria%20Evolu%C3%A7%C3%A3o%20Corporal." target="_blank" rel="noopener noreferrer" aria-label="Conversar pelo WhatsApp no número 32 98861-9666"><span>(32) 98861-9666</span><span aria-hidden="true">↗</span></a>
+    <a class="contact-link" data-whatsapp="5532991598033" href="https://wa.me/5532991598033?text=Ol%C3%A1%21%20Gostaria%20de%20saber%20mais%20sobre%20a%20consultoria%20Evolu%C3%A7%C3%A3o%20Corporal." target="_blank" rel="noopener noreferrer" aria-label="Conversar pelo WhatsApp no número 32 99159-8033"><span>(32) 99159-8033</span><span aria-hidden="true">↗</span></a>
   </div>
 </article>
 <article class="contact-card">
@@ -477,4 +485,27 @@ a:focus-visible,summary:focus-visible{outline:3px solid #b1ffa0;outline-offset:4
 
 </main>
 <footer><div class="container foot-inner"><span>© 2026 Evolução Corporal · André Salles • Silvana Salles</span><span><a href="/trabalhos">Nossos Trabalhos</a> · <a href="#contato">WhatsApp e Instagram</a> · Matrículas automáticas em preparação</span></div></footer>
+
+<script>
+(function(){
+  var notice=document.getElementById("matricula-contato-info");
+  var whatsappButtons=document.querySelectorAll("[data-whatsapp]");
+  var choices=document.querySelectorAll("[data-matricula-plano]");
+  choices.forEach(function(link){
+    link.addEventListener("click",function(){
+      var plan=link.getAttribute("data-matricula-plano")||"";
+      var price=link.getAttribute("data-matricula-preco")||"";
+      if(notice){
+        notice.hidden=false;
+        notice.textContent="Você escolheu o plano "+plan+" ("+price+"). Selecione um dos dois WhatsApps abaixo para solicitar sua matrícula.";
+      }
+      var msg="Olá! Gostaria de solicitar minha matrícula na Consultoria Evolução Corporal. Tenho interesse no Plano "+plan+" de "+price+".";
+      whatsappButtons.forEach(function(button){
+        var phone=button.getAttribute("data-whatsapp");
+        if(phone)button.href="https://wa.me/"+phone+"?text="+encodeURIComponent(msg);
+      });
+    });
+  });
+})();
+</script>
 </body></html>
