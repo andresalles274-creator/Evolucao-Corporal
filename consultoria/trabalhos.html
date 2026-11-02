@@ -1,0 +1,129 @@
+<!doctype html><html lang="pt-BR"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080d09">
+<meta name="description" content="Galeria de trabalhos, treinos, campanhas e bastidores da consultoria Evolução Corporal — André Salles e Silvana Salles.">
+<title>Nossos Trabalhos | Evolução Corporal</title>
+<style>
+:root{color-scheme:dark;--g:#62ff36;--bg:#080b09;--panel:#121b13;--text:#f4f7f2;--muted:#a9b3a8}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}button{font:inherit}button:focus-visible,a:focus-visible{outline:3px solid var(--g);outline-offset:3px}
+.wrap{width:min(1180px,calc(100% - 40px));margin:0 auto}
+header{position:sticky;top:0;z-index:10;background:#080d09f0;border-bottom:1px solid #263e29;backdrop-filter:blur(15px)}
+.header-inner{min-height:74px;display:flex;justify-content:space-between;gap:20px;align-items:center}
+.brand{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:900;letter-spacing:.06em;line-height:1}
+.brand svg{height:39px;width:39px;filter:drop-shadow(0 0 7px #62ff3655)}.brand small{display:block;font-size:9px;letter-spacing:.25em;color:var(--g);margin-top:6px}
+.nav-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.nav-actions a{border:1px solid #405d40;border-radius:9px;padding:10px 15px;font-size:12px;font-weight:850}.nav-actions a.primary{background:var(--g);color:#091307;border-color:var(--g)}
+.hero{background:radial-gradient(circle at 75% 12%,#264a2954,transparent 50%),linear-gradient(155deg,#151d17,#070a08);border-bottom:1px solid #28402c;padding:75px 0 65px}
+.eyebrow{font-size:12px;letter-spacing:.2em;color:var(--g);font-weight:800;text-transform:uppercase}
+h1{font-size:clamp(40px,7vw,85px);letter-spacing:-.07em;line-height:.99;margin:22px 0 19px;max-width:900px}
+h1 span{color:var(--g)}
+.hero p{font-size:16px;line-height:1.7;color:#c1ccbf;max-width:670px}
+.names{color:#ecf4e8;font-family:Georgia,serif;font-style:italic;font-size:18px;margin-top:24px}
+.main{padding:50px 0 90px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:26px}
+.section-head h2{margin:6px 0;font-size:clamp(25px,3.6vw,38px);letter-spacing:-.04em}
+.section-head p{color:var(--muted);font-size:13px;margin:0}
+.filter-bar{display:flex;flex-wrap:wrap;gap:9px}
+.filter-bar button{border:1px solid #436043;background:#121b13;color:#d5e4d1;font-size:12px;font-weight:800;border-radius:99px;padding:10px 15px;cursor:pointer}
+.filter-bar button.active,.filter-bar button:hover{background:var(--g);border-color:var(--g);color:#0b1608}
+.gallery-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;align-items:start}
+.photo-card{border-radius:17px;overflow:hidden;border:1px solid #345138;background:#111c12;box-shadow:0 15px 28px #0006}
+.photo-card[hidden]{display:none}
+.photo-trigger{display:block;background:none;border:0;margin:0;padding:0;color:#fff;text-align:left;cursor:zoom-in;width:100%;position:relative}
+.photo-trigger img{display:block;width:100%;height:auto;aspect-ratio:auto;object-fit:contain}
+.photo-overlay{position:absolute;bottom:0;left:0;right:0;padding:56px 16px 16px;background:linear-gradient(0deg,#020602e9 0%,#020502a8 45%,transparent 100%);display:flex;flex-direction:column;gap:4px}
+.photo-subtitle{font-size:10px;color:var(--g);letter-spacing:.14em;font-weight:900;text-transform:uppercase}
+.photo-overlay strong{font-size:14px;line-height:1.25}
+.expand{font-size:11px;color:#cae8c5;margin-top:3px;display:flex;justify-content:space-between}
+.closer{margin-top:48px;padding:29px;border-radius:18px;border:1px solid #355839;background:#111a12;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.closer h2{font-size:24px;margin:0 0 6px;letter-spacing:-.04em}.closer p{color:var(--muted);font-size:13px;margin:0;max-width:600px;line-height:1.7}
+.action{display:inline-block;padding:13px 18px;background:var(--g);border-radius:10px;color:#071506;font-size:12px;font-weight:900;white-space:nowrap}
+footer{border-top:1px solid #243526;padding:28px 0;color:#aeb8aa;font-size:12px}
+footer .wrap{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
+dialog{max-width:min(94vw,1100px);max-height:96dvh;width:auto;border:1px solid #486c47;padding:15px;border-radius:15px;background:#080d09;color:#fff;box-shadow:0 20px 110px #000}
+dialog::backdrop{background:#000d;backdrop-filter:blur(7px)}
+.lightbox-inner{display:flex;flex-direction:column;align-items:center;gap:12px}
+.lightbox-inner img{display:block;max-width:100%;max-height:80dvh;object-fit:contain}
+.lightbox-tools{display:flex;justify-content:space-between;align-items:center;gap:16px;width:100%}
+.lightbox-tools span{color:#d6e7d2;font-size:13px}
+.lightbox-tools button{border:1px solid #425c41;background:#1c291c;color:#fff;border-radius:8px;padding:9px 12px;cursor:pointer}
+@media(max-width:1050px){.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.hero{padding:52px 0}.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.photo-overlay{padding:30px 10px 10px}.photo-overlay strong{font-size:12px}.main{padding:36px 0 58px}.closer{align-items:flex-start;flex-direction:column}.nav-actions a{font-size:11px;padding:10px}.brand{font-size:13px}.brand svg{width:30px;height:30px}}
+@media(max-width:410px){.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wrap{width:calc(100% - 28px)}.nav-actions{gap:6px}.nav-actions a{font-size:10px;padding:9px 7px}.brand{gap:5px;font-size:11px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head><body>
+<header><div class="wrap header-inner"><a href="/" class="brand" aria-label="Voltar ao Evolução Corporal"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="#62ff36" d="M50 4 96 94H72L50 49 28 94H4Z"/><path fill="#62ff36" d="M37 72h41l-8 17H29Z"/><path fill="#0a120c" d="M48 61h18l10 21H63Z"/></svg><span>EVOLUÇÃO<small>C O R P O R A L</small></span></a><div class="nav-actions"><a href="/">← Início</a><a class="primary" href="/#planos">Ver planos ↗</a></div></div></header>
+<main><section class="hero"><div class="wrap"><div class="eyebrow">NOSSO DIA A DIA • TREINOS • CAMPANHAS</div><h1>NOSSOS <span>TRABALHOS.</span></h1><p>Conheça um pouco dos treinos, campanhas e momentos que fazem parte da nossa trajetória. Uma galeria com registros originais, separados dos resultados de evolução dos nossos alunos.</p><div class="names">André Salles • Silvana Salles</div></div></section>
+<section class="main"><div class="wrap"><div class="section-head"><div><div class="eyebrow">PORTFÓLIO EVOLUÇÃO CORPORAL</div><h2>O trabalho por trás da evolução.</h2><p>Selecione uma foto para ver em tamanho maior. Novas imagens serão adicionadas à galeria.</p></div><div class="filter-bar" role="group" aria-label="Filtrar galeria"><button type="button" class="active" data-filter="todos" aria-pressed="true">Todas</button><button type="button" data-filter="andre" aria-pressed="false">André</button><button type="button" data-filter="silvana" aria-pressed="false">Silvana</button><button type="button" data-filter="campanhas" aria-pressed="false">Campanhas</button></div></div>
+<div class="gallery-grid">
+<article class="photo-card" data-category="campanhas">
+<button class="photo-trigger" type="button" data-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/01-foco-disciplina.jpg" data-alt="Foco, disciplina e resultado" aria-label="Ampliar foto: Foco, disciplina e resultado">
+<img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/01-foco-disciplina.jpg" alt="Foco, disciplina e resultado" loading="eager" decoding="async" width="707" height="1536">
+<span class="photo-overlay"><span class="photo-subtitle">Campanhas</span><strong>Foco, disciplina e resultado</strong><span class="expand">Ver foto <span aria-hidden="true">↗</span></span></span>
+</button>
+</article>
+
+<article class="photo-card" data-category="silvana">
+<button class="photo-trigger" type="button" data-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/02-silvana-treino.jpg" data-alt="Silvana • Dedicação diária" aria-label="Ampliar foto: Silvana • Dedicação diária">
+<img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/02-silvana-treino.jpg" alt="Silvana • Dedicação diária" loading="eager" decoding="async" width="864" height="1536">
+<span class="photo-overlay"><span class="photo-subtitle">Silvana</span><strong>Silvana • Dedicação diária</strong><span class="expand">Ver foto <span aria-hidden="true">↗</span></span></span>
+</button>
+</article>
+
+<article class="photo-card" data-category="campanhas">
+<button class="photo-trigger" type="button" data-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/03-resultado-constancia.jpg" data-alt="Treino com determinação" aria-label="Ampliar foto: Treino com determinação">
+<img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/03-resultado-constancia.jpg" alt="Treino com determinação" loading="eager" decoding="async" width="864" height="1536">
+<span class="photo-overlay"><span class="photo-subtitle">Campanhas</span><strong>Treino com determinação</strong><span class="expand">Ver foto <span aria-hidden="true">↗</span></span></span>
+</button>
+</article>
+
+<article class="photo-card" data-category="silvana">
+<button class="photo-trigger" type="button" data-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/04-silvana-alta-performance.jpg" data-alt="Silvana • Alta Performance" aria-label="Ampliar foto: Silvana • Alta Performance">
+<img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/04-silvana-alta-performance.jpg" alt="Silvana • Alta Performance" loading="lazy" decoding="async" width="864" height="1536">
+<span class="photo-overlay"><span class="photo-subtitle">Silvana</span><strong>Silvana • Alta Performance</strong><span class="expand">Ver foto <span aria-hidden="true">↗</span></span></span>
+</button>
+</article>
+
+<article class="photo-card" data-category="andre">
+<button class="photo-trigger" type="button" data-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/05-andre-fitness.jpg" data-alt="André • Rotina fitness" aria-label="Ampliar foto: André • Rotina fitness">
+<img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/05-andre-fitness.jpg" alt="André • Rotina fitness" loading="lazy" decoding="async" width="864" height="1536">
+<span class="photo-overlay"><span class="photo-subtitle">André</span><strong>André • Rotina fitness</strong><span class="expand">Ver foto <span aria-hidden="true">↗</span></span></span>
+</button>
+</article>
+
+<article class="photo-card" data-category="silvana">
+<button class="photo-trigger" type="button" data-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/06-silvana-academia.jpg" data-alt="Silvana • Constância" aria-label="Ampliar foto: Silvana • Constância">
+<img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/06-silvana-academia.jpg" alt="Silvana • Constância" loading="lazy" decoding="async" width="864" height="1536">
+<span class="photo-overlay"><span class="photo-subtitle">Silvana</span><strong>Silvana • Constância</strong><span class="expand">Ver foto <span aria-hidden="true">↗</span></span></span>
+</button>
+</article>
+
+<article class="photo-card" data-category="andre">
+<button class="photo-trigger" type="button" data-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/07-andre-preparacao.jpg" data-alt="André • Disciplina no treino" aria-label="Ampliar foto: André • Disciplina no treino">
+<img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/07-andre-preparacao.jpg" alt="André • Disciplina no treino" loading="lazy" decoding="async" width="864" height="1536">
+<span class="photo-overlay"><span class="photo-subtitle">André</span><strong>André • Disciplina no treino</strong><span class="expand">Ver foto <span aria-hidden="true">↗</span></span></span>
+</button>
+</article>
+
+<article class="photo-card" data-category="andre">
+<button class="photo-trigger" type="button" data-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/08-andre-alta-performance.jpg" data-alt="André • Musculação e foco" aria-label="Ampliar foto: André • Musculação e foco">
+<img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/galeria/08-andre-alta-performance.jpg" alt="André • Musculação e foco" loading="lazy" decoding="async" width="864" height="1536">
+<span class="photo-overlay"><span class="photo-subtitle">André</span><strong>André • Musculação e foco</strong><span class="expand">Ver foto <span aria-hidden="true">↗</span></span></span>
+</button>
+</article></div>
+<div class="closer"><div><h2>Gostou do que viu?</h2><p>Conheça nossos planos de acompanhamento ou fale com a equipe pelo WhatsApp e Instagram.</p></div><a class="action" href="/#contato">FALE COM A GENTE ↗</a></div>
+</div></section></main><footer><div class="wrap"><span>© 2026 Evolução Corporal · André Salles • Silvana Salles</span><a href="/#resultados">Veja também: evolução dos alunos ↗</a></div></footer>
+<dialog id="lightbox" aria-label="Visualizar foto ampliada"><div class="lightbox-inner"><div class="lightbox-tools"><span id="lightboxTitle"></span><button type="button" id="closeLightbox" aria-label="Fechar foto ampliada">✕ Fechar</button></div><img id="lightboxImage" src="" alt=""></div></dialog>
+<script>
+(function(){
+const filters=document.querySelectorAll("[data-filter]");
+filters.forEach(function(btn){btn.addEventListener("click",function(){const category=btn.dataset.filter;filters.forEach(function(b){const active=b===btn;b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active));});document.querySelectorAll(".photo-card").forEach(function(card){card.hidden=category!=="todos" && card.dataset.category!==category;});});});
+const modal=document.getElementById("lightbox"), image=document.getElementById("lightboxImage"), label=document.getElementById("lightboxTitle");
+document.querySelectorAll(".photo-trigger").forEach(function(button){button.addEventListener("click",function(){image.src=button.dataset.src;image.alt=button.dataset.alt;label.textContent=button.dataset.alt;modal.showModal();});});
+document.getElementById("closeLightbox").addEventListener("click",function(){modal.close();});
+modal.addEventListener("click",function(e){if(e.target===modal)modal.close();});
+modal.addEventListener("close",function(){image.removeAttribute("src");});
+})();
+</script></body></html>
