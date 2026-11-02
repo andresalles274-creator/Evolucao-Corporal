@@ -314,3 +314,28 @@ body.student-neon .student-billing-card{display:none!important}
  .student-row .student-list-copy strong{font-size:clamp(11px,3.2vw,15px)!important}
  .student-row .student-main .badge{font-size:9px!important}
 }
+
+
+/* Acesso ao site — somente no painel do coach */
+.app:not(.student-app) .coach-welcome{flex-wrap:wrap!important}
+.app:not(.student-app) .coach-welcome>.coach-site-button{
+  display:flex!important;align-items:center;gap:14px;flex:0 0 100%;width:100%;min-width:0;
+  margin-top:3px;padding:15px 18px;min-height:75px;border-radius:17px;
+  border:1px solid rgba(123,255,79,.85);background:linear-gradient(120deg,#16281a,#0a150d 80%);
+  color:#f0ffed!important;text-decoration:none!important;box-shadow:0 8px 24px rgba(0,0,0,.45),0 0 14px rgba(98,255,54,.1);
+  transition:border-color .2s ease,background .2s ease,transform .2s ease;
+}
+.app:not(.student-app) .coach-site-button:hover{border-color:#a8ff6d;background:linear-gradient(120deg,#1d3920,#101e12);transform:translateY(-1px)}
+.app:not(.student-app) .coach-site-button:focus-visible{outline:3px solid #caff18;outline-offset:3px}
+.app:not(.student-app) .coach-site-icon{display:grid;place-items:center;flex:0 0 44px;height:44px;border-radius:13px;background:#b4ff64;color:#0a180c;font-size:28px;font-weight:900}
+.app:not(.student-app) .coach-site-copy{display:flex;flex:1;flex-direction:column;gap:4px;min-width:0}
+.app:not(.student-app) .coach-site-copy strong{font-size:15px;color:#f2fff0!important;font-weight:850;letter-spacing:.01em}
+.app:not(.student-app) .coach-site-copy small{font-size:12px;color:#b9d7bb!important;line-height:1.35}
+.app:not(.student-app) .coach-site-arrow{color:#b4ff64;font-size:25px;font-weight:700;flex:none}
+@media(max-width:480px){
+ .app:not(.student-app) .coach-welcome>.coach-site-button{gap:10px;padding:13px;min-height:68px}
+ .app:not(.student-app) .coach-site-icon{flex-basis:40px;height:40px}
+ .app:not(.student-app) .coach-site-copy strong{font-size:13px}
+ .app:not(.student-app) .coach-site-copy small{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.app:not(.student-app) .coach-site-button{transition:none}}

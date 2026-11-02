@@ -1061,6 +1061,11 @@ function coachHome(){
  <div class="coach-welcome">
    <div><div class="eyebrow">Área profissional</div><h2>Painel do Coach</h2><p class="sub">Gerencie seus alunos e acompanhe a evolução em um só lugar.</p></div>
    <div class="coach-total"><span>${data.students.length}</span><small>aluno(s)</small></div>
+   <a class="coach-site-button" href="https://consultoria-andre-salles.ca-pacientes-andre.workers.dev/" target="_blank" rel="noopener noreferrer" aria-label="Abrir site da consultoria Evolução Corporal em nova aba">
+     <span class="coach-site-icon" aria-hidden="true">↗</span>
+     <span class="coach-site-copy"><strong>Abrir site da consultoria</strong><small>Visualizar o site Evolução Corporal</small></span>
+     <span class="coach-site-arrow" aria-hidden="true">→</span>
+   </a>
  </div>
 
  ${active?`<div class="card active-student-card">
