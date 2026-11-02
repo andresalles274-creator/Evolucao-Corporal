@@ -2,7 +2,7 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 
-const APP_VERSION="10.6.8";
+const APP_VERSION="10.6.9";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -12,7 +12,8 @@ const fmt=d=>d?new Date(String(d).length===10?d+"T12:00:00":d).toLocaleDateStrin
 const n=v=>Number(v||0);
 
 let session=null,user=null,profile=null,isCoach=false,route="home",accountInactive=false,accountSuspended=false;
-let suspendedStudentIds=new Set();
+let suspendedStudentIds=new Set(),paymentNoticeStudentIds=new Set();
+let paymentNoticeEnabled=false,paymentNoticeDismissed=false;
 let selectedTrainingDayId=null;
 let selectedStudentId=null,selectedStudentProfile=null;
 let loadErrors={};
@@ -110,7 +111,7 @@ async function init(){
    if(ev==="TOKEN_REFRESHED" || ev==="INITIAL_SESSION") return;
 
    if(!user){
-     profile=null;isCoach=false;accountInactive=false;accountSuspended=false;suspendedStudentIds=new Set();
+     profile=null;isCoach=false;accountInactive=false;accountSuspended=false;suspendedStudentIds=new Set();paymentNoticeStudentIds=new Set();paymentNoticeEnabled=false;paymentNoticeDismissed=false;
      selectedStudentId=null;selectedStudentProfile=null;
      data={measurements:[],meals:[],workouts:[],hormone_logs:[],students:[],skinfolds:[],progress_photos:[],exercise_library:[],training_plans:[],training_days:[],training_day_exercises:[],training_sessions:[],training_set_logs:[],diet_plans:[],diet_plan_meals:[]};
      clearPhotoDraft();
@@ -129,11 +130,12 @@ async function hydrate(){
  const [p,c,access]=await Promise.all([
   supabase.from("profiles").select("*").eq("user_id",user.id).maybeSingle(),
   supabase.from("coach_users").select("user_id").eq("user_id",user.id).maybeSingle(),
-  supabase.from("student_access_controls").select("is_suspended").eq("user_id",user.id).maybeSingle()
+  supabase.from("student_access_controls").select("is_suspended,payment_notice_enabled").eq("user_id",user.id).maybeSingle()
  ]);
  profile=p.data||{user_id:user.id,full_name:user.user_metadata?.full_name||user.email.split("@")[0],goal:user.user_metadata?.goal||"",age:"",height_cm:""};
  isCoach=!!c.data;
  accountSuspended=!isCoach && access.data?.is_suspended===true;
+ paymentNoticeEnabled=!isCoach && access.data?.payment_notice_enabled===true;
  if(access.error && !isCoach)loadErrors.student_access_controls=access.error.message;
  accountInactive=!isCoach && (profile?.is_active===false || accountSuspended);
  if(accountInactive){selectedStudentId=null;selectedStudentProfile=null;return;}
@@ -141,11 +143,12 @@ async function hydrate(){
  if(isCoach){
    const [r,s]=await Promise.all([
     supabase.from("profiles").select("*").order("full_name"),
-    supabase.from("student_access_controls").select("user_id,is_suspended").eq("is_suspended",true)
+    supabase.from("student_access_controls").select("user_id,is_suspended,payment_notice_enabled")
    ]);
    if(r.error) loadErrors.students=r.error.message;
    if(s.error) loadErrors.student_access_controls=s.error.message;
-   suspendedStudentIds=new Set((s.data||[]).map(x=>x.user_id));
+   suspendedStudentIds=new Set((s.data||[]).filter(x=>x.is_suspended).map(x=>x.user_id));
+   paymentNoticeStudentIds=new Set((s.data||[]).filter(x=>x.payment_notice_enabled).map(x=>x.user_id));
    data.students=(r.data||[]).filter(x=>x.user_id!==user.id && x.is_active!==false);
 
    const saved=sessionStorage.getItem("evolucao_selected_student");
@@ -759,6 +762,27 @@ async function toggleStudentSuspension(id,suspend){
  toast(suspend?"Acesso suspenso. Dados preservados.":"Acesso reativado para o aluno.");
 }
 
+async function toggleStudentPaymentNotice(id,showNotice){
+ if(!isCoach||!id)return;
+ const student=data.students.find(s=>s.user_id===id);
+ if(!student)return toast("Aluno não encontrado.",true);
+ const name=student.full_name||"este aluno";
+ const msg=showNotice
+  ?`Mostrar aviso de mensalidade pendente para ${name}?\n\nO aluno continuará podendo usar todas as funções normalmente.`
+  :`Remover aviso de mensalidade de ${name}?`;
+ if(!confirm(msg))return;
+ document.querySelectorAll(".student-payment-toggle").forEach(b=>b.disabled=true);
+ const result=await supabase.rpc("set_student_payment_notice",{target_user_id:id,show_notice:showNotice});
+ if(result.error){
+  document.querySelectorAll(".student-payment-toggle").forEach(b=>b.disabled=false);
+  return toast("Não foi possível alterar o aviso: "+result.error.message,true);
+ }
+ if(showNotice)paymentNoticeStudentIds.add(id);
+ else paymentNoticeStudentIds.delete(id);
+ render();
+ toast(showNotice?"Aviso ativado sem bloquear o aluno.":"Aviso retirado do aplicativo do aluno.");
+}
+
 async function deleteStudent(id){
  if(!isCoach||!id)return;
  const student=data.students.find(s=>s.user_id===id);
@@ -924,12 +948,18 @@ function shell(){
  return `<div class="app${isCoach?"":" student-app"}"><header class="topbar">
  <div class="brand-wrap">${backTarget()?`<button type="button" class="top-back" data-back aria-label="Voltar">←</button>`:""}<img src="./coach-a-neon.svg" class="brand-mark" alt="Logo Evolução Corporal"><div><div class="small">Evolução Corporal <span class="version-badge">v${APP_VERSION}</span></div><div class="brand">${isCoach?"Painel do Coach":"Olá, "+esc(name.split(" ")[0])}</div></div></div>
  <div class="top-actions">${isCoach&&selectedStudentId?`<div class="active-student-chip"><span>${studentInitials(selectedStudentName())}</span><div><small>Aluno ativo</small><strong>${esc(selectedStudentName().split(" ")[0])}</strong></div></div>`:""}<div class="user-chip"><span class="avatar">${esc(name[0])}</span><button id="logout" class="btn btn-ghost" style="padding:7px 10px">Sair</button></div></div></header>
+ ${!isCoach&&paymentNoticeEnabled&&!paymentNoticeDismissed?`<section class="student-payment-notice" aria-label="Aviso de mensalidade pendente">
+   <button type="button" class="student-payment-dismiss" id="dismissPaymentNotice" aria-label="Fechar aviso de mensalidade">×</button>
+   <img src="./payment-notice.svg" alt="Mensalidade pendente. Entre em contato com seu coach para regularizar. Você pode continuar usando o aplicativo." draggable="false">
+   <p>Você pode continuar usando seus treinos e sua dieta normalmente.</p>
+  </section>`:""}
  <main id="content"></main>
  <nav class="bottomnav">${nav("home","⌂","Visão geral")}${nav("measures","▥","Medidas")}${nav("food","◉","Alimentação")}${nav("training","✦","Meu treino")}${nav("hormones","⌁","Uso hormonal")}${nav(isCoach?"coach":"profile","♟",isCoach?"Alunos":"Meu perfil")}</nav></div>`;
 }
 function nav(r,i,l){return `<button class="navbtn ${route===r?"active":""}" data-route="${r}"><span class="ico">${i}</span>${l}</button>`}
 function bindShell(){
  $("#logout").onclick=()=>supabase.auth.signOut();
+ if($("#dismissPaymentNotice"))$("#dismissPaymentNotice").onclick=()=>{paymentNoticeDismissed=true;$(".student-payment-notice")?.remove();};
  $$(".navbtn").forEach(b=>b.onclick=()=>{route=b.dataset.route;render()});
  $$("[data-back]").forEach(b=>b.onclick=goBack);
 }
@@ -1072,10 +1102,11 @@ function studentDashboard(){
  <div class="card"><div class="eyebrow">Atividade recente</div><h2>Histórico do aluno</h2>${activityTimeline(8)}</div>
  <div class="card"><div class="eyebrow">Evolução</div><h2>Gráfico de peso</h2><canvas id="chart"></canvas></div>
  <div class="card student-access-panel">
-  <div class="eyebrow">ACESSO À CONSULTORIA</div>
-  <h2>${suspendedStudentIds.has(selectedStudentId)?"Acesso suspenso":"Acesso liberado"}</h2>
-  <p class="sub">${suspendedStudentIds.has(selectedStudentId)?"Aluno temporariamente bloqueado até a regularização do pagamento. Dados e treinos preservados.":"Suspenda temporariamente por falta de pagamento, sem excluir a conta do aluno."}</p>
-  <button type="button" class="btn btn-full student-suspend ${suspendedStudentIds.has(selectedStudentId)?"btn-primary":"btn-ghost"}" data-student="${selectedStudentId}" data-suspend="${suspendedStudentIds.has(selectedStudentId)?"0":"1"}">${suspendedStudentIds.has(selectedStudentId)?"Reativar aluno":"Suspender acesso"}</button>
+  <div class="eyebrow">AVISO DE MENSALIDADE</div>
+  <h2>${paymentNoticeStudentIds.has(selectedStudentId)?"Aviso ativo":"Aviso desativado"}</h2>
+  <p class="sub">O aviso aparece na tela do aluno, mas não impede o acesso aos treinos, dieta, fotos e avaliações.</p>
+  <button type="button" class="btn btn-full student-payment-toggle ${paymentNoticeStudentIds.has(selectedStudentId)?"btn-primary":"btn-ghost"}" data-student="${selectedStudentId}" data-show="${paymentNoticeStudentIds.has(selectedStudentId)?"0":"1"}">${paymentNoticeStudentIds.has(selectedStudentId)?"Remover aviso":"Mostrar aviso de pagamento"}</button>
+  ${suspendedStudentIds.has(selectedStudentId)?`<p class="sub">Este aluno ainda possui um bloqueio antigo de acesso.</p><button type="button" class="btn btn-ghost btn-full student-suspend" data-student="${selectedStudentId}" data-suspend="0">Reativar acesso do aluno</button>`:""}
  </div>
  <div class="danger-zone"><div><strong>Excluir aluno</strong><p class="small">Desativa o acesso e remove o aluno do painel. O histórico fica preservado.</p></div><button type="button" class="btn btn-danger student-delete" data-student="${selectedStudentId}">Excluir aluno</button></div>`;
 }
@@ -1087,10 +1118,11 @@ function studentList(){
    <button type="button" class="student-main student-open" data-student="${s.user_id}" data-next="student">
      <span class="student-avatar-sm">${studentInitials(s.full_name||"Aluno")}</span>
      <span class="student-list-copy"><strong>${esc(s.full_name||"Aluno")}</strong><small>${esc(s.goal||"Objetivo não informado")}</small></span>
-     <span class="badge">${suspendedStudentIds.has(s.user_id)?"Suspenso":s.user_id===selectedStudentId?"Selecionado":"Ativo"}</span>
+     <span class="badge">${suspendedStudentIds.has(s.user_id)?"Suspenso":paymentNoticeStudentIds.has(s.user_id)?"Aviso ativo":s.user_id===selectedStudentId?"Selecionado":"Ativo"}</span>
    </button>
    <div class="student-row-controls">
-     <button type="button" class="student-suspend ${suspendedStudentIds.has(s.user_id)?"access-reactivate":"access-suspend"}" data-student="${s.user_id}" data-suspend="${suspendedStudentIds.has(s.user_id)?"0":"1"}">${suspendedStudentIds.has(s.user_id)?"Reativar":"Suspender"}</button>
+     <button type="button" class="student-payment-toggle ${paymentNoticeStudentIds.has(s.user_id)?"access-reactivate":"access-suspend"}" data-student="${s.user_id}" data-show="${paymentNoticeStudentIds.has(s.user_id)?"0":"1"}">${paymentNoticeStudentIds.has(s.user_id)?"Retirar aviso":"Avisar mensalidade"}</button>
+     ${suspendedStudentIds.has(s.user_id)?`<button type="button" class="student-suspend access-reactivate" data-student="${s.user_id}" data-suspend="0">Reativar acesso</button>`:""}
      <button type="button" class="student-delete mini-danger" data-student="${s.user_id}" title="Excluir aluno">Excluir</button>
    </div>
  </div>`).join("")||`<div class="empty-state"><strong>Nenhum aluno cadastrado</strong><span>Os alunos aparecerão aqui depois do cadastro.</span></div>`}</div>`;
@@ -1282,6 +1314,7 @@ function bindRoute(){
  $$("[data-back]").forEach(b=>b.onclick=goBack);
  $$(".student-delete").forEach(b=>b.onclick=e=>{e.stopPropagation();deleteStudent(b.dataset.student)});
  document.querySelectorAll(".student-suspend").forEach(b=>b.onclick=e=>{e.stopPropagation();toggleStudentSuspension(b.dataset.student,b.dataset.suspend==="1")});
+ document.querySelectorAll(".student-payment-toggle").forEach(b=>b.onclick=e=>{e.stopPropagation();toggleStudentPaymentNotice(b.dataset.student,b.dataset.show==="1")});
 $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.dataset.index));
  $$(".photo-delete").forEach(b=>b.onclick=()=>deleteProgressPhoto(b.dataset.photoId,b.dataset.photoPath));
  $$(".photo-open").forEach(b=>b.onclick=e=>{
@@ -1332,15 +1365,19 @@ async function refreshStudentAccess(){
  try{
   const [p,a]=await Promise.all([
    supabase.from("profiles").select("is_active").eq("user_id",user.id).maybeSingle(),
-   supabase.from("student_access_controls").select("is_suspended").eq("user_id",user.id).maybeSingle()
+   supabase.from("student_access_controls").select("is_suspended,payment_notice_enabled").eq("user_id",user.id).maybeSingle()
   ]);
   if(p.error||a.error)return;
   const nextSuspended=a.data?.is_suspended===true;
+  const nextPaymentNotice=a.data?.payment_notice_enabled===true;
   const nextInactive=p.data?.is_active===false||nextSuspended;
-  if(nextInactive!==accountInactive || nextSuspended!==accountSuspended){
+  if(nextInactive!==accountInactive || nextSuspended!==accountSuspended || nextPaymentNotice!==paymentNoticeEnabled){
+   const wasInactive=accountInactive;
+   if(nextPaymentNotice!==paymentNoticeEnabled)paymentNoticeDismissed=false;
    accountSuspended=nextSuspended;
    accountInactive=nextInactive;
-   if(!nextInactive)await hydrate();
+   paymentNoticeEnabled=nextPaymentNotice;
+   if(wasInactive&&!nextInactive)await hydrate();
    render();
   }
  }catch(e){console.warn("Não foi possível atualizar o status do aluno.",e)}
