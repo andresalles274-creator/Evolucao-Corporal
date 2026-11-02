@@ -2,7 +2,7 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 
-const APP_VERSION="10.6.1";
+const APP_VERSION="10.6.8";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -824,13 +824,33 @@ function openRecordDetail(table,index){
 
 function inactiveView(){
  const suspended=accountSuspended && profile?.is_active!==false;
+ if(suspended)return `<section class="payment-lock" role="main">
+  <div class="payment-lock__panel">
+   <div class="payment-lock__brand"><img src="./coach-a-neon.svg" alt=""> Evolução Corporal</div>
+   <div class="payment-lock__symbol" role="img" aria-label="Cadeado indicando acesso pausado">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+     <path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="#ff9c81" stroke-width="2.2" stroke-linecap="round"/>
+     <rect x="4.5" y="9.5" width="15" height="12" rx="3" fill="#e9424a" stroke="#ff9a7e" stroke-width="1.1"/>
+     <circle cx="12" cy="15.3" r="1.8" fill="#fff"/>
+     <path d="M12 17v1.6" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+   </div>
+   <div class="payment-lock__eyebrow">Aviso importante</div>
+   <h1 class="payment-lock__title">MENSALIDADE <strong>PENDENTE</strong></h1>
+   <p class="payment-lock__description">Seu acesso ao aplicativo está temporariamente pausado. Para continuar acompanhando seus treinos, dieta e evolução, regularize sua mensalidade com a consultoria.</p>
+   <div class="payment-lock__safe">Seus treinos, dietas, fotos e avaliações continuam salvos. O acesso será liberado após a confirmação do pagamento pelo coach.</div>
+   <div class="payment-lock__actions">
+    <button id="inactiveCheck" class="payment-lock__check" type="button">Verificar liberação</button>
+    <button id="inactiveLogout" class="payment-lock__logout" type="button">Sair da conta</button>
+   </div>
+   <small class="payment-lock__hint">Já realizou o pagamento? Avise seu coach e depois toque em "Verificar liberação".</small>
+  </div>
+ </section>`;
  return `<section class="auth"><div class="authbox" style="text-align:center">
  <img src="./coach-a-neon.svg" class="auth-logo" alt="Logo Evolução Corporal">
  <div class="eyebrow">Consultoria online</div>
- <h1>${suspended?"Acesso temporariamente suspenso":"Conta desativada"}</h1>
- <p class="sub">${suspended
- ?"Seu acesso está temporariamente suspenso até a regularização do pagamento. Seus treinos, dietas, fotos e avaliações permanecem salvos. Entre em contato com seu coach."
- :"Seu acesso à consultoria foi encerrado. Entre em contato com seu coach caso precise reativar a conta."}</p>
+ <h1>Conta desativada</h1>
+ <p class="sub">Seu acesso à consultoria foi encerrado. Entre em contato com seu coach caso precise reativar a conta.</p>
  <button id="inactiveLogout" class="btn btn-ghost btn-full">Sair</button>
  </div></section>`;
 }
@@ -838,7 +858,17 @@ function inactiveView(){
 function render(){
  const root=$("#app");
  if(!user){root.innerHTML=authView();bindAuth();return}
- if(accountInactive){root.innerHTML=inactiveView();$("#inactiveLogout").onclick=()=>supabase.auth.signOut();return}
+ if(accountInactive){
+  root.innerHTML=inactiveView();
+  $("#inactiveLogout").onclick=()=>supabase.auth.signOut();
+  const check=$("#inactiveCheck");
+  if(check)check.onclick=async()=>{
+    check.disabled=true;
+    await refreshStudentAccess();
+    if(accountInactive){toast("Aguardando liberação pelo coach.");check.disabled=false;}
+  };
+  return;
+ }
  root.innerHTML=shell();bindShell();drawRoute();
 }
 
