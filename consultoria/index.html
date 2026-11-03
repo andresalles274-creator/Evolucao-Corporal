@@ -257,6 +257,37 @@ a:focus-visible,summary:focus-visible{outline:3px solid #b1ffa0;outline-offset:4
 .evo-silvana-previous{width:min(100%,490px);border-color:#456b46}
 @media(max-width:640px){.evo-silvana-pair .evo-before-after{grid-template-columns:minmax(0,1fr) 15px minmax(0,1fr);gap:3px}.evo-silvana-pair .evo-photo{aspect-ratio:.47}}
 
+
+/* Correção de enquadramento Silvana: fotos sem faixas vazias, mantendo proporções */
+.evo-rafaela-grid .evo-silvana-pair .evo-photo{overflow:hidden;background:#081009}
+.evo-rafaela-grid .evo-silvana-pair .evo-photo img{
+ width:100%;height:100%;display:block;object-fit:cover;object-position:center;
+}
+.evo-rafaela-grid .evo-silvana-pair .evo-photo:first-child img{
+ object-position:50% 51%;transform:scale(1.11);transform-origin:50% 51%;
+}
+.evo-rafaela-grid .evo-silvana-pair .evo-photo:last-child img{
+ object-position:50% 41%;transform:scale(1.18);transform-origin:50% 41%;
+}
+/* O registro anterior já é uma imagem composta: enquadrar cada metade sem esconder nada */
+.evo-rafaela-grid .evo-silvana-previous{
+ display:block;width:min(100%,820px);min-width:0;border:1px solid #456b46;
+ background:linear-gradient(160deg,#1b2b1d,#0b160e)
+}
+.evo-rafaela-grid .evo-silvana-previous .evo-photo.evo-silvana-half{
+ display:block;width:100%;height:auto;min-height:0;aspect-ratio:.385;
+ background-repeat:no-repeat;background-size:200% auto;background-color:#081009;
+ border:2px solid #477849;border-radius:13px
+}
+.evo-rafaela-grid .evo-silvana-previous .evo-silvana-before{background-position:right center}
+.evo-rafaela-grid .evo-silvana-previous .evo-silvana-after{background-position:left center}
+@media(max-width:640px){
+ .evo-rafaela-grid .evo-silvana-previous .evo-before-after{
+ grid-template-columns:minmax(0,1fr) 15px minmax(0,1fr);gap:3px
+ }
+ .evo-rafaela-grid .evo-silvana-previous .evo-photo.evo-silvana-half{aspect-ratio:.385}
+}
+
 </style>
 </head>
 <body>
@@ -358,14 +389,14 @@ a:focus-visible,summary:focus-visible{outline:3px solid #b1ffa0;outline-offset:4
 <div class="evo-arrow" aria-hidden="true">››</div>
 <button type="button" class="evo-photo" data-zoom-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-02/depois-academia.jpg" data-zoom-label="Silvana — Depois na academia" aria-label="Ampliar foto posterior da Silvana na academia"><img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-02/depois-academia.jpg" alt="Silvana, foto posterior na academia" loading="lazy" decoding="async"><span class="evo-label after-label">DEPOIS</span></button>
 </div></article>
-<article class="evolution-pair evo-single-pair evo-silvana-previous"><div class="evo-pair-top"><span class="evo-mini-marker">02</span><div><h4>Registro anterior</h4><p>Antes e depois • comparativo original</p></div></div>
-<div class="evo-before-after evo-split-compare" style="--half-ratio:0.375">
-  <button type="button" class="evo-photo evo-split-photo" data-zoom-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-02/comparativo-original.jpg" data-zoom-label="Transformação física — Comparativo original" aria-label="Ampliar comparação original: Transformação física">
-    <img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-02/comparativo-original.jpg" alt="Foto anterior do comparativo: Transformação física" loading="lazy" decoding="async" style="left:-100%"><span class="evo-label before-label">ANTES</span>
-  </button><div class="evo-arrow" aria-hidden="true">››</div>
-  <button type="button" class="evo-photo evo-split-photo" data-zoom-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-02/comparativo-original.jpg" data-zoom-label="Transformação física — Comparativo original" aria-label="Ampliar comparação original: Transformação física">
-    <img src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-02/comparativo-original.jpg" alt="Foto posterior do comparativo: Transformação física" loading="lazy" decoding="async" style="left:0"><span class="evo-label after-label">DEPOIS</span>
-  </button>
+<article class="evolution-pair evo-single-pair evo-silvana-previous">
+<div class="evo-pair-top"><span class="evo-mini-marker">02</span><div><h4>Registro anterior</h4><p>Comparativo original • antes e depois</p></div></div>
+<div class="evo-before-after evo-silvana-legacy-compare">
+<button type="button" class="evo-photo evo-silvana-half evo-silvana-before" style="background-image:url('https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-02/comparativo-original.jpg')" data-zoom-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-02/comparativo-original.jpg" data-zoom-label="Silvana — comparação anterior, antes" aria-label="Ampliar comparativo anterior da Silvana">
+<span class="evo-label before-label">ANTES</span></button>
+<div class="evo-arrow" aria-hidden="true">››</div>
+<button type="button" class="evo-photo evo-silvana-half evo-silvana-after" style="background-image:url('https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-02/comparativo-original.jpg')" data-zoom-src="https://raw.githubusercontent.com/andresalles274-creator/Evolucao-Corporal/main/consultoria/evolucoes/aluno-02/comparativo-original.jpg" data-zoom-label="Silvana — comparação anterior, depois" aria-label="Ampliar comparativo posterior da Silvana">
+<span class="evo-label after-label">DEPOIS</span></button>
 </div></article></div></div></div>
 <div class="evo-slide" role="group" aria-roledescription="slide" aria-label="Evolução 3 de 4 — Rafaela">
 <div class="evo-student evo-rafaela-student" data-student="03" data-student-name="Rafaela">
