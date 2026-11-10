@@ -2,7 +2,7 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 
-const APP_VERSION="10.7.1";
+const APP_VERSION="10.8.0";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -15,6 +15,7 @@ let session=null,user=null,profile=null,isCoach=false,route="home",accountInacti
 let suspendedStudentIds=new Set(),paymentNoticeStudentIds=new Set();
 let paymentNoticeEnabled=false,paymentNoticeDismissed=false;
 let selectedTrainingDayId=null;
+const demoGenderOverrides=new Map();
 let selectedStudentId=null,selectedStudentProfile=null;
 let loadErrors={};
 let data={measurements:[],meals:[],workouts:[],hormone_logs:[],students:[],skinfolds:[],progress_photos:[],
@@ -933,13 +934,14 @@ function authView(){return `<section class="auth"><div class="authbox">
 <div class="field"><label>E-mail</label><input name="email" type="email" required></div>
 <div class="field"><label>Senha</label><input name="password" type="password" minlength="6" required></div>
 <div class="field"><label>Objetivo</label><select name="goal"><option>Hipertrofia</option><option>Emagrecimento</option><option>Condicionamento</option><option>Saúde</option></select></div>
+<div class="field"><label>Como prefere ver a execução dos exercícios?</label><select name="demonstration_preference"><option value="">Escolher depois</option><option value="male">Com homem</option><option value="female">Com mulher</option></select></div>
 <button class="btn btn-primary btn-full">Criar minha conta</button>
 <p class="small">Confirme o e-mail antes do primeiro acesso, se solicitado.</p>
 </form></div></section>`}
 function bindAuth(){
  $$(".tabs button").forEach(b=>b.onclick=()=>{$$(".tabs button").forEach(x=>x.classList.toggle("active",x===b));$("#loginForm").hidden=b.dataset.tab!=="login";$("#signupForm").hidden=b.dataset.tab!=="signup"});
  $("#loginForm").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.currentTarget);let r=await supabase.auth.signInWithPassword({email:String(f.get("email")).trim(),password:String(f.get("password"))});if(r.error)toast("Erro ao entrar: "+r.error.message,true)};
- $("#signupForm").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.currentTarget);let r=await supabase.auth.signUp({email:String(f.get("email")).trim(),password:String(f.get("password")),options:{data:{full_name:String(f.get("name")).trim(),goal:String(f.get("goal"))},emailRedirectTo:location.origin+location.pathname}});if(r.error)return toast("Erro no cadastro: "+r.error.message,true);toast(r.data.session?"Conta criada com sucesso.":"Conta criada. Confira seu e-mail para confirmar.")};
+ $("#signupForm").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.currentTarget);let r=await supabase.auth.signUp({email:String(f.get("email")).trim(),password:String(f.get("password")),options:{data:{full_name:String(f.get("name")).trim(),goal:String(f.get("goal")),demonstration_preference:String(f.get("demonstration_preference")||"")||null},emailRedirectTo:location.origin+location.pathname}});if(r.error)return toast("Erro no cadastro: "+r.error.message,true);toast(r.data.session?"Conta criada com sucesso.":"Conta criada. Confira seu e-mail para confirmar.")};
  $("#forgot").onclick=async()=>{let email=prompt("Digite seu e-mail:");if(!email)return;let r=await supabase.auth.resetPasswordForEmail(email,{redirectTo:CANONICAL_APP_URL});toast(r.error?r.error.message:"Link de recuperação enviado.",!!r.error)};
 }
 
@@ -1184,32 +1186,71 @@ function videoEmbed(ex,compact=false){
  if(/\.(mp4|webm|ogg)(\?|$)/i.test(url))return `<div class="training-video ${compact?"compact":""}"><video controls preload="metadata" playsinline src="${esc(url)}"></video></div>`;
  return `<div class="training-video-link"><a class="btn btn-ghost btn-full" href="${esc(url)}" target="_blank" rel="noopener">▶ Abrir vídeo demonstrativo</a></div>`;
 }
-function exerciseImage(ex,compact=false){
- const url=String(ex?.thumbnail_url||"").trim();
- const valid=/^https:\/\/[^\s"'<>]+$/i.test(url);
- if(!valid)return `<div class="exercise-media-unavailable ${compact?"compact":""}"><span aria-hidden="true">▧</span><small>Imagem demonstrativa em preparação</small></div>`;
- // A biblioteca pública inclui duas fotos por exercício: início e fim.
- const second=/^https:\/\/raw\.githubusercontent\.com\/yuhonas\/free-exercise-db\/main\/exercises\/.+\/0\.jpg$/i.test(url)?url.replace(/\/0\.jpg$/i,"/1.jpg"):"";
- const pose=(src,title)=>`<figure class="exercise-pose"><img src="${esc(src)}" alt="${esc(title+" — "+(ex?.name||"exercício"))}" loading="lazy" decoding="async"><figcaption>${esc(title)}</figcaption></figure>`;
- return `<div class="exercise-pose-gallery ${compact?"compact":""}">${pose(url,second?"Posição inicial":"Demonstração")}${second?pose(second,"Posição final"):""}</div>`;
+
+function selectedDemoGender(ex){
+ const key=String(ex?.id||"");
+ const override=demoGenderOverrides.get(key);
+ const configured=isCoach?selectedStudentProfile?.demonstration_preference:profile?.demonstration_preference;
+ const preferred=override||configured||user?.user_metadata?.demonstration_preference||"male";
+ return preferred==="female"?"female":"male";
 }
+function validExerciseMediaUrl(value){
+ return /^https:\/\/[^\s"'<>]+$/i.test(String(value||"").trim());
+}
+function exerciseImage(ex,compact=false,gender=null){
+ const selected=gender==="female"?"female":gender==="male"?"male":selectedDemoGender(ex);
+ const specificRaw=selected==="female"?ex?.female_image_url:ex?.male_image_url;
+ const specific=validExerciseMediaUrl(specificRaw)?String(specificRaw).trim():"";
+ const general=validExerciseMediaUrl(ex?.thumbnail_url)?String(ex.thumbnail_url).trim():"";
+ const url=specific||general;
+ if(!url)return '<div class="exercise-media-unavailable '+(compact?"compact":"")+'"><span aria-hidden="true">▧</span><small>Imagem demonstrativa em preparação</small></div>';
+ const second=!specific&&/^https:\/\/raw\.githubusercontent\.com\/yuhonas\/free-exercise-db\/main\/exercises\/.+\/0\.jpg$/i.test(url)?url.replace(/\/0\.jpg$/i,"/1.jpg"):"";
+ const pose=(src,title)=>'<figure class="exercise-pose"><img src="'+esc(src)+'" alt="'+esc(title+" — "+(ex?.name||"exercício"))+'" loading="lazy" decoding="async"><figcaption>'+esc(title)+'</figcaption></figure>';
+ const mainTitle=specific?(selected==="female"?"Execução com mulher":"Execução com homem"):(second?"Posição inicial":"Demonstração geral");
+ const note=!specific&&general?'<p class="exercise-demo-fallback">Esta versão ainda não tem imagem específica; mostrando a demonstração geral.</p>':"";
+ return '<div class="exercise-pose-gallery '+(compact?"compact":"")+'">'+pose(url,mainTitle)+(second?pose(second,"Posição final"):"")+'</div>'+note;
+}
+function exerciseDemoPanel(ex){
+ const gender=selectedDemoGender(ex),id=String(ex?.id||"");
+ const option=(value,label)=>'<button type="button" class="exercise-demo-switch '+(gender===value?"active":"")+'" data-gender="'+value+'" aria-pressed="'+String(gender===value)+'">'+label+'</button>';
+ return '<section class="exercise-demo" data-exercise="'+esc(id)+'"><div class="exercise-demo-head"><strong>Ver execução</strong><div class="exercise-demo-options" role="group" aria-label="Modelo da demonstração">'+option("male","Homem")+option("female","Mulher")+'</div></div><div class="exercise-media-slot">'+exerciseImage(ex,false,gender)+'</div></section>';
+}
+
+
 function coachExerciseImageEditor(){
- return `<details class="card exercise-images-editor"><summary><strong>Imagens dos exercícios</strong><small>Gerenciar fotos demonstrativas da biblioteca</small></summary>
- <p class="sub">As imagens são compartilhadas por todas as fichas. Para trocar uma foto, cole um link HTTPS da imagem e salve.</p>
- <div class="exercise-image-editor-list">${data.exercise_library.map(ex=>`<form class="exercise-image-form" data-exercise="${esc(ex.id)}"><div class="exercise-image-editor-head"><strong>${esc(ex.name)}</strong><small>${esc(ex.muscle_group||"")}</small></div>${exerciseImage(ex,true)}<label class="exercise-image-label">Endereço da imagem</label><input type="url" name="thumbnail_url" inputmode="url" placeholder="https://.../foto.jpg" value="${esc(ex.thumbnail_url||"")}"><button type="submit" class="btn btn-ghost">Salvar imagem</button></form>`).join("")}</div></details>`;
+ const image=(url,label)=>validExerciseMediaUrl(url)?'<figure class="coach-demo-thumb"><img src="'+esc(url)+'" loading="lazy" alt="'+esc(label)+'"><figcaption>'+esc(label)+'</figcaption></figure>':'<div class="coach-demo-thumb empty"><small>'+esc(label)+': pendente</small></div>';
+ return '<details class="card exercise-images-editor"><summary><strong>Imagens dos exercícios</strong><small>Organizar fotos masculina, feminina e geral</small></summary>'+
+ '<p class="sub">Salve os links de fotos reais de cada exercício. Fotos específicas aparecem automaticamente conforme a preferência do aluno; a imagem geral continua disponível como alternativa.</p>'+
+ '<div class="exercise-image-editor-list">'+data.exercise_library.map(ex=>
+  '<form class="exercise-image-form" data-exercise="'+esc(ex.id)+'"><div class="exercise-image-editor-head"><strong>'+esc(ex.name)+'</strong><small>'+esc(ex.muscle_group||"")+'</small></div>'+
+  '<div class="coach-demo-previews">'+image(ex.male_image_url,"Homem")+image(ex.female_image_url,"Mulher")+'</div>'+
+  '<label class="exercise-image-label">Imagem de homem</label><input type="url" name="male_image_url" placeholder="https://.../homem.jpg" value="'+esc(ex.male_image_url||"")+'">'+
+  '<label class="exercise-image-label">Imagem de mulher</label><input type="url" name="female_image_url" placeholder="https://.../mulher.jpg" value="'+esc(ex.female_image_url||"")+'">'+
+  '<label class="exercise-image-label">Imagem geral (alternativa)</label><input type="url" name="thumbnail_url" placeholder="https://.../geral.jpg" value="'+esc(ex.thumbnail_url||"")+'">'+
+  '<button type="submit" class="btn btn-ghost">Salvar imagens</button></form>').join("")+'</div></details>';
 }
 async function editExerciseImage(form){
  if(!isCoach)return;
- const id=form.dataset.exercise;
- const url=String(new FormData(form).get("thumbnail_url")||"").trim();
- if(url&&!/^https:\/\/[^\s"'<>]+$/i.test(url))return toast("Use um link HTTPS válido de imagem.",true);
- const button=form.querySelector('button[type="submit"]'); if(button)button.disabled=true;
- const r=await supabase.from("exercise_library").update({thumbnail_url:url||null,updated_at:new Date().toISOString()}).eq("id",id).select("id").maybeSingle();
- if(button)button.disabled=false;
- if(r.error||!r.data)return toast("Não foi possível salvar a imagem. Verifique sua permissão de coach.",true);
- toast("Imagem do exercício atualizada.");
- await loadTrainingData(selectedStudentId||user.id);render();
+ const id=form.dataset.exercise,f=new FormData(form);
+ const imageFields=["male_image_url","female_image_url","thumbnail_url"];
+ const values={};
+ for(const key of imageFields){
+  const url=String(f.get(key)||"").trim();
+  if(url&&!validExerciseMediaUrl(url))return toast("Use links HTTPS válidos para as imagens.",true);
+  values[key]=url||null;
+ }
+ const button=form.querySelector('button[type="submit"]');
+ if(button)button.disabled=true;
+ try{
+  const result=await supabase.from("exercise_library").update({...values,updated_at:new Date().toISOString()}).eq("id",id).select("id").maybeSingle();
+  if(result.error||!result.data)return toast("Não foi possível salvar as imagens. Verifique sua permissão de coach.",true);
+  toast("Imagens demonstrativas salvas.");
+  await loadTrainingData(selectedStudentId||user.id);
+  render();
+ }catch(e){toast("Falha de conexão ao salvar as imagens.",true)}
+ finally{if(button)button.disabled=false}
 }
+
 function trainingView(){
  return isCoach?coachTrainingView():studentTrainingView();
 }
@@ -1252,7 +1293,7 @@ function trainingDayView(){
 function trainingExerciseCard(it,idx,session){
  const ex=exById(it.exercise_id)||{name:"Exercício"};
  const logs=session?logsFor(session.id,it.exercise_id):[];
- return `<div class="card training-exercise-card"><div class="exercise-number">${idx+1}</div><h2>${esc(ex.name)}</h2><p class="sub">${esc(ex.muscle_group||"")}</p>${exerciseImage(ex)}${ex.video_url?`<details class="training-video-details"><summary>▶ Assistir demonstração em vídeo</summary>${videoEmbed(ex,true)}</details>`:""}${ex.instructions?`<div class="exercise-instructions"><strong>Execução</strong><p>${esc(ex.instructions)}</p></div>`:""}<div class="prescription-strip"><span><small>Séries</small><strong>${it.sets}</strong></span><span><small>Repetições</small><strong>${it.reps_min||"—"}${it.reps_max?`–${it.reps_max}`:""}</strong></span><span><small>Descanso</small><strong>${it.rest_seconds||0}s</strong></span></div>${it.notes?`<p class="training-note">${esc(it.notes)}</p>`:""}
+ return `<div class="card training-exercise-card"><div class="exercise-number">${idx+1}</div><h2>${esc(ex.name)}</h2><p class="sub">${esc(ex.muscle_group||"")}</p>${exerciseDemoPanel(ex)}${ex.video_url?`<details class="training-video-details"><summary>▶ Assistir demonstração em vídeo</summary>${videoEmbed(ex,true)}</details>`:""}${ex.instructions?`<div class="exercise-instructions"><strong>Execução</strong><p>${esc(ex.instructions)}</p></div>`:""}<div class="prescription-strip"><span><small>Séries</small><strong>${it.sets}</strong></span><span><small>Repetições</small><strong>${it.reps_min||"—"}${it.reps_max?`–${it.reps_max}`:""}</strong></span><span><small>Descanso</small><strong>${it.rest_seconds||0}s</strong></span></div>${it.notes?`<p class="training-note">${esc(it.notes)}</p>`:""}
  ${session&&!isCoach?`<div class="set-log-list">${Array.from({length:it.sets},(_,i)=>{const setNo=i+1;const log=logs.find(x=>Number(x.set_number)===setNo);return `<div class="set-log-row ${log?.completed?"done":""}" data-session="${session.id}" data-exercise="${it.exercise_id}" data-set="${setNo}"><span class="set-number">${setNo}</span><input class="set-weight" type="number" step="0.5" min="0" placeholder="kg" value="${log?.weight_kg??""}"><input class="set-reps" type="number" min="0" placeholder="reps" value="${log?.reps??""}"><button class="set-save ${log?.completed?"done":""}" type="button">${log?.completed?"✓":"Salvar"}</button></div>`}).join("")}</div>`:""}</div>`;
 }
 async function addExercise(form){
@@ -1305,6 +1346,7 @@ function profileView(){return `${pageBack()}<div class="section-head"><div><div 
 <div class="field"><label>Nome</label><input name="full_name" value="${esc(profile.full_name||"")}" required></div>
 <div class="field"><label>Objetivo</label><select name="goal">${["Hipertrofia","Emagrecimento","Condicionamento","Saúde"].map(x=>`<option ${profile.goal===x?"selected":""}>${x}</option>`).join("")}</select></div>
 <div class="row"><div class="field"><label>Idade</label><input type="number" name="age" value="${esc(profile.age||"")}"></div><div class="field"><label>Altura (cm)</label><input type="number" step="0.1" name="height_cm" value="${esc(profile.height_cm||"")}"></div></div>
+<div class="field"><label>Como você prefere ver os exercícios?</label><select name="demonstration_preference"><option value="">Sem preferência</option><option value="male" ${(profile.demonstration_preference||user?.user_metadata?.demonstration_preference)==="male"?"selected":""}>Com homem</option><option value="female" ${(profile.demonstration_preference||user?.user_metadata?.demonstration_preference)==="female"?"selected":""}>Com mulher</option></select><small class="sub">Esta escolha controla apenas as demonstrações visuais dos treinos e pode ser alterada a qualquer momento.</small></div>
 <button class="btn btn-primary btn-full">Salvar configurações</button><p class="small">Os dados ficam salvos online na sua conta.</p></form>
 <div class="card photo-cta"><div class="eyebrow">Fotos de evolução</div><h2>Seu acompanhamento visual</h2><p class="sub">Registre fotos de frente, lado e costas e acompanhe seu antes e depois.</p><button type="button" class="btn btn-primary btn-full" data-go="photos">Abrir Fotos de Evolução</button></div>`}
 
@@ -1354,6 +1396,22 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
    openPhotoViewerById(b.dataset.photoId);
  });
 
+
+ $(".exercise-demo-switch").forEach(b=>b.onclick=()=>{
+  const wrap=b.closest(".exercise-demo");
+  const ex=wrap?exById(wrap.dataset.exercise):null;
+  if(!wrap||!ex)return;
+  const gender=b.dataset.gender==="female"?"female":"male";
+  demoGenderOverrides.set(String(ex.id),gender);
+  wrap.querySelectorAll(".exercise-demo-switch").forEach(btn=>{
+    const selected=btn.dataset.gender===gender;
+    btn.classList.toggle("active",selected);
+    btn.setAttribute("aria-pressed",String(selected));
+  });
+  const slot=wrap.querySelector(".exercise-media-slot");
+  if(slot){slot.innerHTML=exerciseImage(ex,false,gender);slot.querySelectorAll(".exercise-pose img").forEach(img=>{img.onerror=()=>{const p=img.closest(".exercise-pose");if(p){const gallery=p.closest(".exercise-pose-gallery");p.remove();if(gallery&&!gallery.querySelector("img"))gallery.innerHTML='<p class="exercise-demo-fallback">Imagem temporariamente indisponível.</p>';}}});}
+ });
+
  document.querySelectorAll(".exercise-image-form").forEach(f=>f.onsubmit=e=>{e.preventDefault();editExerciseImage(f)});
  document.querySelectorAll(".exercise-pose img").forEach(img=>img.onerror=()=>{img.closest(".exercise-pose")?.remove();});
  if($("#exerciseForm"))$("#exerciseForm").onsubmit=e=>{e.preventDefault();addExercise(e.currentTarget)};
@@ -1386,7 +1444,7 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
  if($("#workoutForm"))$("#workoutForm").onsubmit=e=>{e.preventDefault();insert("workouts",e.currentTarget,["workout_date","workout_type","duration_minutes","muscle_group","intensity","calories","notes"])};
  if($("#hormoneForm"))$("#hormoneForm").onsubmit=e=>{e.preventDefault();insert("hormone_logs",e.currentTarget,["start_date","hormone_name","amount","unit","frequency","period","notes"])};
  if($("#skinfoldForm"))$("#skinfoldForm").onsubmit=e=>{e.preventDefault();insert("skinfolds",e.currentTarget,["assessment_date","triceps","subscapular","chest","midaxillary","suprailiac","abdominal","thigh","protocol"])};
- if($("#profileForm"))$("#profileForm").onsubmit=async e=>{e.preventDefault();let o=obj(e.currentTarget,["full_name","goal","age","height_cm"]);o.updated_at=new Date().toISOString();let r=await supabase.from("profiles").update(o).eq("user_id",user.id).select().single();if(r.error)return toast("Erro ao salvar: "+r.error.message,true);profile=r.data;toast("Configurações salvas online.");render()};
+ if($("#profileForm"))$("#profileForm").onsubmit=async e=>{e.preventDefault();let o=obj(e.currentTarget,["full_name","goal","age","height_cm","demonstration_preference"]);o.updated_at=new Date().toISOString();let r=await supabase.from("profiles").update(o).eq("user_id",user.id).select().single();if(r.error)return toast("Erro ao salvar: "+r.error.message,true);profile=r.data;toast("Configurações salvas online.");render()};
 }
 function drawChart(){
  let cv=$("#chart");if(!cv)return;let a=[...data.measurements].slice(0,10).reverse(),dpr=devicePixelRatio||1,w=cv.clientWidth||320,h=180;cv.width=w*dpr;cv.height=h*dpr;let c=cv.getContext("2d");c.scale(dpr,dpr);c.strokeStyle="#333530";for(let i=1;i<5;i++){c.beginPath();c.moveTo(0,i*h/5);c.lineTo(w,i*h/5);c.stroke()}if(a.length<2){c.fillStyle="#a8aaa6";c.font="13px sans-serif";c.fillText("Salve 2 avaliações para ver sua evolução.",12,90);return}let vals=a.map(x=>n(x.weight)),mn=Math.min(...vals)-1,mx=Math.max(...vals)+1;c.strokeStyle="#ff6d66";c.lineWidth=3;c.beginPath();a.forEach((x,i)=>{let px=12+i*(w-24)/(a.length-1),py=h-18-((n(x.weight)-mn)/(mx-mn))*(h-36);i?c.lineTo(px,py):c.moveTo(px,py)});c.stroke()
