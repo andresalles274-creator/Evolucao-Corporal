@@ -2,7 +2,7 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 
-const APP_VERSION="10.6.9";
+const APP_VERSION="10.7.0";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -1184,13 +1184,39 @@ function videoEmbed(ex,compact=false){
  if(/\.(mp4|webm|ogg)(\?|$)/i.test(url))return `<div class="training-video ${compact?"compact":""}"><video controls preload="metadata" playsinline src="${esc(url)}"></video></div>`;
  return `<div class="training-video-link"><a class="btn btn-ghost btn-full" href="${esc(url)}" target="_blank" rel="noopener">▶ Abrir vídeo demonstrativo</a></div>`;
 }
+function exerciseImage(ex,compact=false){
+ const url=String(ex?.thumbnail_url||"").trim();
+ const valid=/^https:\/\/[^\s"'<>]+$/i.test(url);
+ if(!valid)return `<div class="exercise-media-unavailable ${compact?"compact":""}"><span aria-hidden="true">▧</span><small>Imagem demonstrativa em preparação</small></div>`;
+ // A biblioteca pública inclui duas fotos por exercício: início e fim.
+ const second=/^https:\/\/raw\.githubusercontent\.com\/yuhonas\/free-exercise-db\/main\/exercises\/.+\/0\.jpg$/i.test(url)?url.replace(/\/0\.jpg$/i,"/1.jpg"):"";
+ const pose=(src,title)=>`<figure class="exercise-pose"><img src="${esc(src)}" alt="${esc(title+" — "+(ex?.name||"exercício"))}" loading="lazy" decoding="async"><figcaption>${esc(title)}</figcaption></figure>`;
+ return `<div class="exercise-pose-gallery ${compact?"compact":""}">${pose(url,second?"Posição inicial":"Demonstração")}${second?pose(second,"Posição final"):""}</div>`;
+}
+function coachExerciseImageEditor(){
+ return `<details class="card exercise-images-editor"><summary><strong>Imagens dos exercícios</strong><small>Gerenciar fotos demonstrativas da biblioteca</small></summary>
+ <p class="sub">As imagens são compartilhadas por todas as fichas. Para trocar uma foto, cole um link HTTPS da imagem e salve.</p>
+ <div class="exercise-image-editor-list">${data.exercise_library.map(ex=>`<form class="exercise-image-form" data-exercise="${esc(ex.id)}"><div class="exercise-image-editor-head"><strong>${esc(ex.name)}</strong><small>${esc(ex.muscle_group||"")}</small></div>${exerciseImage(ex,true)}<label class="exercise-image-label">Endereço da imagem</label><input type="url" name="thumbnail_url" inputmode="url" placeholder="https://.../foto.jpg" value="${esc(ex.thumbnail_url||"")}"><button type="submit" class="btn btn-ghost">Salvar imagem</button></form>`).join("")}</div></details>`;
+}
+async function editExerciseImage(form){
+ if(!isCoach)return;
+ const id=form.dataset.exercise;
+ const url=String(new FormData(form).get("thumbnail_url")||"").trim();
+ if(url&&!/^https:\/\/[^\s"'<>]+$/i.test(url))return toast("Use um link HTTPS válido de imagem.",true);
+ const button=form.querySelector('button[type="submit"]'); if(button)button.disabled=true;
+ const r=await supabase.from("exercise_library").update({thumbnail_url:url||null,updated_at:new Date().toISOString()}).eq("id",id).select("id").maybeSingle();
+ if(button)button.disabled=false;
+ if(r.error||!r.data)return toast("Não foi possível salvar a imagem. Verifique sua permissão de coach.",true);
+ toast("Imagem do exercício atualizada.");
+ await loadTrainingData(selectedStudentId||user.id);render();
+}
 function trainingView(){
  return isCoach?coachTrainingView():studentTrainingView();
 }
 function coachTrainingView(){
  const plans=data.training_plans.filter(x=>x.is_active!==false);
  return `${pageBack()}${coachStudentBanner()}<div class="section-head"><div><div class="eyebrow">Ficha de treino</div><h1>Meu Treino</h1></div></div>${trainingSetupWarning()}
- ${plans.length?plans.map(plan=>{const days=planDays(plan.id);return `<div class="card"><div class="eyebrow">${esc(plan.objective||"Plano atual")}</div><h2>${esc(plan.title)}</h2><div class="training-day-list">${days.map(day=>{const items=dayExercises(day.id);return `<button class="training-day-card training-day-open" data-day="${day.id}"><span class="training-day-icon">✦</span><span><strong>${esc(day.title)}</strong><small>${items.length} exercício(s)</small></span><span class="activity-arrow">›</span></button>`}).join("")||`<p class="sub">Nenhum exercício prescrito nesta ficha.</p>`}</div></div>`}).join(""):`<div class="card"><div class="empty-state"><strong>Nenhum treino prescrito ainda</strong><span>A ficha ativa aparecerá aqui.</span></div></div>`}`;
+ ${plans.length?plans.map(plan=>{const days=planDays(plan.id);return `<div class="card"><div class="eyebrow">${esc(plan.objective||"Plano atual")}</div><h2>${esc(plan.title)}</h2><div class="training-day-list">${days.map(day=>{const items=dayExercises(day.id);return `<button class="training-day-card training-day-open" data-day="${day.id}"><span class="training-day-icon">✦</span><span><strong>${esc(day.title)}</strong><small>${items.length} exercício(s)</small></span><span class="activity-arrow">›</span></button>`}).join("")||`<p class="sub">Nenhum exercício prescrito nesta ficha.</p>`}</div></div>`}).join(""):`<div class="card"><div class="empty-state"><strong>Nenhum treino prescrito ainda</strong><span>A ficha ativa aparecerá aqui.</span></div></div>`}${coachExerciseImageEditor()}`;
 }
 function coachPlanCard(plan){
  const days=planDays(plan.id);
@@ -1226,7 +1252,7 @@ function trainingDayView(){
 function trainingExerciseCard(it,idx,session){
  const ex=exById(it.exercise_id)||{name:"Exercício"};
  const logs=session?logsFor(session.id,it.exercise_id):[];
- return `<div class="card training-exercise-card"><div class="exercise-number">${idx+1}</div><h2>${esc(ex.name)}</h2><p class="sub">${esc(ex.muscle_group||"")}</p>${ex.instructions?`<div class="exercise-instructions"><strong>Execução</strong><p>${esc(ex.instructions)}</p></div>`:""}<div class="prescription-strip"><span><small>Séries</small><strong>${it.sets}</strong></span><span><small>Repetições</small><strong>${it.reps_min||"—"}${it.reps_max?`–${it.reps_max}`:""}</strong></span><span><small>Descanso</small><strong>${it.rest_seconds||0}s</strong></span></div>${it.notes?`<p class="training-note">${esc(it.notes)}</p>`:""}
+ return `<div class="card training-exercise-card"><div class="exercise-number">${idx+1}</div><h2>${esc(ex.name)}</h2><p class="sub">${esc(ex.muscle_group||"")}</p>${exerciseImage(ex)}${ex.video_url?`<details class="training-video-details"><summary>▶ Assistir demonstração em vídeo</summary>${videoEmbed(ex,true)}</details>`:""}${ex.instructions?`<div class="exercise-instructions"><strong>Execução</strong><p>${esc(ex.instructions)}</p></div>`:""}<div class="prescription-strip"><span><small>Séries</small><strong>${it.sets}</strong></span><span><small>Repetições</small><strong>${it.reps_min||"—"}${it.reps_max?`–${it.reps_max}`:""}</strong></span><span><small>Descanso</small><strong>${it.rest_seconds||0}s</strong></span></div>${it.notes?`<p class="training-note">${esc(it.notes)}</p>`:""}
  ${session&&!isCoach?`<div class="set-log-list">${Array.from({length:it.sets},(_,i)=>{const setNo=i+1;const log=logs.find(x=>Number(x.set_number)===setNo);return `<div class="set-log-row ${log?.completed?"done":""}" data-session="${session.id}" data-exercise="${it.exercise_id}" data-set="${setNo}"><span class="set-number">${setNo}</span><input class="set-weight" type="number" step="0.5" min="0" placeholder="kg" value="${log?.weight_kg??""}"><input class="set-reps" type="number" min="0" placeholder="reps" value="${log?.reps??""}"><button class="set-save ${log?.completed?"done":""}" type="button">${log?.completed?"✓":"Salvar"}</button></div>`}).join("")}</div>`:""}</div>`;
 }
 async function addExercise(form){
@@ -1328,6 +1354,8 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
    openPhotoViewerById(b.dataset.photoId);
  });
 
+ $(".exercise-image-form").forEach(f=>f.onsubmit=e=>{e.preventDefault();editExerciseImage(f)});
+ $(".exercise-pose img").forEach(img=>img.onerror=()=>{img.closest(".exercise-pose")?.remove();});
  if($("#exerciseForm"))$("#exerciseForm").onsubmit=e=>{e.preventDefault();addExercise(e.currentTarget)};
  $$(".exercise-delete").forEach(b=>b.onclick=()=>deleteExercise(b.dataset.exercise));
  if($("#trainingPlanForm"))$("#trainingPlanForm").onsubmit=e=>{e.preventDefault();addTrainingPlan(e.currentTarget)};
