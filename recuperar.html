@@ -52,14 +52,14 @@ async function recover(){
   const response=await fetch("./index.html?reparo="+stamp,{cache:"no-store",redirect:"follow"});
   if(!response.ok)throw new Error("O servidor retornou "+response.status);
   const content=await response.text();
-  if(!content.includes("app.js?v=10.8.0")){
+  if(!content.includes("app.js?v=10.8.1")){
    status.textContent="O site ainda está entregando uma versão anterior. Os arquivos temporários já foram removidos. Toque em Repetir recuperação para verificar novamente.";
    return;
   }
-  const scriptResponse=await fetch("./app.js?v=10.8.0&verificacao="+stamp,{cache:"no-store"});
+  const scriptResponse=await fetch("./app.js?v=10.8.1&verificacao="+stamp,{cache:"no-store"});
   if(!scriptResponse.ok)throw new Error("O novo aplicativo ainda não está disponível");
   const script=await scriptResponse.text();
-  if(!script.includes('const APP_VERSION="10.8.0"')||!script.includes('document.querySelectorAll(".exercise-image-form").forEach')){
+  if(!script.includes('const APP_VERSION="10.8.1"')||!script.includes('document.querySelectorAll(".exercise-image-form").forEach')){
    status.textContent="O navegador ainda recebe um arquivo antigo. Toque em Repetir recuperação para testar novamente.";
    return;
   }
