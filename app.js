@@ -1106,6 +1106,14 @@ function studentDashboard(){
    <button class="quick-action" data-go="coach"><span>◇</span><strong>Avaliação profissional</strong><small>${data.skinfolds.length} registro(s)</small></button>
  </div></div>
 
+ <form id="coachDemoPreference" class="card" data-student="${esc(selectedStudentId)}">
+ <div class="eyebrow">Demonstrações do treino</div><h2>Exemplos para este aluno</h2>
+ <p class="sub">Defina qual modelo aparece primeiro na ficha de treino. O aluno poderá alternar entre os dois.</p>
+ <div class="field"><label>Preferência das imagens</label><select name="demonstration_preference">
+ <option value="" ${!selectedStudentProfile?.demonstration_preference?"selected":""}>Sem preferência definida</option>
+ <option value="male" ${selectedStudentProfile?.demonstration_preference==="male"?"selected":""}>Mostrar homem primeiro</option>
+ <option value="female" ${selectedStudentProfile?.demonstration_preference==="female"?"selected":""}>Mostrar mulher primeiro</option>
+ </select></div><button type="submit" class="btn btn-ghost btn-full">Salvar preferência</button></form>
  <div class="card"><div class="eyebrow">Atividade recente</div><h2>Histórico do aluno</h2>${activityTimeline(8)}</div>
  <div class="card"><div class="eyebrow">Evolução</div><h2>Gráfico de peso</h2><canvas id="chart"></canvas></div>
  <div class="card student-access-panel">
@@ -1444,6 +1452,24 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
  if($("#workoutForm"))$("#workoutForm").onsubmit=e=>{e.preventDefault();insert("workouts",e.currentTarget,["workout_date","workout_type","duration_minutes","muscle_group","intensity","calories","notes"])};
  if($("#hormoneForm"))$("#hormoneForm").onsubmit=e=>{e.preventDefault();insert("hormone_logs",e.currentTarget,["start_date","hormone_name","amount","unit","frequency","period","notes"])};
  if($("#skinfoldForm"))$("#skinfoldForm").onsubmit=e=>{e.preventDefault();insert("skinfolds",e.currentTarget,["assessment_date","triceps","subscapular","chest","midaxillary","suprailiac","abdominal","thigh","protocol"])};
+ if($("#coachDemoPreference"))$("#coachDemoPreference").onsubmit=async e=>{
+  e.preventDefault();
+  if(!isCoach||!selectedStudentId)return;
+  const form=e.currentTarget;
+  const value=String(new FormData(form).get("demonstration_preference")||"");
+  if(value&&value!=="male"&&value!=="female")return;
+  const btn=form.querySelector('button[type="submit"]');
+  if(btn)btn.disabled=true;
+  try{
+   const result=await supabase.from("profiles").update({demonstration_preference:value||null,updated_at:new Date().toISOString()}).eq("user_id",selectedStudentId).select("user_id,demonstration_preference").maybeSingle();
+   if(result.error||!result.data)return toast("Não foi possível salvar a preferência.",true);
+   if(selectedStudentProfile)selectedStudentProfile.demonstration_preference=result.data.demonstration_preference;
+   const target=data.students.find(x=>x.user_id===selectedStudentId);
+   if(target)target.demonstration_preference=result.data.demonstration_preference;
+   toast("Preferência do aluno salva.");render();
+  }catch(_){toast("Não foi possível atualizar a preferência.",true)}
+  finally{if(btn)btn.disabled=false}
+ };
  if($("#profileForm"))$("#profileForm").onsubmit=async e=>{e.preventDefault();let o=obj(e.currentTarget,["full_name","goal","age","height_cm","demonstration_preference"]);o.updated_at=new Date().toISOString();let r=await supabase.from("profiles").update(o).eq("user_id",user.id).select().single();if(r.error)return toast("Erro ao salvar: "+r.error.message,true);profile=r.data;toast("Configurações salvas online.");render()};
 }
 function drawChart(){
