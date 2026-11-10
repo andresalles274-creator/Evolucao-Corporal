@@ -1354,8 +1354,8 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
    openPhotoViewerById(b.dataset.photoId);
  });
 
- $(".exercise-image-form").forEach(f=>f.onsubmit=e=>{e.preventDefault();editExerciseImage(f)});
- $(".exercise-pose img").forEach(img=>img.onerror=()=>{img.closest(".exercise-pose")?.remove();});
+ document.querySelectorAll(".exercise-image-form").forEach(f=>f.onsubmit=e=>{e.preventDefault();editExerciseImage(f)});
+ document.querySelectorAll(".exercise-pose img").forEach(img=>img.onerror=()=>{img.closest(".exercise-pose")?.remove();});
  if($("#exerciseForm"))$("#exerciseForm").onsubmit=e=>{e.preventDefault();addExercise(e.currentTarget)};
  $$(".exercise-delete").forEach(b=>b.onclick=()=>deleteExercise(b.dataset.exercise));
  if($("#trainingPlanForm"))$("#trainingPlanForm").onsubmit=e=>{e.preventDefault();addTrainingPlan(e.currentTarget)};
