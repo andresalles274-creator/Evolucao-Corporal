@@ -2,7 +2,7 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 
-const APP_VERSION="10.8.2";
+const APP_VERSION="10.9.0";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -1223,14 +1223,42 @@ function exerciseImage(ex,compact=false,gender=null){
  if(!url)return '<div class="exercise-media-unavailable '+(compact?"compact":"")+'"><span aria-hidden="true">▧</span><small>Imagem demonstrativa em preparação</small></div>';
  const second=!specific&&/^https:\/\/raw\.githubusercontent\.com\/yuhonas\/free-exercise-db\/main\/exercises\/.+\/0\.jpg$/i.test(url)?url.replace(/\/0\.jpg$/i,"/1.jpg"):"";
  const pose=(src,title)=>'<figure class="exercise-pose"><img src="'+esc(src)+'" alt="'+esc(title+" — "+(ex?.name||"exercício"))+'" loading="lazy" decoding="async"><figcaption>'+esc(title)+'</figcaption></figure>';
- const mainTitle=specific?(selected==="female"?"Execução com mulher":"Execução com homem"):(second?"Posição inicial":"Demonstração geral");
+ const mainTitle=specific?(selected==="female"?"Imagem de referência — mulher":"Imagem de referência — homem"):(second?"Posição inicial":"Demonstração geral");
  const note=!specific&&general?'<p class="exercise-demo-fallback">Esta versão ainda não tem imagem específica; mostrando a demonstração geral.</p>':"";
  return '<div class="exercise-pose-gallery '+(compact?"compact":"")+'">'+pose(url,mainTitle)+(second?pose(second,"Posição final"):"")+'</div>'+note;
 }
+
+function exerciseGuide(ex){
+ const aliases=ex?.alternate_name?'<div class="exercise-aka">Também conhecido como: <strong>'+esc(ex.alternate_name)+'</strong></div>':"";
+ const stages=[["1","Posição inicial",ex?.setup_cue],["2","Execução",ex?.movement_cue],["3","Retorno",ex?.return_cue]]
+    .filter(step=>String(step[2]||"").trim());
+ const line=(title,body,cls)=>body?'<div class="exercise-guide-callout '+cls+'"><strong>'+title+'</strong><p>'+esc(body)+'</p></div>':"";
+ if(!stages.length&&!ex?.instructions)return "";
+ const steps=stages.length?'<ol class="exercise-guide-steps">'+stages.map(x=>'<li><span class="guide-step-number">'+x[0]+'</span><div><strong>'+x[1]+'</strong><p>'+esc(x[2])+'</p></div></li>').join("")+'</ol>':"";
+ return '<section class="exercise-guide" aria-label="Orientações para '+esc(ex?.name||"exercício")+'"><h3>Como executar</h3>'+aliases+steps+
+ line("Dica rápida",ex?.quick_tip,"guide-tip")+line("Erro comum",ex?.common_mistake,"guide-error")+
+ line("Orientação complementar",ex?.instructions,"guide-coach")+'</section>';
+}
+function exerciseMotion(ex,gender){
+ const selected=gender==="female"?"female":"male";
+ const url=selected==="female"?ex?.female_video_url:ex?.male_video_url;
+ if(!validExerciseMediaUrl(url)||!/\.(mp4|webm)(\?|$)/i.test(url))return "";
+ const img=selected==="female"?ex?.female_image_url:ex?.male_image_url;
+ const poster=validExerciseMediaUrl(img)?' poster="'+esc(img)+'"':"";
+ const model=selected==="female"?"mulher":"homem";
+ return '<details class="exercise-motion"><summary>▶ Ver movimento completo com '+model+'</summary>'+
+ '<p>Assista à execução em movimento, não apenas à imagem parada.</p>'+
+ '<video controls playsinline preload="none"'+poster+' src="'+esc(url)+'" aria-label="Demonstração do '+esc(ex.name)+' com '+model+'"></video>'+
+ '<small>Ajuste a amplitude e a carga conforme a orientação do seu coach.</small></details>';
+}
+function exerciseMediaBlock(ex,gender){
+ return exerciseMotion(ex,gender)+exerciseImage(ex,false,gender);
+}
+
 function exerciseDemoPanel(ex){
  const gender=selectedDemoGender(ex),id=String(ex?.id||"");
  const option=(value,label)=>'<button type="button" class="exercise-demo-switch '+(gender===value?"active":"")+'" data-gender="'+value+'" aria-pressed="'+String(gender===value)+'">'+label+'</button>';
- return '<section class="exercise-demo" data-exercise="'+esc(id)+'"><div class="exercise-demo-head"><strong>Ver execução</strong><div class="exercise-demo-options" role="group" aria-label="Modelo da demonstração">'+option("male","Homem")+option("female","Mulher")+'</div></div><div class="exercise-media-slot">'+exerciseImage(ex,false,gender)+'</div></section>';
+ return '<section class="exercise-demo" data-exercise="'+esc(id)+'"><div class="exercise-demo-head"><strong>Ver execução</strong><div class="exercise-demo-options" role="group" aria-label="Modelo da demonstração">'+option("male","Homem")+option("female","Mulher")+'</div></div><div class="exercise-media-slot">'+exerciseMediaBlock(ex,gender)+'</div></section>';
 }
 
 
@@ -1310,7 +1338,7 @@ function trainingDayView(){
 function trainingExerciseCard(it,idx,session){
  const ex=exById(it.exercise_id)||{name:"Exercício"};
  const logs=session?logsFor(session.id,it.exercise_id):[];
- return `<div class="card training-exercise-card"><div class="exercise-number">${idx+1}</div><h2>${esc(ex.name)}</h2><p class="sub">${esc(ex.muscle_group||"")}</p>${exerciseDemoPanel(ex)}${ex.video_url?`<details class="training-video-details"><summary>▶ Assistir demonstração em vídeo</summary>${videoEmbed(ex,true)}</details>`:""}${ex.instructions?`<div class="exercise-instructions"><strong>Execução</strong><p>${esc(ex.instructions)}</p></div>`:""}<div class="prescription-strip"><span><small>Séries</small><strong>${it.sets}</strong></span><span><small>Repetições</small><strong>${it.reps_min||"—"}${it.reps_max?`–${it.reps_max}`:""}</strong></span><span><small>Descanso</small><strong>${it.rest_seconds||0}s</strong></span></div>${it.notes?`<p class="training-note">${esc(it.notes)}</p>`:""}
+ return `<div class="card training-exercise-card"><div class="exercise-number">${idx+1}</div><h2>${esc(ex.name)}</h2><p class="sub">${esc(ex.muscle_group||"")}</p>${exerciseGuide(ex)}${exerciseDemoPanel(ex)}${ex.video_url?`<details class="training-video-details"><summary>▶ Assistir demonstração em vídeo</summary>${videoEmbed(ex,true)}</details>`:""}<div class="prescription-strip"><span><small>Séries</small><strong>${it.sets}</strong></span><span><small>Repetições</small><strong>${it.reps_min||"—"}${it.reps_max?`–${it.reps_max}`:""}</strong></span><span><small>Descanso</small><strong>${it.rest_seconds||0}s</strong></span></div>${it.notes?`<p class="training-note">${esc(it.notes)}</p>`:""}
  ${session&&!isCoach?`<div class="set-log-list">${Array.from({length:it.sets},(_,i)=>{const setNo=i+1;const log=logs.find(x=>Number(x.set_number)===setNo);return `<div class="set-log-row ${log?.completed?"done":""}" data-session="${session.id}" data-exercise="${it.exercise_id}" data-set="${setNo}"><span class="set-number">${setNo}</span><input class="set-weight" type="number" step="0.5" min="0" placeholder="kg" value="${log?.weight_kg??""}"><input class="set-reps" type="number" min="0" placeholder="reps" value="${log?.reps??""}"><button class="set-save ${log?.completed?"done":""}" type="button">${log?.completed?"✓":"Salvar"}</button></div>`}).join("")}</div>`:""}</div>`;
 }
 async function addExercise(form){
@@ -1427,7 +1455,7 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
     btn.setAttribute("aria-pressed",String(selected));
   });
   const slot=wrap.querySelector(".exercise-media-slot");
-  if(slot){slot.innerHTML=exerciseImage(ex,false,gender);slot.querySelectorAll(".exercise-pose img").forEach(img=>{img.onerror=()=>{const p=img.closest(".exercise-pose");if(p){const gallery=p.closest(".exercise-pose-gallery");p.remove();if(gallery&&!gallery.querySelector("img"))gallery.innerHTML='<p class="exercise-demo-fallback">Imagem temporariamente indisponível.</p>';}}});}
+  if(slot){slot.innerHTML=exerciseMediaBlock(ex,gender);slot.querySelectorAll(".exercise-pose img").forEach(img=>{img.onerror=()=>{const p=img.closest(".exercise-pose");if(p){const gallery=p.closest(".exercise-pose-gallery");p.remove();if(gallery&&!gallery.querySelector("img"))gallery.innerHTML='<p class="exercise-demo-fallback">Imagem temporariamente indisponível.</p>';}}});}
  });
 
  document.querySelectorAll(".exercise-image-form").forEach(f=>f.onsubmit=e=>{e.preventDefault();editExerciseImage(f)});
