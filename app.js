@@ -1272,24 +1272,33 @@ function coachExerciseImageEditor(){
   '<label class="exercise-image-label">Imagem de homem</label><input type="url" name="male_image_url" placeholder="https://.../homem.jpg" value="'+esc(ex.male_image_url||"")+'">'+
   '<label class="exercise-image-label">Imagem de mulher</label><input type="url" name="female_image_url" placeholder="https://.../mulher.jpg" value="'+esc(ex.female_image_url||"")+'">'+
   '<label class="exercise-image-label">Imagem geral (alternativa)</label><input type="url" name="thumbnail_url" placeholder="https://.../geral.jpg" value="'+esc(ex.thumbnail_url||"")+'">'+
-  '<button type="submit" class="btn btn-ghost">Salvar imagens</button></form>').join("")+'</div></details>';
+  '<details class="exercise-guide-editor"><summary>Editar explicação deste exercício</summary>'+
+  '<label>Também conhecido como</label><input name="alternate_name" value="'+esc(ex.alternate_name||"")+'">'+
+  '<label>Posição inicial</label><textarea name="setup_cue" rows="3">'+esc(ex.setup_cue||"")+'</textarea>'+
+  '<label>Execução</label><textarea name="movement_cue" rows="3">'+esc(ex.movement_cue||"")+'</textarea>'+
+  '<label>Retorno</label><textarea name="return_cue" rows="3">'+esc(ex.return_cue||"")+'</textarea>'+
+  '<label>Dica rápida</label><textarea name="quick_tip" rows="2">'+esc(ex.quick_tip||"")+'</textarea>'+
+  '<label>Erro comum</label><textarea name="common_mistake" rows="2">'+esc(ex.common_mistake||"")+'</textarea></details>'+
+  '<button type="submit" class="btn btn-ghost">Salvar imagens e orientações</button></form>').join("")+'</div></details>';
 }
 async function editExerciseImage(form){
  if(!isCoach)return;
  const id=form.dataset.exercise,f=new FormData(form);
  const imageFields=["male_image_url","female_image_url","thumbnail_url"];
+ const guideFields=["alternate_name","setup_cue","movement_cue","return_cue","quick_tip","common_mistake"];
  const values={};
  for(const key of imageFields){
   const url=String(f.get(key)||"").trim();
   if(url&&!validExerciseMediaUrl(url))return toast("Use links HTTPS válidos para as imagens.",true);
   values[key]=url||null;
  }
+ for(const key of guideFields)values[key]=String(f.get(key)||"").trim()||null;
  const button=form.querySelector('button[type="submit"]');
  if(button)button.disabled=true;
  try{
   const result=await supabase.from("exercise_library").update({...values,updated_at:new Date().toISOString()}).eq("id",id).select("id").maybeSingle();
   if(result.error||!result.data)return toast("Não foi possível salvar as imagens. Verifique sua permissão de coach.",true);
-  toast("Imagens demonstrativas salvas.");
+  toast("Imagens e orientações salvas.");
   await loadTrainingData(selectedStudentId||user.id);
   render();
  }catch(e){toast("Falha de conexão ao salvar as imagens.",true)}
