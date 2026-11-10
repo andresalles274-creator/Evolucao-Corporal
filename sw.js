@@ -1,5 +1,5 @@
-const CACHE="evolucao-corporal-v11.40-coach-consultoria-link";
-const STATIC=["./","./index.html","./styles.css?v=10.8.0","./payment-lock.css?v=1.0.0","./payment-notice.css?v=1.0.0","./payment-notice.svg","./theme-v11.css?v=11.11.3","./app.js?v=10.6.10","./billing-v11.js?v=11.0.2","./ui-neon-v11.js?v=11.12.5","./config.js","./chat-v1.js?v=1.0.6","./brand-background.jpg","./coach-a-neon.svg","./coach-gym-neon.svg"];
+const CACHE="evolucao-corporal-v11.41-exercise-images";
+const STATIC=["./","./index.html","./styles.css?v=10.8.0","./payment-lock.css?v=1.0.0","./payment-notice.css?v=1.0.0","./payment-notice.svg","./theme-v11.css?v=11.11.3","./app.js?v=10.7.0","./exercise-media.css?v=10.7.0","./billing-v11.js?v=11.0.2","./ui-neon-v11.js?v=11.12.5","./config.js","./chat-v1.js?v=1.0.6","./brand-background.jpg","./coach-a-neon.svg","./coach-gym-neon.svg"];
 
 self.addEventListener("install",event=>{
   self.skipWaiting();
@@ -38,6 +38,7 @@ self.addEventListener("fetch",event=>{
 
   const isCore =
     url.pathname.endsWith("/app.js") ||
+    url.pathname.endsWith("/exercise-media.css") ||
     url.pathname.endsWith("/ui-neon-v11.js") ||
     url.pathname.endsWith("/chat-v1.js") ||
     url.pathname.endsWith("/styles.css") ||
