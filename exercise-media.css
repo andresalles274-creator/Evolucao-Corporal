@@ -73,3 +73,10 @@
 .exercise-motion small{display:block;padding:10px 12px 12px;font-size:11px;color:#c6d6b5}
 .exercise-media-slot .exercise-pose-gallery{margin-top:12px}
 @media(max-width:390px){.exercise-guide{padding:12px 11px}.exercise-guide-steps{gap:10px}.exercise-motion summary{font-size:12px}.exercise-motion summary:after{font-size:9px}}
+
+.exercise-guide-editor{background:#111b11;border:1px solid #2e4326;padding:12px;border-radius:12px;display:block}
+.exercise-guide-editor:not([open]){display:block}
+.exercise-guide-editor summary{cursor:pointer;color:#d4ff64;font-size:13px;font-weight:700;list-style:revert}
+.exercise-guide-editor label{display:block;font-size:11px;font-weight:700;color:#cfe8c3;margin:11px 0 5px}
+.exercise-guide-editor textarea{display:block;width:100%;min-height:74px;resize:vertical;border-radius:10px;background:#091009;border:1px solid #344035;color:#fff;font:inherit;font-size:12px;line-height:1.4;padding:10px}
+.exercise-guide-editor input{font-size:12px}
