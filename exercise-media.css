@@ -27,3 +27,21 @@
 .exercise-image-form input{width:100%;min-width:0;border:1px solid #344035;border-radius:10px;padding:11px;color:#fff;background:#0a100c;font-size:12px}
 .exercise-image-form .btn{width:100%;max-width:100%}
 @media(max-width:420px){.exercise-pose-gallery{gap:7px}.exercise-pose figcaption{font-size:10px}.exercise-image-editor-list{max-height:480px}}
+
+
+/* Demonstrações masculino/feminino — v10.8 */
+.exercise-demo{margin:12px 0 16px}
+.exercise-demo-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.exercise-demo-head>strong{font-size:12px;color:#e1f5da}
+.exercise-demo-options{display:inline-flex;gap:4px;border:1px solid rgba(202,255,24,.3);border-radius:12px;padding:4px;background:#0a100b}
+.exercise-demo-switch{border:0;background:transparent;color:#cbd5c7;border-radius:9px;padding:9px 15px;font-size:12px;font-weight:700;min-height:38px}
+.exercise-demo-switch.active{background:#caff18;color:#152006;box-shadow:0 2px 10px rgba(202,255,24,.18)}
+.exercise-demo-switch:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.exercise-demo .exercise-pose-gallery{margin:10px 0 6px}
+.exercise-demo-fallback{margin:4px 0 12px;font-size:11px;line-height:1.4;color:#aebca8}
+.coach-demo-previews{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.coach-demo-thumb{margin:0;border-radius:11px;border:1px solid #33432e;background:#090f0a;overflow:hidden;min-width:0}
+.coach-demo-thumb img{display:block;width:100%;height:100px;object-fit:contain;background:#0c120d}
+.coach-demo-thumb figcaption{text-align:center;padding:5px;color:#caff18;font-size:11px}
+.coach-demo-thumb.empty{display:grid;place-items:center;min-height:118px;padding:10px;text-align:center;color:#b2c3b0}
+@media(max-width:380px){.exercise-demo-head{align-items:stretch}.exercise-demo-options{width:100%;display:grid;grid-template-columns:1fr 1fr}.exercise-demo-switch{width:100%}}
