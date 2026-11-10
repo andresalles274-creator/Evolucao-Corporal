@@ -934,6 +934,7 @@ function authView(){return `<section class="auth"><div class="authbox">
 <div class="field"><label>E-mail</label><input name="email" type="email" required></div>
 <div class="field"><label>Senha</label><input name="password" type="password" minlength="6" required></div>
 <div class="field"><label>Objetivo</label><select name="goal"><option>Hipertrofia</option><option>Emagrecimento</option><option>Condicionamento</option><option>Saúde</option></select></div>
+<div class="field"><label>Sexo (opcional)</label><select name="gender"><option value="">Prefiro não informar</option><option value="male">Masculino</option><option value="female">Feminino</option></select></div>
 <div class="field"><label>Como prefere ver a execução dos exercícios?</label><select name="demonstration_preference"><option value="">Escolher depois</option><option value="male">Com homem</option><option value="female">Com mulher</option></select></div>
 <button class="btn btn-primary btn-full">Criar minha conta</button>
 <p class="small">Confirme o e-mail antes do primeiro acesso, se solicitado.</p>
@@ -941,7 +942,7 @@ function authView(){return `<section class="auth"><div class="authbox">
 function bindAuth(){
  $$(".tabs button").forEach(b=>b.onclick=()=>{$$(".tabs button").forEach(x=>x.classList.toggle("active",x===b));$("#loginForm").hidden=b.dataset.tab!=="login";$("#signupForm").hidden=b.dataset.tab!=="signup"});
  $("#loginForm").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.currentTarget);let r=await supabase.auth.signInWithPassword({email:String(f.get("email")).trim(),password:String(f.get("password"))});if(r.error)toast("Erro ao entrar: "+r.error.message,true)};
- $("#signupForm").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.currentTarget);let r=await supabase.auth.signUp({email:String(f.get("email")).trim(),password:String(f.get("password")),options:{data:{full_name:String(f.get("name")).trim(),goal:String(f.get("goal")),demonstration_preference:String(f.get("demonstration_preference")||"")||null},emailRedirectTo:location.origin+location.pathname}});if(r.error)return toast("Erro no cadastro: "+r.error.message,true);toast(r.data.session?"Conta criada com sucesso.":"Conta criada. Confira seu e-mail para confirmar.")};
+ $("#signupForm").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.currentTarget);let r=await supabase.auth.signUp({email:String(f.get("email")).trim(),password:String(f.get("password")),options:{data:{full_name:String(f.get("name")).trim(),goal:String(f.get("goal")),gender:String(f.get("gender")||"")||null,demonstration_preference:String(f.get("demonstration_preference")||"")||null},emailRedirectTo:location.origin+location.pathname}});if(r.error)return toast("Erro no cadastro: "+r.error.message,true);toast(r.data.session?"Conta criada com sucesso.":"Conta criada. Confira seu e-mail para confirmar.")};
  $("#forgot").onclick=async()=>{let email=prompt("Digite seu e-mail:");if(!email)return;let r=await supabase.auth.resetPasswordForEmail(email,{redirectTo:CANONICAL_APP_URL});toast(r.error?r.error.message:"Link de recuperação enviado.",!!r.error)};
 }
 
@@ -1109,6 +1110,12 @@ function studentDashboard(){
  <form id="coachDemoPreference" class="card" data-student="${esc(selectedStudentId)}">
  <div class="eyebrow">Demonstrações do treino</div><h2>Exemplos para este aluno</h2>
  <p class="sub">Defina qual modelo aparece primeiro na ficha de treino. O aluno poderá alternar entre os dois.</p>
+
+ <div class="field"><label>Sexo informado</label><select name="gender">
+ <option value="" ${!selectedStudentProfile?.gender?"selected":""}>Não informado</option>
+ <option value="male" ${selectedStudentProfile?.gender==="male"?"selected":""}>Masculino</option>
+ <option value="female" ${selectedStudentProfile?.gender==="female"?"selected":""}>Feminino</option>
+ </select></div>
  <div class="field"><label>Preferência das imagens</label><select name="demonstration_preference">
  <option value="" ${!selectedStudentProfile?.demonstration_preference?"selected":""}>Sem preferência definida</option>
  <option value="male" ${selectedStudentProfile?.demonstration_preference==="male"?"selected":""}>Mostrar homem primeiro</option>
@@ -1198,8 +1205,10 @@ function videoEmbed(ex,compact=false){
 function selectedDemoGender(ex){
  const key=String(ex?.id||"");
  const override=demoGenderOverrides.get(key);
- const configured=isCoach?selectedStudentProfile?.demonstration_preference:profile?.demonstration_preference;
- const preferred=override||configured||user?.user_metadata?.demonstration_preference||"male";
+ const studentProfile=isCoach?selectedStudentProfile:profile;
+ const configured=studentProfile?.demonstration_preference;
+ const selfMetadata=isCoach?null:user?.user_metadata;
+ const preferred=override||configured||selfMetadata?.demonstration_preference||studentProfile?.gender||selfMetadata?.gender||"male";
  return preferred==="female"?"female":"male";
 }
 function validExerciseMediaUrl(value){
@@ -1354,6 +1363,7 @@ function profileView(){return `${pageBack()}<div class="section-head"><div><div 
 <div class="field"><label>Nome</label><input name="full_name" value="${esc(profile.full_name||"")}" required></div>
 <div class="field"><label>Objetivo</label><select name="goal">${["Hipertrofia","Emagrecimento","Condicionamento","Saúde"].map(x=>`<option ${profile.goal===x?"selected":""}>${x}</option>`).join("")}</select></div>
 <div class="row"><div class="field"><label>Idade</label><input type="number" name="age" value="${esc(profile.age||"")}"></div><div class="field"><label>Altura (cm)</label><input type="number" step="0.1" name="height_cm" value="${esc(profile.height_cm||"")}"></div></div>
+<div class="field"><label>Sexo (opcional)</label><select name="gender"><option value="" ${!profile.gender?"selected":""}>Prefiro não informar</option><option value="male" ${profile.gender==="male"?"selected":""}>Masculino</option><option value="female" ${profile.gender==="female"?"selected":""}>Feminino</option></select><small class="sub">Quando informado, ajuda a escolher automaticamente a demonstração inicial.</small></div>
 <div class="field"><label>Como você prefere ver os exercícios?</label><select name="demonstration_preference"><option value="">Sem preferência</option><option value="male" ${(profile.demonstration_preference||user?.user_metadata?.demonstration_preference)==="male"?"selected":""}>Com homem</option><option value="female" ${(profile.demonstration_preference||user?.user_metadata?.demonstration_preference)==="female"?"selected":""}>Com mulher</option></select><small class="sub">Esta escolha controla apenas as demonstrações visuais dos treinos e pode ser alterada a qualquer momento.</small></div>
 <button class="btn btn-primary btn-full">Salvar configurações</button><p class="small">Os dados ficam salvos online na sua conta.</p></form>
 <div class="card photo-cta"><div class="eyebrow">Fotos de evolução</div><h2>Seu acompanhamento visual</h2><p class="sub">Registre fotos de frente, lado e costas e acompanhe seu antes e depois.</p><button type="button" class="btn btn-primary btn-full" data-go="photos">Abrir Fotos de Evolução</button></div>`}
@@ -1456,21 +1466,23 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
   e.preventDefault();
   if(!isCoach||!selectedStudentId)return;
   const form=e.currentTarget;
-  const value=String(new FormData(form).get("demonstration_preference")||"");
-  if(value&&value!=="male"&&value!=="female")return;
+  const dataForm=new FormData(form);
+  const value=String(dataForm.get("demonstration_preference")||"");
+  const gender=String(dataForm.get("gender")||"");
+  if((value&&value!=="male"&&value!=="female")||(gender&&gender!=="male"&&gender!=="female"))return;
   const btn=form.querySelector('button[type="submit"]');
   if(btn)btn.disabled=true;
   try{
-   const result=await supabase.from("profiles").update({demonstration_preference:value||null,updated_at:new Date().toISOString()}).eq("user_id",selectedStudentId).select("user_id,demonstration_preference").maybeSingle();
+   const result=await supabase.from("profiles").update({gender:gender||null,demonstration_preference:value||null,updated_at:new Date().toISOString()}).eq("user_id",selectedStudentId).select("user_id,gender,demonstration_preference").maybeSingle();
    if(result.error||!result.data)return toast("Não foi possível salvar a preferência.",true);
-   if(selectedStudentProfile)selectedStudentProfile.demonstration_preference=result.data.demonstration_preference;
+   if(selectedStudentProfile){selectedStudentProfile.gender=result.data.gender;selectedStudentProfile.demonstration_preference=result.data.demonstration_preference;}
    const target=data.students.find(x=>x.user_id===selectedStudentId);
-   if(target)target.demonstration_preference=result.data.demonstration_preference;
+   if(target){target.gender=result.data.gender;target.demonstration_preference=result.data.demonstration_preference;}
    toast("Preferência do aluno salva.");render();
   }catch(_){toast("Não foi possível atualizar a preferência.",true)}
   finally{if(btn)btn.disabled=false}
  };
- if($("#profileForm"))$("#profileForm").onsubmit=async e=>{e.preventDefault();let o=obj(e.currentTarget,["full_name","goal","age","height_cm","demonstration_preference"]);o.updated_at=new Date().toISOString();let r=await supabase.from("profiles").update(o).eq("user_id",user.id).select().single();if(r.error)return toast("Erro ao salvar: "+r.error.message,true);profile=r.data;toast("Configurações salvas online.");render()};
+ if($("#profileForm"))$("#profileForm").onsubmit=async e=>{e.preventDefault();let o=obj(e.currentTarget,["full_name","goal","age","height_cm","gender","demonstration_preference"]);o.updated_at=new Date().toISOString();let r=await supabase.from("profiles").update(o).eq("user_id",user.id).select().single();if(r.error)return toast("Erro ao salvar: "+r.error.message,true);profile=r.data;toast("Configurações salvas online.");render()};
 }
 function drawChart(){
  let cv=$("#chart");if(!cv)return;let a=[...data.measurements].slice(0,10).reverse(),dpr=devicePixelRatio||1,w=cv.clientWidth||320,h=180;cv.width=w*dpr;cv.height=h*dpr;let c=cv.getContext("2d");c.scale(dpr,dpr);c.strokeStyle="#333530";for(let i=1;i<5;i++){c.beginPath();c.moveTo(0,i*h/5);c.lineTo(w,i*h/5);c.stroke()}if(a.length<2){c.fillStyle="#a8aaa6";c.font="13px sans-serif";c.fillText("Salve 2 avaliações para ver sua evolução.",12,90);return}let vals=a.map(x=>n(x.weight)),mn=Math.min(...vals)-1,mx=Math.max(...vals)+1;c.strokeStyle="#ff6d66";c.lineWidth=3;c.beginPath();a.forEach((x,i)=>{let px=12+i*(w-24)/(a.length-1),py=h-18-((n(x.weight)-mn)/(mx-mn))*(h-36);i?c.lineTo(px,py):c.moveTo(px,py)});c.stroke()
