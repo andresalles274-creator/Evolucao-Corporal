@@ -1,5 +1,5 @@
-const CACHE="evolucao-corporal-v11.43-dual-model-exercises";
-const STATIC=["./","./index.html","./styles.css?v=10.8.0","./payment-lock.css?v=1.0.0","./payment-notice.css?v=1.0.0","./payment-notice.svg","./theme-v11.css?v=11.11.3","./app.js?v=10.8.0","./exercise-media.css?v=10.8.0","./billing-v11.js?v=11.0.2","./ui-neon-v11.js?v=11.12.5","./config.js","./chat-v1.js?v=1.0.6","./brand-background.jpg","./coach-a-neon.svg","./coach-gym-neon.svg"];
+const CACHE="evolucao-corporal-v11.44-dual-model-autoselect";
+const STATIC=["./","./index.html","./styles.css?v=10.8.0","./payment-lock.css?v=1.0.0","./payment-notice.css?v=1.0.0","./payment-notice.svg","./theme-v11.css?v=11.11.3","./app.js?v=10.8.1","./exercise-media.css?v=10.8.0","./billing-v11.js?v=11.0.2","./ui-neon-v11.js?v=11.12.5","./config.js","./chat-v1.js?v=1.0.6","./brand-background.jpg","./coach-a-neon.svg","./coach-gym-neon.svg"];
 
 self.addEventListener("install",event=>{
   self.skipWaiting();
