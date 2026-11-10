@@ -1,0 +1,29 @@
+/* Imagens demonstrativas nos treinos — v10.7 */
+.exercise-pose-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+.exercise-pose-gallery .exercise-pose:only-child{grid-column:1 / -1}
+.exercise-pose{margin:0;min-width:0;background:#0c110e;border:1px solid rgba(202,255,24,.18);border-radius:14px;overflow:hidden}
+.exercise-pose img{width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;display:block;background:#101713}
+.exercise-pose figcaption{padding:7px 8px;font-size:11px;text-align:center;color:#caff18;font-weight:650}
+.exercise-media-unavailable{margin:12px 0;padding:18px;border:1px dashed rgba(202,255,24,.22);border-radius:14px;min-height:110px;display:flex;align-items:center;justify-content:center;gap:8px;flex-direction:column;color:#aebbac;text-align:center;background:#0e140f}
+.exercise-media-unavailable span{font-size:30px;color:#caff18}
+.exercise-media-unavailable small{font-size:11px}
+.training-video-details{border:1px solid rgba(202,255,24,.2);border-radius:12px;margin:8px 0 14px;padding:10px}
+.training-video-details summary{color:#caff18;cursor:pointer;font-size:12px;font-weight:650}
+.exercise-images-editor{margin-top:16px}
+.exercise-images-editor>summary{display:flex;flex-direction:column;gap:4px;cursor:pointer;list-style:none;color:#f7faf7}
+.exercise-images-editor>summary::-webkit-details-marker{display:none}
+.exercise-images-editor>summary:after{content:"Toque para abrir / fechar";color:#caff18;font-size:11px;font-weight:500}
+.exercise-images-editor>summary small{color:#aebbac;font-size:11px}
+.exercise-images-editor>.sub{margin:14px 0}
+.exercise-image-editor-list{display:grid;gap:13px;max-height:520px;overflow:auto;margin-top:12px}
+.exercise-image-form{padding:12px;border:1px solid rgba(202,255,24,.17);border-radius:14px;background:#101611;display:grid;gap:8px;min-width:0}
+.exercise-image-editor-head strong,.exercise-image-editor-head small{display:block}
+.exercise-image-editor-head strong{color:#fff;font-size:13px}
+.exercise-image-editor-head small{color:#aebbac;font-size:11px}
+.exercise-image-form .exercise-pose-gallery{margin:3px 0}
+.exercise-image-form .exercise-pose img{max-height:100px}
+.exercise-image-form .exercise-media-unavailable{min-height:64px;margin:2px 0;padding:10px}
+.exercise-image-label{font-size:11px;color:#caff18}
+.exercise-image-form input{width:100%;min-width:0;border:1px solid #344035;border-radius:10px;padding:11px;color:#fff;background:#0a100c;font-size:12px}
+.exercise-image-form .btn{width:100%;max-width:100%}
+@media(max-width:420px){.exercise-pose-gallery{gap:7px}.exercise-pose figcaption{font-size:10px}.exercise-image-editor-list{max-height:480px}}
