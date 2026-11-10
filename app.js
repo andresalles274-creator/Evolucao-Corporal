@@ -1415,7 +1415,7 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
  });
 
 
- $(".exercise-demo-switch").forEach(b=>b.onclick=()=>{
+ document.querySelectorAll(".exercise-demo-switch").forEach(b=>b.onclick=()=>{
   const wrap=b.closest(".exercise-demo");
   const ex=wrap?exById(wrap.dataset.exercise):null;
   if(!wrap||!ex)return;
