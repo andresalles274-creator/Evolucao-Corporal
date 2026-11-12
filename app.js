@@ -2,13 +2,21 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 
-const APP_VERSION="10.9.3";
+const APP_VERSION="10.10.0";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=(v="")=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 const today=()=>{const d=new Date(),p=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`};
 const fmt=d=>d?new Date(String(d).length===10?d+"T12:00:00":d).toLocaleDateString("pt-BR"):"—";
+// Datas de presença no fuso do coach (Brasil), inclusive para quem viaja.
+const attendanceDate=(days=0)=>{
+ const date=new Date(Date.now()+days*86400000);
+ const parts=new Intl.DateTimeFormat("en-US",{timeZone:"America/Sao_Paulo",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(date);
+ const get=type=>parts.find(p=>p.type===type)?.value||"";
+ return [get("year"),get("month"),get("day")].join("-");
+};
+const attendanceTime=value=>value?new Date(value).toLocaleTimeString("pt-BR",{timeZone:"America/Sao_Paulo",hour:"2-digit",minute:"2-digit"}):"—";
 const n=v=>Number(v||0);
 
 let session=null,user=null,profile=null,isCoach=false,route="home",accountInactive=false,accountSuspended=false;
@@ -19,7 +27,7 @@ const demoGenderOverrides=new Map();
 let selectedStudentId=null,selectedStudentProfile=null;
 let loadErrors={};
 let data={measurements:[],meals:[],workouts:[],hormone_logs:[],students:[],skinfolds:[],progress_photos:[],
-  exercise_library:[],training_plans:[],training_days:[],training_day_exercises:[],training_sessions:[],training_set_logs:[],diet_plans:[],diet_plan_meals:[]};
+  exercise_library:[],training_plans:[],training_days:[],training_day_exercises:[],training_sessions:[],training_set_logs:[],training_checkins:[],diet_plans:[],diet_plan_meals:[]};
 
 let photoDraft={
   front:null,
@@ -114,7 +122,7 @@ async function init(){
    if(!user){
      profile=null;isCoach=false;accountInactive=false;accountSuspended=false;suspendedStudentIds=new Set();paymentNoticeStudentIds=new Set();paymentNoticeEnabled=false;paymentNoticeDismissed=false;
      selectedStudentId=null;selectedStudentProfile=null;
-     data={measurements:[],meals:[],workouts:[],hormone_logs:[],students:[],skinfolds:[],progress_photos:[],exercise_library:[],training_plans:[],training_days:[],training_day_exercises:[],training_sessions:[],training_set_logs:[],diet_plans:[],diet_plan_meals:[]};
+     data={measurements:[],meals:[],workouts:[],hormone_logs:[],students:[],skinfolds:[],progress_photos:[],exercise_library:[],training_plans:[],training_days:[],training_day_exercises:[],training_sessions:[],training_set_logs:[],training_checkins:[],diet_plans:[],diet_plan_meals:[]};
      clearPhotoDraft();
      render();
      return;
@@ -164,12 +172,14 @@ async function hydrate(){
    selectedStudentProfile=data.students.find(s=>s.user_id===selectedStudentId)||null;
    await loadStudentData();
    if(!selectedStudentId){ await loadTrainingData(user.id); await loadDietData(user.id); }
+   await loadTrainingCheckins();
  }else{
    selectedStudentId=null; selectedStudentProfile=null;
    await Promise.all(["measurements","meals","workouts","hormone_logs","skinfolds"].map(t=>loadTable(t,user.id)));
    await loadPhotos(user.id);
    await loadTrainingData(user.id);
    await loadDietData(user.id);
+   await loadTrainingCheckins();
  }
 }
 async function loadTable(table,targetId){
@@ -230,6 +240,144 @@ async function loadTrainingData(targetId){
     const logs=await supabase.from("training_set_logs").select("*").in("session_id",sessionIds).order("set_number");
     if(logs.error){loadErrors.training_set_logs=logs.error.message;data.training_set_logs=[];} else {delete loadErrors.training_set_logs;data.training_set_logs=logs.data||[];}
   }else data.training_set_logs=[];
+}
+
+async function loadTrainingCheckins(){
+ if(!user){data.training_checkins=[];return;}
+ // Carrega as marcações recentes de todos os alunos para o coach; o RLS
+ // garante que o aluno veja somente os registros da própria conta.
+ const r=await supabase.from("training_checkins")
+  .select("id,user_id,training_day_id,training_title,completed_on,completed_at,source")
+  .gte("completed_on",attendanceDate(-30))
+  .order("completed_at",{ascending:false})
+  .limit(1000);
+ if(r.error){
+  loadErrors.training_checkins=r.error.message;
+  data.training_checkins=[];
+ }else{
+  delete loadErrors.training_checkins;
+  data.training_checkins=r.data||[];
+ }
+}
+
+function currentTrainingCheckin(dayId,uid=user?.id){
+ return data.training_checkins.find(c=>c.user_id===uid
+  && c.training_day_id===dayId && c.completed_on===attendanceDate())||null;
+}
+function studentDayCheckins(uid,date=attendanceDate()){
+ return data.training_checkins.filter(c=>c.user_id===uid&&c.completed_on===date);
+}
+function studentCheckinIndicator(uid){
+ const items=studentDayCheckins(uid);
+ return `<small class="attendance-list-label ${items.length?"completed":"pending"}">${items.length?"✓ Treinou hoje":"Ainda não marcou hoje"}${items.length>1?` · ${items.length} treinos`:""}</small>`;
+}
+function studentCheckinToggle(day){
+ const c=currentTrainingCheckin(day.id);
+ if(c?.source==="session")return `<div class="attendance-toggle finished" role="status">
+ <span class="attendance-square">✓</span><span>Treino concluído hoje <small>Registrado automaticamente</small></span></div>`;
+ const marked=!!c;
+ return `<button type="button" class="attendance-toggle training-check-toggle ${marked?"finished":""}"
+  data-day="${esc(day.id)}" aria-pressed="${marked}">
+  <span class="attendance-square">${marked?"✓":""}</span>
+  <span>${marked?"Treino concluído hoje":"Marcar treino de hoje como concluído"}<small>${marked?"Toque para desfazer a marcação":"O coach verá esta confirmação"}</small></span>
+ </button>`;
+}
+function studentAttendanceIntro(){
+ const todayDone=studentDayCheckins(user.id);
+ return `<div class="card attendance-intro">
+  <div class="eyebrow">Checklist diário</div>
+  <h2>${todayDone.length?"✓ Treino de hoje registrado":"Marque seu treino de hoje"}</h2>
+  <p class="sub">${todayDone.length?
+   `Você marcou ${todayDone.length} treino(s) hoje. Seu coach consegue acompanhar pelo painel.`:
+   "Depois de terminar o treino, toque em Concluído na ficha correspondente. O coach verá seu registro."}</p>
+ </div>`;
+}
+function coachAttendanceOverview(){
+ if(loadErrors.training_checkins)return `<div class="card attendance-coach"><h2>Conclusão dos treinos</h2>
+  <p class="sub">Não foi possível carregar o checklist: ${esc(loadErrors.training_checkins)}</p>
+  <button type="button" class="btn btn-ghost attendance-refresh">Tentar novamente</button></div>`;
+ const activeIds=new Set(data.students.map(s=>s.user_id));
+ const all=data.training_checkins.filter(c=>activeIds.has(c.user_id));
+ const completedToday=all.filter(c=>c.completed_on===attendanceDate());
+ const studentsToday=new Set(completedToday.map(c=>c.user_id)).size;
+ const recent=all.filter(c=>c.completed_on>=attendanceDate(-6)).slice(0,12);
+ return `<div class="card attendance-coach">
+  <div class="attendance-head"><div><div class="eyebrow">Checklist dos alunos</div><h2>Treinos concluídos</h2></div>
+   <button type="button" class="btn btn-ghost attendance-refresh">↻ Atualizar</button></div>
+  <div class="attendance-total"><strong>${studentsToday}</strong><span>de ${data.students.length} alunos confirmaram treino hoje</span></div>
+  <p class="sub">Confirmações registradas pelos alunos e treinos finalizados no aplicativo.</p>
+  <div class="attendance-feed">
+   ${recent.length?recent.map(c=>{
+    const student=data.students.find(s=>s.user_id===c.user_id);
+    return `<button type="button" class="attendance-feed-row student-open" data-student="${esc(c.user_id)}" data-next="student">
+     <span class="attendance-feed-icon">✓</span>
+     <span class="attendance-feed-copy"><strong>${esc(student?.full_name||"Aluno")}</strong>
+      <small>${esc(c.training_title)} · ${fmt(c.completed_on)} às ${attendanceTime(c.completed_at)}</small></span>
+    </button>`;
+   }).join(""):`<p class="sub">Nenhuma confirmação nos últimos 7 dias. As marcações aparecerão aqui.</p>`}
+  </div>
+ </div>`;
+}
+function coachStudentAttendance(){
+ if(!isCoach||!selectedStudentId)return "";
+ const recent=data.training_checkins.filter(c=>c.user_id===selectedStudentId).slice(0,8);
+ const todayDone=studentDayCheckins(selectedStudentId);
+ return `<div class="card attendance-coach">
+  <div class="attendance-head"><div><div class="eyebrow">Checklist de treinos</div>
+   <h2>${todayDone.length?"✓ Treino concluído hoje":"Sem confirmação hoje"}</h2></div>
+   <button type="button" class="btn btn-ghost attendance-refresh">↻ Atualizar</button></div>
+  <p class="sub">${todayDone.length?
+   `O aluno concluiu ${todayDone.length} treino(s) hoje.`:
+   "Ainda não existe marcação de treino concluído para hoje."}</p>
+  <div class="attendance-feed">
+   ${recent.length?recent.map(c=>`<div class="attendance-feed-row">
+    <span class="attendance-feed-icon">✓</span>
+    <span class="attendance-feed-copy"><strong>${esc(c.training_title)}</strong>
+     <small>${fmt(c.completed_on)} às ${attendanceTime(c.completed_at)} · ${c.source==="session"?"Registro do treino":"Checklist do aluno"}</small></span>
+   </div>`).join(""):`<p class="sub">Nenhum treino concluído registrado nos últimos 30 dias.</p>`}
+  </div>
+ </div>`;
+}
+
+let attendanceRefreshBusy=false;
+async function refreshAttendance(showMessage=false){
+ if(!isCoach||attendanceRefreshBusy)return;
+ attendanceRefreshBusy=true;
+ try{
+  await loadTrainingCheckins();
+  if(["home","student"].includes(route))render();
+  if(showMessage)toast(loadErrors.training_checkins?
+   "Não foi possível atualizar o checklist. Tente novamente.":"Checklist atualizado.",
+   !!loadErrors.training_checkins);
+ }finally{attendanceRefreshBusy=false;}
+}
+async function toggleTrainingCheckin(button){
+ if(isCoach||!user||accountInactive)return;
+ const dayId=button.dataset.day;
+ const day=data.training_days.find(d=>d.id===dayId);
+ const plan=day&&data.training_plans.find(p=>p.id===day.plan_id&&p.is_active!==false&&p.user_id===user.id);
+ if(!day||!plan)return toast("Treino não disponível na sua conta.",true);
+ const existing=currentTrainingCheckin(dayId,user.id);
+ if(existing?.source==="session")return toast("Este treino já foi concluído e registrado.",true);
+ if(existing&&!confirm("Desfazer a confirmação do treino de hoje?"))return;
+ button.disabled=true;
+ try{
+  const result=existing?
+   await supabase.from("training_checkins").delete().eq("id",existing.id).eq("user_id",user.id):
+   await supabase.from("training_checkins").insert({
+    user_id:user.id,training_day_id:day.id,training_title:day.title,
+    completed_on:attendanceDate(),source:"checklist"
+   });
+  if(result.error){
+   if(result.error.code==="23505"){await loadTrainingCheckins();render();return;}
+   return toast("Não foi possível salvar a marcação: "+result.error.message,true);
+  }
+  await loadTrainingCheckins();
+  if(loadErrors.training_checkins)return toast("Registro salvo, mas não foi possível atualizar a tela.",true);
+  toast(existing?"Marcação de hoje desfeita.":"✓ Treino concluído! Seu coach já consegue ver.");
+  render();
+ }catch(err){toast("Falha ao registrar treino: "+(err?.message||String(err)),true);}
+ finally{if(button.isConnected)button.disabled=false;}
 }
 
 async function loadDietData(targetId){
@@ -1110,6 +1258,7 @@ function coachHome(){
    <button class="btn btn-primary btn-full student-open" data-student="${active.user_id}" data-next="student">Abrir ficha completa</button>
  </div>`:`<div class="card"><div class="empty-state"><strong>Nenhum aluno cadastrado</strong><span>Quando um aluno criar a conta, ele aparecerá aqui.</span></div></div>`}
 
+ ${coachAttendanceOverview()}
  <div class="card"><div class="section-mini-head"><div><div class="eyebrow">Acompanhamento</div><h2>Alunos</h2></div><span class="count-pill">${data.students.length}</span></div>${studentList()}</div>
 
  ${active?`<div class="card"><div class="eyebrow">Atividade recente</div><h2>Últimos registros</h2>${activityTimeline(6)}</div>`:""}`;
@@ -1132,6 +1281,7 @@ function studentDashboard(){
    <div class="metric"><span class="small">TREINO HOJE</span><strong>${train} min</strong><div class="trend">${works.length} registro(s)</div></div>
  </div>
 
+ ${coachStudentAttendance()}
  <div class="card"><div class="eyebrow">Acesso rápido</div><h2>Acompanhamento</h2>${coachQuickActions()}
  <div class="quick-actions secondary-actions">
    <button class="quick-action" data-go="hormones"><span>⌁</span><strong>Uso hormonal</strong><small>${data.hormone_logs.length} registro(s)</small></button>
@@ -1170,7 +1320,7 @@ function studentList(){
  <div class="list student-list" id="studentList">${data.students.map(s=>`<div class="item student-row ${s.user_id===selectedStudentId?"selected":""} ${suspendedStudentIds.has(s.user_id)?"student-is-suspended":""}" data-student-name="${esc((s.full_name||"Aluno").toLowerCase())}">
    <button type="button" class="student-main student-open" data-student="${s.user_id}" data-next="student">
      <span class="student-avatar-sm">${studentInitials(s.full_name||"Aluno")}</span>
-     <span class="student-list-copy"><strong>${esc(s.full_name||"Aluno")}</strong><small>${esc(s.goal||"Objetivo não informado")}</small></span>
+     <span class="student-list-copy"><strong>${esc(s.full_name||"Aluno")}</strong><small>${esc(s.goal||"Objetivo não informado")}</small>${studentCheckinIndicator(s.user_id)}</span>
      <span class="badge">${suspendedStudentIds.has(s.user_id)?"Suspenso":paymentNoticeStudentIds.has(s.user_id)?"Aviso ativo":s.user_id===selectedStudentId?"Selecionado":"Ativo"}</span>
    </button>
    <div class="student-row-controls">
@@ -1359,7 +1509,26 @@ function coachDayCard(day){
 function studentTrainingView(){
  const plans=data.training_plans.filter(x=>x.is_active!==false);
  return `${pageBack()}<div class="section-head"><div><div class="eyebrow">Prescrição do Coach</div><h1>Meu Treino</h1></div></div>${trainingSetupWarning()}
- ${plans.length?plans.map(plan=>{const days=planDays(plan.id);return `<div class="card"><div class="eyebrow">${esc(plan.objective||"Plano atual")}</div><h2>${esc(plan.title)}</h2><p class="sub">${esc(plan.notes||"Siga a prescrição e registre suas cargas a cada série.")}</p><div class="training-day-list">${days.map(day=>{const items=dayExercises(day.id);const done=data.training_sessions.filter(s=>String(s.training_day_id)===String(day.id)&&s.finished_at).length;return `<button class="training-day-card training-day-open" data-day="${day.id}"><span class="training-day-icon">✦</span><span><strong>${esc(day.title)}</strong><small>${items.length} exercício(s) · ${done} conclusão(ões)</small></span><span class="activity-arrow">›</span></button>`}).join("")||`<p class="sub">Seu Coach ainda não adicionou os treinos.</p>`}</div></div>`}).join(""):`<div class="card"><div class="empty-state"><strong>Nenhum treino prescrito ainda</strong><span>Quando seu Coach publicar sua ficha, ela aparecerá aqui.</span></div></div>`}
+ ${studentAttendanceIntro()}
+ ${plans.length?plans.map(plan=>{
+  const days=planDays(plan.id);
+  return `<div class="card"><div class="eyebrow">${esc(plan.objective||"Plano atual")}</div>
+   <h2>${esc(plan.title)}</h2>
+   <p class="sub">${esc(plan.notes||"Siga a prescrição e registre suas cargas a cada série.")}</p>
+   <div class="training-day-list">${days.map(day=>{
+    const items=dayExercises(day.id);
+    const done=data.training_sessions.filter(s=>String(s.training_day_id)===String(day.id)&&s.finished_at).length;
+    return `<div class="training-checkin-day">
+     <button class="training-day-card training-day-open" data-day="${esc(day.id)}">
+      <span class="training-day-icon">✦</span><span><strong>${esc(day.title)}</strong>
+       <small>${items.length} exercício(s) · ${done} conclusão(ões)</small></span>
+      <span class="activity-arrow">›</span>
+     </button>
+     ${studentCheckinToggle(day)}
+    </div>`;
+   }).join("")||`<p class="sub">Seu Coach ainda não adicionou os treinos.</p>`}</div>
+  </div>`;
+ }).join(""):`<div class="card"><div class="empty-state"><strong>Nenhum treino prescrito ainda</strong><span>Quando seu Coach publicar sua ficha, ela aparecerá aqui.</span></div></div>`}
  <div class="card"><button class="btn btn-ghost btn-full" data-go="workouts">Registrar outra atividade</button></div>`;
 }
 function activeSessionForDay(dayId){return data.training_sessions.find(s=>String(s.training_day_id)===String(dayId)&&!s.finished_at)||null}
@@ -1369,7 +1538,7 @@ function trainingDayView(){
  if(!day)return `${pageBack()}<div class="card"><div class="empty-state"><strong>Treino não encontrado</strong><span>Volte e abra o treino novamente.</span></div></div>`;
  const items=dayExercises(day.id);const session=activeSessionForDay(day.id);
  return `${pageBack()}${coachStudentBanner()}<div class="section-head"><div><div class="eyebrow">Treino prescrito</div><h1>${esc(day.title)}</h1></div></div>
- ${isCoach?`<div class="notice"><strong>Visualização do Coach</strong><br><span class="small">Você está vendo como este treino fica para o aluno.</span></div>`:""}
+ ${isCoach?`<div class="notice"><strong>Visualização do Coach</strong><br><span class="small">Você está vendo como este treino fica para o aluno.</span></div>`:`<div class="card attendance-day-detail">${studentCheckinToggle(day)}</div>`}
  ${!isCoach&&!session?`<div class="card"><p class="sub">Ao iniciar, suas cargas e repetições serão salvas online.</p><button class="btn btn-primary btn-full" id="startTraining" data-day="${day.id}">▶ Iniciar treino</button></div>`:""}
  ${session?`<div class="training-session-status"><span>Treino em andamento</span><strong>Iniciado ${new Date(session.started_at).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</strong></div>`:""}
  ${items.map((it,idx)=>trainingExerciseCard(it,idx,session)).join("")||`<div class="card"><p class="sub">Nenhum exercício foi adicionado a este treino.</p></div>`}
@@ -1408,7 +1577,7 @@ async function deleteTrainingDay(id){if(!confirm("Excluir este treino e todos os
 async function deleteTrainingPlan(id){if(!confirm("Excluir esta ficha inteira? Os dias e exercícios prescritos nela também serão removidos."))return;const r=await supabase.from("training_plans").delete().eq("id",id);if(r.error)return toast(r.error.message,true);await loadTrainingData(selectedStudentId);render();}
 async function startTraining(dayId){const r=await supabase.from("training_sessions").insert({user_id:user.id,training_day_id:dayId}).select().single();if(r.error)return toast("Não foi possível iniciar: "+r.error.message,true);toast("Treino iniciado. Bora! 👊");await loadTrainingData(user.id);render();}
 async function saveTrainingSet(row){const sid=row.dataset.session,eid=row.dataset.exercise,setNo=Number(row.dataset.set);const weight=row.querySelector(".set-weight").value;const reps=row.querySelector(".set-reps").value;const o={session_id:sid,exercise_id:eid,set_number:setNo,weight_kg:weight===""?null:Number(weight),reps:reps===""?null:Number(reps),completed:true};const r=await supabase.from("training_set_logs").upsert(o,{onConflict:"session_id,exercise_id,set_number"}).select().single();if(r.error)return toast("Erro ao salvar série: "+r.error.message,true);row.classList.add("done");const b=row.querySelector(".set-save");b.classList.add("done");b.textContent="✓";await loadTrainingData(user.id);}
-async function finishTraining(id){if(!confirm("Finalizar o treino de hoje?"))return;const r=await supabase.from("training_sessions").update({finished_at:new Date().toISOString()}).eq("id",id);if(r.error)return toast("Erro ao finalizar: "+r.error.message,true);toast("Treino finalizado e salvo. Excelente! 👊");await loadTrainingData(user.id);route="training";render();}
+async function finishTraining(id){if(!confirm("Finalizar o treino de hoje?"))return;const r=await supabase.from("training_sessions").update({finished_at:new Date().toISOString()}).eq("id",id);if(r.error)return toast("Erro ao finalizar: "+r.error.message,true);toast("Treino finalizado e salvo. Excelente! 👊");await Promise.all([loadTrainingData(user.id),loadTrainingCheckins()]);route="training";render();}
 
 function workouts(){return `${pageBack()}${coachStudentBanner()}<div class="section-head"><div><div class="eyebrow">Registro de atividade</div><h1>Treinos</h1></div></div>
 <form id="workoutForm" class="card"><div class="eyebrow">Registro de treino</div><h2>Como foi seu treino hoje?</h2>${studentSelect()}
@@ -1511,7 +1680,9 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
  $$(".training-day-open").forEach(b=>b.onclick=()=>{selectedTrainingDayId=b.dataset.day;route="trainingDay";render()});
  if($("#startTraining"))$("#startTraining").onclick=()=>startTraining($("#startTraining").dataset.day);
  $$(".set-save").forEach(b=>b.onclick=()=>saveTrainingSet(b.closest(".set-log-row")));
- $$(".finish-training").forEach(b=>b.onclick=()=>finishTraining(b.dataset.session));
+ $(".finish-training").forEach(b=>b.onclick=()=>finishTraining(b.dataset.session));
+ $(".training-check-toggle").forEach(b=>b.onclick=()=>toggleTrainingCheckin(b));
+ $(".attendance-refresh").forEach(b=>b.onclick=()=>refreshAttendance(true));
  const studentSearch=$("#studentSearch");
  if(studentSearch){
    studentSearch.oninput=()=>{
@@ -1552,6 +1723,15 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
  };
  if($("#profileForm"))$("#profileForm").onsubmit=async e=>{e.preventDefault();let o=obj(e.currentTarget,["full_name","goal","age","height_cm","gender","demonstration_preference"]);o.updated_at=new Date().toISOString();let r=await supabase.from("profiles").update(o).eq("user_id",user.id).select().single();if(r.error)return toast("Erro ao salvar: "+r.error.message,true);profile=r.data;toast("Configurações salvas online.");render()};
 }
+// Atualiza o painel quando o coach volta ao aplicativo ou mantém a tela aberta.
+// O checklist permanece no banco e também pode ser atualizado pelo botão manual.
+setInterval(()=>{
+ if(isCoach&&user&&route==="home"&&!document.hidden)refreshAttendance(false);
+},60000);
+document.addEventListener("visibilitychange",()=>{
+ if(document.visibilityState==="visible"&&isCoach&&user&&route==="home")refreshAttendance(false);
+});
+
 function drawChart(){
  let cv=$("#chart");if(!cv)return;let a=[...data.measurements].slice(0,10).reverse(),dpr=devicePixelRatio||1,w=cv.clientWidth||320,h=180;cv.width=w*dpr;cv.height=h*dpr;let c=cv.getContext("2d");c.scale(dpr,dpr);c.strokeStyle="#333530";for(let i=1;i<5;i++){c.beginPath();c.moveTo(0,i*h/5);c.lineTo(w,i*h/5);c.stroke()}if(a.length<2){c.fillStyle="#a8aaa6";c.font="13px sans-serif";c.fillText("Salve 2 avaliações para ver sua evolução.",12,90);return}let vals=a.map(x=>n(x.weight)),mn=Math.min(...vals)-1,mx=Math.max(...vals)+1;c.strokeStyle="#ff6d66";c.lineWidth=3;c.beginPath();a.forEach((x,i)=>{let px=12+i*(w-24)/(a.length-1),py=h-18-((n(x.weight)-mn)/(mx-mn))*(h-36);i?c.lineTo(px,py):c.moveTo(px,py)});c.stroke()
 }
