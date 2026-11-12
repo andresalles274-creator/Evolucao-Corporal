@@ -67,13 +67,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          RELEASE_TAG="android-v1.0.0"
+          RELEASE_TAG="android-v1.1.0"
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" Evolucao-Corporal.apk --clobber
           else
             gh release create "$RELEASE_TAG" Evolucao-Corporal.apk \
               --target "$GITHUB_SHA" \
-              --title "Evolucao Corporal Android v1.0.0" \
-              --notes "APK instalavel do Evolucao Corporal. Coach e alunos usam o mesmo aplicativo e as contas existentes no Supabase. Versao de teste assinada com chave de desenvolvimento, adequada para instalacao direta e validacao antes da assinatura definitiva." \
+              --title "Evolucao Corporal Android v1.1.0 — Icone preto e vermelho" \
+              --notes "Novo icone do aplicativo em preto e vermelho. Mesmo login e todos os dados no Supabase. Esta versao de teste e assinada com chave de desenvolvimento temporaria; pode ser necessario desinstalar a versao APK anterior antes de instalar. O login precisara ser refeito depois. O arquivo anterior foi preservado no release v1.0.0." \
               --prerelease
           fi

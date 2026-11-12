@@ -29,3 +29,13 @@ O workflow \`.github/workflows/android-apk.yml\` faz o build em GitHub Actions, 
 ## Observações importantes
 
 Este é inicialmente um APK de TESTE (debug signing). Para distribuir publicamente com atualizações instaladas por cima, configurar assinatura de release com keystore privado em GitHub Actions Secrets. Não publicar a chave de assinatura no repositório. A funcionalidade de notificações push do navegador pode não funcionar na WebView; precisa ser implementada de forma nativa quando necessária. Requer conexão com internet para sincronização Supabase. Para publicação na Play Store, gerar AAB e verificar os requisitos de políticas da plataforma.
+
+
+## v1.1.0 — Ícone preto/vermelho
+
+O ícone Android agora usa uma camada adaptativa com fundo preto e símbolo A vermelho.
+Código de versão Android: 2; nome da versão: 1.1.0.
+
+A versão v1.0.0 foi assinada pelo Gradle com uma chave debug temporária gerada no GitHub Actions. Uma nova execução em outro runner usa outra chave, portanto o Android pode mostrar **App não instalado** quando você tenta atualizar por cima. Neste caso, desinstale a versão antiga e instale este APK. Os dados permanecem no Supabase, mas será necessário entrar novamente.
+
+**Próximas versões:** para atualizar por cima de forma confiável, é preciso configurar uma keystore privada estável (por exemplo, em GitHub Actions Secrets); não coloque chaves privadas em commits ou Releases públicos.

@@ -13,8 +13,8 @@
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:label="@string/app_name"
-        android:icon="@drawable/ic_evolucao"
-        android:roundIcon="@drawable/ic_evolucao"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:usesCleartextTraffic="false"
         android:theme="@android:style/Theme.Material.NoActionBar">
