@@ -1680,9 +1680,9 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
  $$(".training-day-open").forEach(b=>b.onclick=()=>{selectedTrainingDayId=b.dataset.day;route="trainingDay";render()});
  if($("#startTraining"))$("#startTraining").onclick=()=>startTraining($("#startTraining").dataset.day);
  $$(".set-save").forEach(b=>b.onclick=()=>saveTrainingSet(b.closest(".set-log-row")));
- $(".finish-training").forEach(b=>b.onclick=()=>finishTraining(b.dataset.session));
- $(".training-check-toggle").forEach(b=>b.onclick=()=>toggleTrainingCheckin(b));
- $(".attendance-refresh").forEach(b=>b.onclick=()=>refreshAttendance(true));
+ $$(".finish-training").forEach(b=>b.onclick=()=>finishTraining(b.dataset.session));
+ $$(".training-check-toggle").forEach(b=>b.onclick=()=>toggleTrainingCheckin(b));
+ $$(".attendance-refresh").forEach(b=>b.onclick=()=>refreshAttendance(true));
  const studentSearch=$("#studentSearch");
  if(studentSearch){
    studentSearch.oninput=()=>{
