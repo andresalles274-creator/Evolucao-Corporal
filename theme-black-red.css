@@ -1,0 +1,260 @@
+/* EVOLUCAO CORPORAL | Black & Red Edition v1
+   Apenas aparencia. Mantem as rotas, formularios, dados, auth e checklist.
+   Paleta: preto profundo / grafite / vermelho desempenho / branco.
+*/
+:root {
+  color-scheme: dark;
+  --bg:#070708!important;
+  --card:#151416!important;
+  --surface:#111013!important;
+  --surface2:#1b171a!important;
+  --text:#f7f5f5!important;
+  --muted:#b8b3b5!important;
+  --line:#44252c!important;
+  --gold:#ff3347!important;
+  --gold2:#ffe1e3!important;
+  --coral:#ff2439!important;
+  --green:#fb4757!important;
+  --lime:#ff253b!important;
+  --lime2:#c81026!important;
+  --accent:#ff283d!important;
+  --primary:#ff283d!important;
+  --shadow:0 18px 40px rgba(0,0,0,.42)!important;
+  accent-color:#f2162c;
+}
+html,body {
+  background:#070708!important;
+  color:#f7f5f5!important;
+}
+body {
+  background-image:
+   radial-gradient(circle at 12% 9%,rgba(183,0,27,.09),transparent 32%),
+   radial-gradient(circle at 97% 65%,rgba(220,0,27,.065),transparent 28%)!important;
+}
+body .app{
+  background:linear-gradient(180deg,#090909 0%,#070708 78%,#0c090a 100%)!important;
+  color:#f7f5f5!important;
+}
+body .topbar{
+  border-bottom:1px solid rgba(255,36,56,.28)!important;
+  background:rgba(8,8,9,.96)!important;
+}
+body .topbar .brand,body .topbar .brand-wrap .brand{color:#fff!important}
+body .topbar .brand-mark,body .topbar .avatar{
+  border:1px solid #f52b40!important;
+  background:#110b0e!important;
+  box-shadow:0 0 0 2px rgba(255,37,58,.07),0 0 12px rgba(255,37,58,.20)!important;
+}
+body .version-badge{
+  border:1px solid rgba(255,40,58,.58)!important;
+  background:#1d0e12!important;
+  color:#ff4454!important;
+}
+body .topbar .user-chip,body .active-student-chip{
+  background:#121012!important;
+  border-color:rgba(255,255,255,.14)!important;
+}
+body .eyebrow{color:#ff3e4e!important}
+body .sub,body .small,body .card small{color:#bab4b7!important}
+body .card,body .metric,body .item,body .active-student-card,
+body .billing-v11,body .record-field,body .record-modal,
+body .exercise-library-card,body .training-day-card,
+body .training-exercise-card,body .diet-meal,
+body .diet-plan-card,body .student-main-actions{
+  background:linear-gradient(150deg,#191618 0%,#100f11 75%)!important;
+  color:#f7f5f5!important;
+  border:1px solid rgba(214,52,72,.31)!important;
+  box-shadow:0 12px 28px rgba(0,0,0,.43),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+body .card h1,body .card h2,body .card h3,
+body .card strong,body .metric strong,body .item strong,
+body .student-main strong{color:#fff!important}
+body .card:hover{border-color:rgba(255,48,69,.46)!important}
+body .btn-primary,body .bottomnav .neon-add .plus{
+  background:linear-gradient(125deg,#ff243b,#ee071f 52%,#bd061b)!important;
+  border:1px solid #ff3349!important;
+  color:#fff!important;
+  box-shadow:0 9px 24px rgba(213,0,27,.24),inset 0 1px 0 rgba(255,255,255,.21)!important;
+}
+body .btn-ghost,body .page-back,body .top-back{
+  color:#fff!important;
+  border-color:rgba(255,63,83,.32)!important;
+  background:linear-gradient(145deg,#1b171a,#100e10)!important;
+}
+body .btn-ghost:active,body .btn-primary:active,body button:active{filter:brightness(.94)}
+body .btn-danger,body .mini-danger{border-color:#a52d37!important;color:#ff8c92!important}
+body .field input,body .field select,body .field textarea,
+body input:not([type="checkbox"]),body select,body textarea,
+body .training-mini-grid input,body .set-log-row input{
+  background:#131115!important;
+  color:#fff!important;
+  border:1px solid #482c31!important;
+  color-scheme:dark;
+}
+body input:focus-visible,body select:focus-visible,body textarea:focus-visible,
+body button:focus-visible,body a:focus-visible{
+  outline:2px solid #ff4357!important;
+  outline-offset:2px;
+}
+body .notice{
+  background:linear-gradient(135deg,#221519,#140f12)!important;
+  border:1px solid rgba(255,48,69,.4)!important;
+  border-left:4px solid #ff233a!important;
+  color:#eee8ea!important;
+}
+body .student-banner,body .student-profile-hero{
+  background:linear-gradient(135deg,#221417,#110f11)!important;
+  border-color:rgba(255,36,56,.4)!important;
+}
+body .student-avatar-lg,body .student-avatar-xl,
+body .student-avatar-sm,body .date-pill{
+  border-color:rgba(255,54,73,.6)!important;
+  background:#201316!important;
+  color:#fff!important;
+}
+body .coach-total{
+  border:1px solid rgba(255,39,58,.55)!important;
+  background:#141014!important;
+}
+body .coach-total span{color:#ff283e!important}
+body .quick-action{
+  background:linear-gradient(135deg,#221719,#110e11)!important;
+  border:1px solid rgba(255,52,70,.33)!important;
+  color:#f7f5f6!important;
+}
+body .quick-action:hover,body .student-row.selected{
+  border-color:rgba(255,52,70,.7)!important;
+  background:linear-gradient(135deg,#2a161a,#131014)!important;
+}
+body .metric .metric-icon,body .quick-action>span,
+body .count-pill,body .training-day-icon{color:#ff374b!important}
+body .metric .trend{color:#ff848f!important}
+body .ring{background:conic-gradient(#f32138 var(--pct,0%),#33262b 0)!important}
+body .ring:before{background:#151114!important}
+body .photo-picker,body .photo-preview,body .photo-frame,
+body .photo-source-btn,body .set-log-row,.exercise-instructions{
+  border-color:#452b30!important;
+  background:#141315!important;
+}
+body .attendance-intro,body .attendance-coach{
+  border-color:rgba(255,47,66,.4)!important;
+}
+body .attendance-toggle.finished{
+  border-color:#ff364c!important;
+  background:rgba(255,36,56,.12)!important;
+}
+body .attendance-toggle.finished .attendance-square,
+body .attendance-feed-icon{
+  background:#f72138!important;
+  border-color:#ff3e54!important;
+  color:#fff!important;
+}
+body .attendance-total{border-color:rgba(255,36,56,.38)!important;background:rgba(255,36,56,.08)!important}
+body .attendance-total strong,body .attendance-list-label.completed{color:#ff4256!important}
+body .student-main .badge,body .count-pill{
+  background:rgba(255,31,52,.1)!important;
+  border:1px solid rgba(255,45,66,.38)!important;
+  color:#ff697a!important;
+}
+body .bottomnav{
+  background:linear-gradient(180deg,rgba(16,13,15,.98),#09090b)!important;
+  border:1px solid rgba(255,255,255,.1)!important;
+  border-top-color:rgba(255,46,65,.38)!important;
+  box-shadow:0 -8px 35px rgba(0,0,0,.6)!important;
+}
+body .bottomnav .navbtn{color:#b9b5b8!important}
+body .bottomnav .navbtn .ico{color:#c9c4c6!important}
+body .bottomnav .navbtn.active,
+body .bottomnav .navbtn.active .ico{
+  color:#ff334a!important;
+}
+body .bottomnav .navbtn.active{
+  background:rgba(255,35,53,.12)!important;
+}
+body .bottomnav .neon-add .plus{
+  border:2px solid #ff495b!important;
+  color:#fff!important;
+  box-shadow:0 0 24px rgba(240,0,32,.45)!important;
+}
+body .auth{
+  background:linear-gradient(160deg,rgba(0,0,0,.60),rgba(0,0,0,.90)),url("./brand-background.jpg") center/cover fixed!important;
+}
+body .authbox{
+  background:rgba(16,14,16,.96)!important;
+  border-color:rgba(255,49,69,.42)!important;
+  box-shadow:0 20px 55px rgba(0,0,0,.6)!important;
+}
+body .authbox h1{color:#fff!important}
+body .auth-logo{border-color:#f12a3e!important}
+body .tabs{background:#131113!important;border-color:#352227!important}
+body .tabs button.active{color:#fff!important;background:#3a171e!important;box-shadow:inset 0 0 0 1px rgba(255,55,75,.48)!important}
+body .premium-brand{
+  border-color:rgba(255,38,58,.72)!important;
+  box-shadow:0 19px 43px rgba(0,0,0,.65),0 0 22px rgba(192,0,25,.12)!important;
+}
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved,
+body.student-neon .student-hero-neon.premium-brand,
+body .app.student-app .student-hero-neon.premium-brand{
+  background-color:#100a0d!important;
+  background-image:
+   linear-gradient(180deg,rgba(9,0,0,.19) 0%,rgba(16,0,3,.33) 45%,rgba(0,0,0,.72) 100%),
+   url("https://myfitnesstrainer.in/assets/hero-functional-Cb5Kcdiz.jpg"),
+   url("./coach-gym-neon.svg")!important;
+  background-position:center!important;
+  background-size:cover!important;
+  background-repeat:no-repeat!important;
+  border-color:rgba(255,41,61,.74)!important;
+}
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved::before{
+  background:radial-gradient(circle at 50% 10%,rgba(244,18,44,.17),transparent 60%)!important;
+}
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved .names,
+body .app.student-app .student-hero-neon .names{color:#fff!important}
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved .tagline,
+body .app.student-app .student-hero-neon .tagline{color:#ff99a4!important}
+body:has(.poster-coach-welcome) .ref-featured{
+  border:1px solid rgba(255,39,60,.48)!important;
+}
+body:has(.poster-coach-welcome) .poster-a-mark{
+  border-color:#e11a31!important;
+  box-shadow:0 0 0 1px rgba(255,50,70,.3),0 0 22px rgba(248,0,42,.16)!important;
+}
+body:has(.poster-coach-welcome) .coach-welcome>.coach-site-button{
+  background:linear-gradient(110deg,#281319,#130d10)!important;
+  border:1px solid rgba(255,42,62,.63)!important;
+  color:#fff!important;
+}
+body:has(.poster-coach-welcome) .coach-site-button .coach-site-icon{
+  background:#ec1e33!important;color:#fff!important;
+}
+body:has(.poster-coach-welcome) .coach-site-button .coach-site-arrow{color:#ff4c5e!important}
+body:has(.poster-coach-welcome) .ref-featured .eyebrow{color:#ff3e51!important}
+body .ref-lower-grid .ref-promo{
+  background:linear-gradient(135deg,#390e16,#130c0f)!important;
+  border:1px solid rgba(255,44,63,.49)!important;
+  color:#fff!important;
+}
+body .attendance-coach .attendance-feed-row{
+  background:#161215!important;border-color:#3e282e!important;color:#fff!important;
+}
+body.student-neon{--accent:#ff283d!important;--primary:#ff283d!important;--gold:#ff283d!important}
+body.student-neon .topbar,body.student-neon .bottomnav{
+  background:#0b0a0c!important;
+  border-color:rgba(255,44,65,.37)!important;
+}
+body.student-neon .student-main-actions,body.student-neon .metric,
+body.student-neon .card{border-color:rgba(255,40,60,.36)!important}
+body.student-neon .metric{background:linear-gradient(145deg,#1b151a,#101012)!important}
+body.student-neon .metric .metric-icon{color:#ff4458!important}
+body .record-modal{background:linear-gradient(150deg,#211a1c,#0f0e11)!important}
+body .record-overlay{background:rgba(0,0,0,.78)!important}
+@media(max-width:620px){
+ body .app #content{background:transparent!important}
+ body .topbar{padding:10px 12px!important}
+ body .app:not(.student-app) .ref-featured,
+ body .app:not(.student-app) .attendance-coach{padding:16px 14px!important}
+ body .bottomnav .neon-add .plus{width:61px!important;height:61px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ body button,body .card,body .quick-action{transition:none!important}
+}

@@ -1,28 +1,28 @@
 /* Checklist diário de treinos — aluno e painel do coach */
-.attendance-intro{border:1px solid rgba(98,255,54,.22)!important}
+.attendance-intro{border:1px solid rgba(255,36,56,.22)!important}
 .attendance-intro h2{margin:4px 0 8px}
 .training-checkin-day{display:flex;flex-direction:column;gap:7px;width:100%;min-width:0;padding-bottom:8px}
 .training-checkin-day .training-day-card{width:100%}
 .attendance-toggle{display:flex;gap:12px;align-items:center;width:100%;border:1px solid rgba(128,143,128,.28);border-radius:13px;padding:12px 14px;background:rgba(130,140,130,.08);color:inherit;font:inherit;text-align:left;cursor:pointer;min-height:52px;transition:background .15s,border-color .15s}
-.attendance-toggle:not(.finished):hover{border-color:#62ff36}
-.attendance-toggle.finished{border-color:rgba(98,255,54,.5);background:rgba(98,255,54,.1)}
+.attendance-toggle:not(.finished):hover{border-color:#ff2538}
+.attendance-toggle.finished{border-color:rgba(255,36,56,.5);background:rgba(255,36,56,.1)}
 .attendance-toggle:disabled{cursor:wait;opacity:.65}
-.attendance-square{display:flex;align-items:center;justify-content:center;flex:0 0 25px;width:25px;height:25px;border:2px solid #9baa9a;border-radius:7px;font-weight:900;color:#081008;background:transparent}
-.attendance-toggle.finished .attendance-square{border-color:#62ff36;background:#62ff36}
+.attendance-square{display:flex;align-items:center;justify-content:center;flex:0 0 25px;width:25px;height:25px;border:2px solid #9baa9a;border-radius:7px;font-weight:900;color:#0a090b;background:transparent}
+.attendance-toggle.finished .attendance-square{border-color:#ff2538;background:#ff2538}
 .attendance-toggle span:nth-child(2){font-weight:750;line-height:1.35}
 .attendance-toggle small{display:block;font-size:11px;font-weight:500;opacity:.76;margin-top:3px}
 .attendance-day-detail .attendance-toggle{margin:0}
 .attendance-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
 .attendance-head h2{margin:0}
 .attendance-head .btn{width:auto;white-space:nowrap;padding:8px 12px;font-size:12px}
-.attendance-total{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1px solid rgba(98,255,54,.25);border-radius:14px;background:rgba(98,255,54,.07)}
-.attendance-total strong{font-size:32px;color:#62ff36;font-weight:850;line-height:1}
+.attendance-total{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1px solid rgba(255,36,56,.25);border-radius:14px;background:rgba(255,36,56,.07)}
+.attendance-total strong{font-size:32px;color:#ff2538;font-weight:850;line-height:1}
 .attendance-total span{font-size:13px;line-height:1.45}
 .attendance-coach .sub{margin:11px 0}
 .attendance-feed{display:flex;flex-direction:column;gap:7px;margin-top:10px}
 .attendance-feed-row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:11px 10px;border:1px solid rgba(130,143,140,.17);border-radius:12px;background:rgba(128,128,128,.04);color:inherit;font:inherit}
 button.attendance-feed-row{cursor:pointer}
-.attendance-feed-icon{display:flex;align-items:center;justify-content:center;flex:0 0 29px;width:29px;height:29px;border-radius:50%;background:#62ff36;color:#081008;font-weight:900}
+.attendance-feed-icon{display:flex;align-items:center;justify-content:center;flex:0 0 29px;width:29px;height:29px;border-radius:50%;background:#ff2538;color:#0a090b;font-weight:900}
 .attendance-feed-copy{min-width:0;display:flex;flex-direction:column;gap:4px}
 .attendance-feed-copy strong{font-size:13px;white-space:normal;overflow-wrap:anywhere}
 .attendance-feed-copy small{font-size:11px;opacity:.76;line-height:1.35;overflow-wrap:anywhere}
