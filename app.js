@@ -2,7 +2,7 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 
-const APP_VERSION="10.9.0";
+const APP_VERSION="10.9.3";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -948,7 +948,31 @@ function authView(){return `<section class="auth"><div class="authbox">
 </form></div></section>`}
 function bindAuth(){
  $$(".tabs button").forEach(b=>b.onclick=()=>{$$(".tabs button").forEach(x=>x.classList.toggle("active",x===b));$("#loginForm").hidden=b.dataset.tab!=="login";$("#signupForm").hidden=b.dataset.tab!=="signup"});
- $("#loginForm").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.currentTarget);let r=await supabase.auth.signInWithPassword({email:String(f.get("email")).trim(),password:String(f.get("password"))});if(r.error)toast("Erro ao entrar: "+r.error.message,true)};
+ $("#loginForm").onsubmit=async e=>{
+  e.preventDefault();
+  const form=e.currentTarget, f=new FormData(form);
+  const btn=form.querySelector('button[type="submit"],button:not([type])');
+  const originalText=btn?.textContent||"Entrar";
+  if(btn){btn.disabled=true;btn.textContent="Conectando...";}
+  const credentials={email:String(f.get("email")).trim(),password:String(f.get("password"))};
+  try{
+   let result;
+   for(let attempt=0;attempt<2;attempt++){
+    try{result=await supabase.auth.signInWithPassword(credentials);}
+    catch(err){result={error:err};}
+    const message=String(result?.error?.message||result?.error||"");
+    const networkError=/failed to fetch|networkerror|fetch failed|network request failed|load failed/i.test(message);
+    if(!networkError||attempt===1)break;
+    await new Promise(resolve=>setTimeout(resolve,1100));
+   }
+   if(result?.error){
+    const message=String(result.error.message||result.error);
+    toast(/failed to fetch|networkerror|fetch failed|network request failed|load failed/i.test(message)
+     ?"Não foi possível conectar ao servidor. Teste Wi-Fi ou dados móveis e tente novamente."
+     :"Erro ao entrar: "+message,true);
+   }
+  }finally{if(btn){btn.disabled=false;btn.textContent=originalText;}}
+ };
  $("#signupForm").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.currentTarget);let r=await supabase.auth.signUp({email:String(f.get("email")).trim(),password:String(f.get("password")),options:{data:{full_name:String(f.get("name")).trim(),goal:String(f.get("goal")),gender:String(f.get("gender")||"")||null,demonstration_preference:String(f.get("demonstration_preference")||"")||null},emailRedirectTo:location.origin+location.pathname}});if(r.error)return toast("Erro no cadastro: "+r.error.message,true);toast(r.data.session?"Conta criada com sucesso.":"Conta criada. Confira seu e-mail para confirmar.")};
  $("#forgot").onclick=async()=>{let email=prompt("Digite seu e-mail:");if(!email)return;let r=await supabase.auth.resetPasswordForEmail(email,{redirectTo:CANONICAL_APP_URL});toast(r.error?r.error.message:"Link de recuperação enviado.",!!r.error)};
 }
