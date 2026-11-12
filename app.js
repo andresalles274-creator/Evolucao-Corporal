@@ -128,13 +128,20 @@ async function init(){
 }
 async function hydrate(){
  loadErrors={};
- const [p,c,access]=await Promise.all([
-  supabase.from("profiles").select("*").eq("user_id",user.id).maybeSingle(),
-  supabase.from("coach_users").select("user_id").eq("user_id",user.id).maybeSingle(),
-  supabase.from("student_access_controls").select("is_suspended,payment_notice_enabled").eq("user_id",user.id).maybeSingle()
+ // Verificação redundante no servidor: nunca inferir permissão pelo nome do perfil.
+ const currentUserId=user.id;
+ const [p,c,access,coachVerification]=await Promise.all([
+  supabase.from("profiles").select("*").eq("user_id",currentUserId).maybeSingle(),
+  supabase.from("coach_users").select("user_id").eq("user_id",currentUserId).maybeSingle(),
+  supabase.from("student_access_controls").select("is_suspended,payment_notice_enabled").eq("user_id",currentUserId).maybeSingle(),
+  supabase.rpc("is_coach")
  ]);
- profile=p.data||{user_id:user.id,full_name:user.user_metadata?.full_name||user.email.split("@")[0],goal:user.user_metadata?.goal||"",age:"",height_cm:""};
- isCoach=!!c.data;
+ if(user?.id!==currentUserId)return;
+ if(c.error && coachVerification.error){
+  throw new Error("Não foi possível verificar seu acesso. Verifique a conexão e toque em Tentar novamente.");
+ }
+ profile=p.data||{user_id:currentUserId,full_name:user.user_metadata?.full_name||user.email.split("@")[0],goal:user.user_metadata?.goal||"",age:"",height_cm:""};
+ isCoach=(c.data?.user_id===currentUserId)||(coachVerification.error?false:coachVerification.data===true);
  accountSuspended=!isCoach && access.data?.is_suspended===true;
  paymentNoticeEnabled=!isCoach && access.data?.payment_notice_enabled===true;
  if(access.error && !isCoach)loadErrors.student_access_controls=access.error.message;
