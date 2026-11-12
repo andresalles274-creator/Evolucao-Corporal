@@ -2,7 +2,7 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 
-const APP_VERSION="10.10.1";
+const APP_VERSION="10.10.2";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -99,7 +99,7 @@ window.addEventListener("unhandledrejection",e=>fatalScreen(e.reason?.message||S
 function toast(msg,err=false){
  const x=document.createElement("div");
  x.textContent=msg;
- x.style.cssText=`position:fixed;z-index:9999;left:50%;bottom:95px;transform:translateX(-50%);max-width:88%;padding:12px 16px;border-radius:14px;color:white;font-weight:700;background:${err?"#b84040":"#087c69"};box-shadow:0 8px 25px #0004`;
+ x.style.cssText=`position:fixed;z-index:9999;left:50%;bottom:95px;transform:translateX(-50%);max-width:88%;padding:12px 16px;border-radius:14px;color:white;font-weight:700;background:${err?"#ad1d2e":"#722336"};box-shadow:0 8px 25px #0004`;
  document.body.appendChild(x);setTimeout(()=>x.remove(),3000);
 }
 function loading(){return `<section class="auth"><div class="authbox" style="text-align:center"><h2>Carregando...</h2><p class="sub">Conectando ao banco de dados.</p></div></section>`}

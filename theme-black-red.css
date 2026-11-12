@@ -1,4 +1,4 @@
-/* EVOLUCAO CORPORAL | Black & Red Edition v1
+/* EVOLUCAO CORPORAL | Black & Red Edition v2 — Cinematografico
    Apenas aparencia. Mantem as rotas, formularios, dados, auth e checklist.
    Paleta: preto profundo / grafite / vermelho desempenho / branco.
 */
@@ -258,3 +258,88 @@ body .record-overlay{background:rgba(0,0,0,.78)!important}
 @media(prefers-reduced-motion:reduce){
  body button,body .card,body .quick-action{transition:none!important}
 }
+
+/* A fotografia externa tem iluminacao verde: aplicar colorizacao somente
+   na camada da imagem, sem alterar logotipos, textos ou controles. */
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved,
+body.student-neon .student-hero-neon.premium-brand,
+body .app.student-app .student-hero-neon.premium-brand{
+  isolation:isolate!important;
+  background:#0d0b0d url("./coach-gym-neon.svg") center/cover no-repeat!important;
+  overflow:hidden!important;
+}
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved::before,
+body.student-neon .student-hero-neon.premium-brand::before,
+body .app.student-app .student-hero-neon.premium-brand::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  display:block!important;
+  z-index:0!important;
+  pointer-events:none!important;
+  background:url("https://myfitnesstrainer.in/assets/hero-functional-Cb5Kcdiz.jpg") center/cover no-repeat!important;
+  filter:hue-rotate(242deg) saturate(1.28) contrast(1.10) brightness(.82)!important;
+  transform:scale(1.01);
+}
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved::after,
+body.student-neon .student-hero-neon.premium-brand::after,
+body .app.student-app .student-hero-neon.premium-brand::after{
+  content:""!important;position:absolute!important;inset:0!important;
+  z-index:1!important;pointer-events:none!important;height:auto!important;
+  background:linear-gradient(180deg,rgba(6,4,6,.16) 0%,rgba(12,3,6,.25) 42%,rgba(0,0,0,.73) 100%)!important;
+}
+body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved .premium-brand-content,
+body.student-neon .student-hero-neon .premium-brand-content,
+body .app.student-app .student-hero-neon .premium-brand-content{
+  position:relative!important;z-index:2!important;
+}
+body .premium-brand #coach-chat-launch{z-index:12!important}
+
+/* Demonstrações masculino/feminino: corrigir as áreas que mantinham o verde. */
+body .exercise-demo-options{border-color:rgba(255,56,73,.45)!important;background:#130e11!important}
+body .exercise-demo-switch{color:#f0e3e5!important;background:transparent!important}
+body .exercise-demo-switch.active{background:#f1233b!important;color:#fff!important;box-shadow:0 3px 15px rgba(227,12,39,.25)!important}
+body .exercise-guide{background:linear-gradient(150deg,#26191d,#141114)!important;border-color:rgba(255,49,70,.5)!important;color:#f7f2f3!important}
+body .exercise-guide h3{color:#ff6b7c!important}
+body .guide-step-number{background:#ee213a!important;color:white!important}
+body .exercise-guide-steps strong{color:#fff!important}
+body .exercise-guide-steps p{color:#ddd0d3!important}
+body .guide-tip{background:#29191e!important;border-left:3px solid #ff2e46!important;color:#f4e2e5!important}
+body .guide-tip strong,body .guide-error strong{color:#fff!important}
+body .guide-error{background:#2a191a!important;border-left:3px solid #ff5b6d!important}
+body .guide-coach{background:#1d181c!important;border-left:3px solid #ed697d!important}
+body .exercise-motion{background:#24151a!important;border-color:rgba(255,49,67,.48)!important}
+body .exercise-motion summary{color:#fff!important}
+body .exercise-motion summary:after{color:#c7b3b7!important}
+body .exercise-guide-editor,.exercise-image-form{background:#191418!important;border-color:#502a33!important}
+body .exercise-guide-editor summary,.exercise-image-label{color:#ff6375!important}
+body .exercise-pose figcaption{color:#ff6375!important}
+
+/* Chat carregado por um script próprio (o CSS anterior não alcançava todos
+   os estados e o script recriava as cores verdes). */
+#coach-chat-launch{
+ background:linear-gradient(130deg,#ff293e,#d90a27)!important;
+ border:1px solid #ff3f55!important;color:white!important;
+ box-shadow:0 9px 24px rgba(205,5,32,.25)!important;
+}
+#coach-chat-panel{background:#111013!important;border-color:#b93042!important;color:#fff!important}
+.chat-head{background:#1b1519!important;border-bottom-color:#4a2730!important}
+.chat-head strong{color:#ff6376!important}
+.chat-head button,.chat-students button{background:#24191e!important;border-color:#4a2a33!important;color:#fff!important}
+.chat-students button.active{border-color:#ff3e53!important;color:#ff5b70!important}
+.chat-messages .chat-bubble{background:#292025!important;color:#fff!important}
+.chat-messages .chat-bubble.mine{background:#541b2a!important;color:#fff!important}
+.chat-compose{border-top-color:#4a2730!important}
+.chat-compose input{background:#191216!important;border-color:#4a2730!important;color:#fff!important}
+.chat-compose button{background:#ed1832!important;color:white!important}
+#chat-notice{background:#22151b!important;border-color:#ff3b51!important;color:#fff!important}
+#coach-chat-launch .chat-count,.chat-nav-count{background:#910c20!important;color:white!important}
+
+/* Padrão de navegação e campos, incluindo as telas de alunos. */
+body .training-video-details,body .exercise-media-unavailable,
+body .coach-demo-thumb,body .exercise-pose{border-color:rgba(255,52,70,.30)!important;background:#171316!important}
+body .training-checkin-day{border-color:#41212a!important}
+body .attendance-toggle:not(.finished){border-color:#513039!important;background:#1e181c!important}
+body .attendance-toggle .attendance-square{border-color:#bd7480!important}
+body .exercise-number,body .diet-number{background:#e51b34!important;color:#fff!important}
+body .metric .trend,body .activity-arrow,body .student-status-line strong{color:#ff7181!important}

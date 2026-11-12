@@ -27,6 +27,6 @@ button.attendance-feed-row{cursor:pointer}
 .attendance-feed-copy strong{font-size:13px;white-space:normal;overflow-wrap:anywhere}
 .attendance-feed-copy small{font-size:11px;opacity:.76;line-height:1.35;overflow-wrap:anywhere}
 .attendance-list-label{display:inline-block!important;font-size:11px!important;font-weight:750!important;margin-top:5px}
-.attendance-list-label.completed{color:#3fd726}
+.attendance-list-label.completed{color:#ff4355}
 .attendance-list-label.pending{opacity:.65}
 @media(max-width:410px){.attendance-head .btn{font-size:11px;padding:7px 9px}.attendance-total{gap:10px;padding:10px}.attendance-total strong{font-size:28px}.attendance-toggle{padding:10px}}

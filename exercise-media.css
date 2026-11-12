@@ -1,30 +1,30 @@
 /* Imagens demonstrativas nos treinos — v10.7 */
 .exercise-pose-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
 .exercise-pose-gallery .exercise-pose:only-child{grid-column:1 / -1}
-.exercise-pose{margin:0;min-width:0;background:#0c110e;border:1px solid rgba(202,255,24,.18);border-radius:14px;overflow:hidden}
-.exercise-pose img{width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;display:block;background:#101713}
-.exercise-pose figcaption{padding:7px 8px;font-size:11px;text-align:center;color:#caff18;font-weight:650}
-.exercise-media-unavailable{margin:12px 0;padding:18px;border:1px dashed rgba(202,255,24,.22);border-radius:14px;min-height:110px;display:flex;align-items:center;justify-content:center;gap:8px;flex-direction:column;color:#aebbac;text-align:center;background:#0e140f}
-.exercise-media-unavailable span{font-size:30px;color:#caff18}
+.exercise-pose{margin:0;min-width:0;background:#141114;border:1px solid rgba(255,37,57,.18);border-radius:14px;overflow:hidden}
+.exercise-pose img{width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;display:block;background:#161216}
+.exercise-pose figcaption{padding:7px 8px;font-size:11px;text-align:center;color:#ff354a;font-weight:650}
+.exercise-media-unavailable{margin:12px 0;padding:18px;border:1px dashed rgba(255,37,57,.22);border-radius:14px;min-height:110px;display:flex;align-items:center;justify-content:center;gap:8px;flex-direction:column;color:#c7b4b8;text-align:center;background:#161216}
+.exercise-media-unavailable span{font-size:30px;color:#ff354a}
 .exercise-media-unavailable small{font-size:11px}
-.training-video-details{border:1px solid rgba(202,255,24,.2);border-radius:12px;margin:8px 0 14px;padding:10px}
-.training-video-details summary{color:#caff18;cursor:pointer;font-size:12px;font-weight:650}
+.training-video-details{border:1px solid rgba(255,37,57,.2);border-radius:12px;margin:8px 0 14px;padding:10px}
+.training-video-details summary{color:#ff354a;cursor:pointer;font-size:12px;font-weight:650}
 .exercise-images-editor{margin-top:16px}
 .exercise-images-editor>summary{display:flex;flex-direction:column;gap:4px;cursor:pointer;list-style:none;color:#f7faf7}
 .exercise-images-editor>summary::-webkit-details-marker{display:none}
-.exercise-images-editor>summary:after{content:"Toque para abrir / fechar";color:#caff18;font-size:11px;font-weight:500}
-.exercise-images-editor>summary small{color:#aebbac;font-size:11px}
+.exercise-images-editor>summary:after{content:"Toque para abrir / fechar";color:#ff354a;font-size:11px;font-weight:500}
+.exercise-images-editor>summary small{color:#c7b4b8;font-size:11px}
 .exercise-images-editor>.sub{margin:14px 0}
 .exercise-image-editor-list{display:grid;gap:13px;max-height:520px;overflow:auto;margin-top:12px}
-.exercise-image-form{padding:12px;border:1px solid rgba(202,255,24,.17);border-radius:14px;background:#101611;display:grid;gap:8px;min-width:0}
+.exercise-image-form{padding:12px;border:1px solid rgba(255,37,57,.17);border-radius:14px;background:#181216;display:grid;gap:8px;min-width:0}
 .exercise-image-editor-head strong,.exercise-image-editor-head small{display:block}
 .exercise-image-editor-head strong{color:#fff;font-size:13px}
-.exercise-image-editor-head small{color:#aebbac;font-size:11px}
+.exercise-image-editor-head small{color:#c7b4b8;font-size:11px}
 .exercise-image-form .exercise-pose-gallery{margin:3px 0}
 .exercise-image-form .exercise-pose img{max-height:100px}
 .exercise-image-form .exercise-media-unavailable{min-height:64px;margin:2px 0;padding:10px}
-.exercise-image-label{font-size:11px;color:#caff18}
-.exercise-image-form input{width:100%;min-width:0;border:1px solid #344035;border-radius:10px;padding:11px;color:#fff;background:#0a100c;font-size:12px}
+.exercise-image-label{font-size:11px;color:#ff354a}
+.exercise-image-form input{width:100%;min-width:0;border:1px solid #48272e;border-radius:10px;padding:11px;color:#fff;background:#120d11;font-size:12px}
 .exercise-image-form .btn{width:100%;max-width:100%}
 @media(max-width:420px){.exercise-pose-gallery{gap:7px}.exercise-pose figcaption{font-size:10px}.exercise-image-editor-list{max-height:480px}}
 
@@ -32,51 +32,51 @@
 /* Demonstrações masculino/feminino — v10.8 */
 .exercise-demo{margin:12px 0 16px}
 .exercise-demo-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.exercise-demo-head>strong{font-size:12px;color:#e1f5da}
-.exercise-demo-options{display:inline-flex;gap:4px;border:1px solid rgba(202,255,24,.3);border-radius:12px;padding:4px;background:#0a100b}
-.exercise-demo-switch{border:0;background:transparent;color:#cbd5c7;border-radius:9px;padding:9px 15px;font-size:12px;font-weight:700;min-height:38px}
-.exercise-demo-switch.active{background:#caff18;color:#152006;box-shadow:0 2px 10px rgba(202,255,24,.18)}
+.exercise-demo-head>strong{font-size:12px;color:#f4e5e7}
+.exercise-demo-options{display:inline-flex;gap:4px;border:1px solid rgba(255,37,57,.3);border-radius:12px;padding:4px;background:#120d11}
+.exercise-demo-switch{border:0;background:transparent;color:#d6c8cb;border-radius:9px;padding:9px 15px;font-size:12px;font-weight:700;min-height:38px}
+.exercise-demo-switch.active{background:#ff354a;color:#230c10;box-shadow:0 2px 10px rgba(255,37,57,.18)}
 .exercise-demo-switch:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .exercise-demo .exercise-pose-gallery{margin:10px 0 6px}
-.exercise-demo-fallback{margin:4px 0 12px;font-size:11px;line-height:1.4;color:#aebca8}
+.exercise-demo-fallback{margin:4px 0 12px;font-size:11px;line-height:1.4;color:#c7b4b8}
 .coach-demo-previews{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.coach-demo-thumb{margin:0;border-radius:11px;border:1px solid #33432e;background:#090f0a;overflow:hidden;min-width:0}
-.coach-demo-thumb img{display:block;width:100%;height:100px;object-fit:contain;background:#0c120d}
-.coach-demo-thumb figcaption{text-align:center;padding:5px;color:#caff18;font-size:11px}
-.coach-demo-thumb.empty{display:grid;place-items:center;min-height:118px;padding:10px;text-align:center;color:#b2c3b0}
+.coach-demo-thumb{margin:0;border-radius:11px;border:1px solid #492831;background:#130f12;overflow:hidden;min-width:0}
+.coach-demo-thumb img{display:block;width:100%;height:100px;object-fit:contain;background:#171215}
+.coach-demo-thumb figcaption{text-align:center;padding:5px;color:#ff354a;font-size:11px}
+.coach-demo-thumb.empty{display:grid;place-items:center;min-height:118px;padding:10px;text-align:center;color:#c7b4b8}
 @media(max-width:380px){.exercise-demo-head{align-items:stretch}.exercise-demo-options{width:100%;display:grid;grid-template-columns:1fr 1fr}.exercise-demo-switch{width:100%}}
 
 
 /* Orientação de execução — v10.9 */
-.exercise-guide{margin:14px 0 16px;padding:15px 14px;border:1px solid rgba(202,255,24,.26);border-radius:18px;background:linear-gradient(165deg,#172315,#0d160f);color:#eff9ea}
-.exercise-guide h3{font-size:16px;line-height:1.25;margin:0 0 10px;color:#d4ff63;font-weight:800}
-.exercise-aka{margin:0 0 12px;font-size:12px;line-height:1.45;color:#c6d2bf}
+.exercise-guide{margin:14px 0 16px;padding:15px 14px;border:1px solid rgba(255,37,57,.26);border-radius:18px;background:linear-gradient(165deg,#241519,#151013);color:#f8f0f2}
+.exercise-guide h3{font-size:16px;line-height:1.25;margin:0 0 10px;color:#ff6575;font-weight:800}
+.exercise-aka{margin:0 0 12px;font-size:12px;line-height:1.45;color:#cfc3c7}
 .exercise-aka strong{color:#fff;font-weight:650}
 .exercise-guide-steps{list-style:none;margin:0;padding:0;display:grid;gap:9px;counter-reset:none}
 .exercise-guide-steps li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
-.guide-step-number{display:grid;place-items:center;width:29px;height:29px;border-radius:10px;background:#caff18;color:#142007;font-size:13px;font-weight:900;flex:none}
-.exercise-guide-steps strong{font-size:12px;display:block;color:#f4ffed;margin:0 0 2px}
-.exercise-guide-steps p{font-size:12px;line-height:1.55;color:#c8d8c6;margin:0;overflow-wrap:anywhere}
+.guide-step-number{display:grid;place-items:center;width:29px;height:29px;border-radius:10px;background:#ff354a;color:#240b0f;font-size:13px;font-weight:900;flex:none}
+.exercise-guide-steps strong{font-size:12px;display:block;color:#f8f2f3;margin:0 0 2px}
+.exercise-guide-steps p{font-size:12px;line-height:1.55;color:#d2c5c8;margin:0;overflow-wrap:anywhere}
 .exercise-guide-callout{margin-top:12px;padding:11px 12px;border-radius:12px;line-height:1.55;font-size:12px}
 .exercise-guide-callout strong{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.03em;margin-bottom:3px}
 .exercise-guide-callout p{margin:0}
-.guide-tip{background:#203117;border-left:3px solid #caff18;color:#e8f1dc}
-.guide-error{background:#2c1d15;border-left:3px solid #fa9971;color:#f8dfd6}
-.guide-coach{background:#15232c;border-left:3px solid #76bbe9;color:#dbeaf6}
-.exercise-motion{border:1px solid rgba(202,255,24,.38);background:#1c2a0e;border-radius:14px;overflow:hidden;margin:12px 0}
-.exercise-motion summary{display:flex;align-items:center;cursor:pointer;color:#e3ff8d;font-size:13px;line-height:1.3;font-weight:800;padding:14px 13px;list-style:none}
+.guide-tip{background:#2a161c;border-left:3px solid #ff354a;color:#f6dfe2}
+.guide-error{background:#29171a;border-left:3px solid #ff5b6b;color:#f8dfd6}
+.guide-coach{background:#161319;border-left:3px solid #d98796;color:#f1d6dc}
+.exercise-motion{border:1px solid rgba(255,37,57,.38);background:#26171b;border-radius:14px;overflow:hidden;margin:12px 0}
+.exercise-motion summary{display:flex;align-items:center;cursor:pointer;color:#ff7d8b;font-size:13px;line-height:1.3;font-weight:800;padding:14px 13px;list-style:none}
 .exercise-motion summary::-webkit-details-marker{display:none}
-.exercise-motion summary:after{content:'toque para assistir';margin-left:auto;font-size:10px;color:#acc37c;font-weight:500}
-.exercise-motion[open] summary{border-bottom:1px solid rgba(202,255,24,.19)}
-.exercise-motion p{margin:10px 12px;font-size:12px;line-height:1.4;color:#cbdfbb}
-.exercise-motion video{width:100%;max-height:420px;aspect-ratio:16/9;object-fit:contain;background:#050805;display:block}
-.exercise-motion small{display:block;padding:10px 12px 12px;font-size:11px;color:#c6d6b5}
+.exercise-motion summary:after{content:'toque para assistir';margin-left:auto;font-size:10px;color:#d7a2a9;font-weight:500}
+.exercise-motion[open] summary{border-bottom:1px solid rgba(255,37,57,.19)}
+.exercise-motion p{margin:10px 12px;font-size:12px;line-height:1.4;color:#dbcccf}
+.exercise-motion video{width:100%;max-height:420px;aspect-ratio:16/9;object-fit:contain;background:#080708;display:block}
+.exercise-motion small{display:block;padding:10px 12px 12px;font-size:11px;color:#d4c2c6}
 .exercise-media-slot .exercise-pose-gallery{margin-top:12px}
 @media(max-width:390px){.exercise-guide{padding:12px 11px}.exercise-guide-steps{gap:10px}.exercise-motion summary{font-size:12px}.exercise-motion summary:after{font-size:9px}}
 
-.exercise-guide-editor{background:#111b11;border:1px solid #2e4326;padding:12px;border-radius:12px;display:block}
+.exercise-guide-editor{background:#171217;border:1px solid #46242d;padding:12px;border-radius:12px;display:block}
 .exercise-guide-editor:not([open]){display:block}
-.exercise-guide-editor summary{cursor:pointer;color:#d4ff64;font-size:13px;font-weight:700;list-style:revert}
-.exercise-guide-editor label{display:block;font-size:11px;font-weight:700;color:#cfe8c3;margin:11px 0 5px}
-.exercise-guide-editor textarea{display:block;width:100%;min-height:74px;resize:vertical;border-radius:10px;background:#091009;border:1px solid #344035;color:#fff;font:inherit;font-size:12px;line-height:1.4;padding:10px}
+.exercise-guide-editor summary{cursor:pointer;color:#ff6575;font-size:13px;font-weight:700;list-style:revert}
+.exercise-guide-editor label{display:block;font-size:11px;font-weight:700;color:#e7d2d5;margin:11px 0 5px}
+.exercise-guide-editor textarea{display:block;width:100%;min-height:74px;resize:vertical;border-radius:10px;background:#110d11;border:1px solid #48272e;color:#fff;font:inherit;font-size:12px;line-height:1.4;padding:10px}
 .exercise-guide-editor input{font-size:12px}

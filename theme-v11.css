@@ -37,7 +37,7 @@ body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved{
  margin:14px 20px 12px!important;min-height:310px!important;border-radius:25px!important;
  border:1px solid rgba(255,36,56,.75)!important;
  background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.78)),url("./brand-background.jpg") center/cover no-repeat!important;
- box-shadow:0 16px 35px #000b,0 0 20px #57ff231a!important
+ box-shadow:0 16px 35px #000b,0 0 20px #ff283a1a!important
 }
 body:has(.poster-coach-welcome) .ref-hero.ref-hero-approved .premium-brand-content{
  min-height:310px!important;padding:24px 15px!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:5px!important
@@ -241,7 +241,7 @@ body.student-neon .student-billing-card{display:none!important}
 }
 .app.student-app .student-hero-neon .names{font-size:clamp(12px,3.8vw,18px)!important;color:#fff!important;margin-top:9px!important}
 .app.student-app .student-hero-neon .tagline{font-size:clamp(8px,2vw,10px)!important;color:#f4bac0!important;letter-spacing:.19em!important;margin-top:7px!important}
-.app.student-app .topbar .brand-mark{width:38px!important;height:38px!important;object-fit:contain!important;padding:4px!important;background:#0a090b!important;border:1px solid #ff293c!important;box-shadow:0 0 10px #55ff3340!important}
+.app.student-app .topbar .brand-mark{width:38px!important;height:38px!important;object-fit:contain!important;padding:4px!important;background:#0a090b!important;border:1px solid #ff293c!important;box-shadow:0 0 10px #ff283a40!important}
 .app.student-app .student-billing-card{display:none!important}
 .app.student-app #content>.card{margin-left:3px!important;margin-right:3px!important}
 .app.student-app .bottomnav{
