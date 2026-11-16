@@ -25,6 +25,7 @@ let paymentNoticeEnabled=false,paymentNoticeDismissed=false;
 let selectedTrainingDayId=null;
 const demoGenderOverrides=new Map();
 let selectedStudentId=null,selectedStudentProfile=null;
+let studentBillingPlans=new Map();
 let loadErrors={};
 let data={measurements:[],meals:[],workouts:[],hormone_logs:[],students:[],skinfolds:[],progress_photos:[],
   exercise_library:[],training_plans:[],training_days:[],training_day_exercises:[],training_sessions:[],training_set_logs:[],training_checkins:[],diet_plans:[],diet_plan_meals:[]};
@@ -121,7 +122,7 @@ async function init(){
 
    if(!user){
      profile=null;isCoach=false;accountInactive=false;accountSuspended=false;suspendedStudentIds=new Set();paymentNoticeStudentIds=new Set();paymentNoticeEnabled=false;paymentNoticeDismissed=false;
-     selectedStudentId=null;selectedStudentProfile=null;
+     selectedStudentId=null;selectedStudentProfile=null;studentBillingPlans=new Map();
      data={measurements:[],meals:[],workouts:[],hormone_logs:[],students:[],skinfolds:[],progress_photos:[],exercise_library:[],training_plans:[],training_days:[],training_day_exercises:[],training_sessions:[],training_set_logs:[],training_checkins:[],diet_plans:[],diet_plan_meals:[]};
      clearPhotoDraft();
      render();
@@ -157,10 +158,13 @@ async function hydrate(){
  if(accountInactive){selectedStudentId=null;selectedStudentProfile=null;return;}
 
  if(isCoach){
-   const [r,s]=await Promise.all([
+   const [r,s,b]=await Promise.all([
     supabase.from("profiles").select("*").order("full_name"),
-    supabase.from("student_access_controls").select("user_id,is_suspended,payment_notice_enabled")
+    supabase.from("student_access_controls").select("user_id,is_suspended,payment_notice_enabled"),
+    supabase.from("student_billing_settings").select("user_id,plan_type,plan_start_date,billing_day")
    ]);
+   if(b.error)loadErrors.student_billing_settings=b.error.message;
+   else {delete loadErrors.student_billing_settings;studentBillingPlans=new Map((b.data||[]).map(x=>[x.user_id,x]));}
    if(r.error) loadErrors.students=r.error.message;
    if(s.error) loadErrors.student_access_controls=s.error.message;
    suspendedStudentIds=new Set((s.data||[]).filter(x=>x.is_suspended).map(x=>x.user_id));
@@ -1263,6 +1267,36 @@ function coachHome(){
 
  ${active?`<div class="card"><div class="eyebrow">Atividade recente</div><h2>Últimos registros</h2>${activityTimeline(6)}</div>`:""}`;
 }
+
+const billingPlanLabels={mensal:"Mensal",trimestral:"Trimestral",semestral:"Semestral"};
+function coachStudentPlan(uid){
+ const x=studentBillingPlans.get(uid);
+ return {type:billingPlanLabels[x?.plan_type]||"Não definido",start:x?.plan_start_date||null,period:{mensal:1,trimestral:3,semestral:6}[x?.plan_type]||0};
+}
+function coachPlanNextDate(uid){
+ const x=coachStudentPlan(uid);
+ if(!x.start||!x.period)return null;
+ const [y,m,d]=x.start.split("-").map(Number);
+ const now=attendanceDate();
+ let offset=x.period,renewal=null;
+ for(let i=0;i<120;i++,offset+=x.period){
+   const mi=y*12+m-1+offset,yr=Math.floor(mi/12),mo=mi%12+1;
+   renewal=[yr,String(mo).padStart(2,"0"),String(Math.min(d,new Date(Date.UTC(yr,mo,0)).getUTCDate())).padStart(2,"0")].join("-");
+   if(renewal>now)break;
+ }
+ return renewal;
+}
+function coachStudentPlanCard(uid){
+ const x=coachStudentPlan(uid);
+ return `<div class="card coach-plan-card">
+ <div class="eyebrow">Plano do aluno</div><h2>Dados da consultoria</h2>
+ <div class="coach-plan-grid">
+ <div><span>PLANO CONTRATADO</span><strong>${esc(x.type)}</strong></div>
+ <div><span>DATA DE INÍCIO</span><strong>${x.start?fmt(x.start):"A definir"}</strong></div>
+ <div><span>PRÓXIMA RENOVAÇÃO</span><strong>${coachPlanNextDate(uid)?fmt(coachPlanNextDate(uid)):"A definir"}</strong></div>
+ </div></div>`;
+}
+
 function studentDashboard(){
  if(!selectedStudentId)return `<div class="card"><div class="empty-state"><strong>Nenhum aluno selecionado</strong><span>Volte ao painel e escolha um aluno.</span></div></div>`;
  const m=last(data.measurements), meals=data.meals.filter(x=>x.meal_date===today()), works=data.workouts.filter(x=>x.workout_date===today());
@@ -1273,6 +1307,7 @@ function studentDashboard(){
    <div><div class="eyebrow">Ficha do aluno</div><h1>${esc(selectedStudentName())}</h1>
    <p>${esc(selectedStudentProfile?.goal||"Objetivo não informado")}${selectedStudentProfile?.age?` · ${esc(selectedStudentProfile.age)} anos`:""}${selectedStudentProfile?.height_cm?` · ${esc(selectedStudentProfile.height_cm)} cm`:""}</p></div>
  </div>
+ ${coachStudentPlanCard(selectedStudentId)}
  ${coachLoadWarning()}
  <div class="metric-grid">
    <div class="metric"><span class="small">ÚLTIMO PESO</span><strong>${m?.weight||0} kg</strong><div class="trend">${m?.assessment_date?fmt(m.assessment_date):"Sem avaliação"}</div></div>
@@ -1320,7 +1355,7 @@ function studentList(){
  <div class="list student-list" id="studentList">${data.students.map(s=>`<div class="item student-row ${s.user_id===selectedStudentId?"selected":""} ${suspendedStudentIds.has(s.user_id)?"student-is-suspended":""}" data-student-name="${esc((s.full_name||"Aluno").toLowerCase())}">
    <button type="button" class="student-main student-open" data-student="${s.user_id}" data-next="student">
      <span class="student-avatar-sm">${studentInitials(s.full_name||"Aluno")}</span>
-     <span class="student-list-copy"><strong>${esc(s.full_name||"Aluno")}</strong><small>${esc(s.goal||"Objetivo não informado")}</small>${studentCheckinIndicator(s.user_id)}</span>
+     <span class="student-list-copy"><strong>${esc(s.full_name||"Aluno")}</strong><small>${esc(s.goal||"Objetivo não informado")}</small><small class="coach-plan-inline">${esc(coachStudentPlan(s.user_id).type)} · Início: ${coachStudentPlan(s.user_id).start?fmt(coachStudentPlan(s.user_id).start):"A definir"}</small>${studentCheckinIndicator(s.user_id)}</span>
      <span class="badge">${suspendedStudentIds.has(s.user_id)?"Suspenso":paymentNoticeStudentIds.has(s.user_id)?"Aviso ativo":s.user_id===selectedStudentId?"Selecionado":"Ativo"}</span>
    </button>
    <div class="student-row-controls">
