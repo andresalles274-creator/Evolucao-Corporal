@@ -1,5 +1,5 @@
-const CACHE="evolucao-corporal-v11.55-coach-student-plans";
-const STATIC=["./","./index.html","./styles.css?v=10.8.0","./payment-lock.css?v=1.0.0","./payment-notice.css?v=1.0.0","./payment-notice.svg","./theme-v11.css?v=11.11.3","./app.js?v=10.10.3","./exercise-media.css?v=10.9.1","./training-checkins.css?v=1.0.0","./theme-black-red.css?v=1.1.1","./billing-v11.js?v=11.1.0","./ui-neon-v11.js?v=11.13.0","./config.js","./chat-v1.js?v=1.0.7","./brand-background.jpg","./coach-a-neon.svg","./icon.svg","./coach-gym-neon.svg"];
+const CACHE="evolucao-corporal-v11.56-daily-checkin-update";
+const STATIC=["./","./index.html","./styles.css?v=10.8.0","./payment-lock.css?v=1.0.0","./payment-notice.css?v=1.0.0","./payment-notice.svg","./theme-v11.css?v=11.11.3","./app.js?v=10.10.3","./exercise-media.css?v=10.9.1","./training-checkins.css?v=1.0.0","./theme-black-red.css?v=1.1.1","./billing-v11.js?v=11.1.0","./ui-neon-v11.js?v=11.13.0","./config.js","./chat-v1.js?v=1.0.7","./daily-checkin.js?v=1.0.3","./brand-background.jpg","./coach-a-neon.svg","./icon.svg","./coach-gym-neon.svg"];
 
 self.addEventListener("install",event=>{
   self.skipWaiting();
@@ -43,6 +43,7 @@ self.addEventListener("fetch",event=>{
     url.pathname.endsWith("/exercise-media.css") ||
     url.pathname.endsWith("/ui-neon-v11.js") ||
     url.pathname.endsWith("/chat-v1.js") ||
+    url.pathname.endsWith("/daily-checkin.js") ||
     url.pathname.endsWith("/styles.css") ||
     url.pathname.endsWith("/payment-lock.css") ||
     url.pathname.endsWith("/payment-notice.css") ||
