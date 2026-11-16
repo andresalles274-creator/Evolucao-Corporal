@@ -343,3 +343,14 @@ body .attendance-toggle:not(.finished){border-color:#513039!important;background
 body .attendance-toggle .attendance-square{border-color:#bd7480!important}
 body .exercise-number,body .diet-number{background:#e51b34!important;color:#fff!important}
 body .metric .trend,body .activity-arrow,body .student-status-line strong{color:#ff7181!important}
+
+
+/* Plano individual do aluno — painel do coach */
+.coach-plan-card{margin:12px 0 16px!important;border:1px solid rgba(245,63,79,.46)!important}
+.coach-plan-card h2{margin-bottom:14px!important}
+.coach-plan-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.coach-plan-grid>div{background:#161316;border:1px solid rgba(230,62,82,.23);border-radius:13px;padding:12px 10px;min-width:0}
+.coach-plan-grid>div:last-child{grid-column:1/-1}
+.coach-plan-grid span{display:block;font-size:10px;letter-spacing:.055em;font-weight:700;color:#c4a7ae;margin-bottom:6px}
+.coach-plan-grid strong{display:block;font-size:17px;color:#fff;overflow-wrap:anywhere}
+.student-list-copy .coach-plan-inline{display:block;margin-top:5px;color:#ff9aa4!important;font-weight:700;font-size:12px}
