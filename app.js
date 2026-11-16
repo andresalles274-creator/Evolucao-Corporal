@@ -80,7 +80,11 @@ const recordSchemas={
 };
 
 
-if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(()=>{});
+if("serviceWorker" in navigator){
+ navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).then(reg=>{
+   document.addEventListener("visibilitychange",()=>{if(!document.hidden)reg.update().catch(()=>{});});
+ }).catch(()=>{});
+}
 
 
 function fatalScreen(message){
