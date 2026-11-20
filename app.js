@@ -1,9 +1,9 @@
 
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
-import { createClinicalPanel } from "./clinical-panel.js?v=1.0.0";
+import { createClinicalPanel } from "./clinical-panel.js?v=1.1.0";
 
-const APP_VERSION="10.11.1";
+const APP_VERSION="10.12.0";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -1094,18 +1094,9 @@ function authView(){return `<section class="auth"><div class="authbox">
 <button class="btn btn-primary btn-full">Entrar</button>
 <button type="button" id="forgot" class="btn btn-ghost btn-full" style="margin-top:10px">Esqueci minha senha</button>
 </form>
-<form id="signupForm" hidden>
-<div class="field"><label>Nome completo</label><input name="name" required></div>
-<div class="field"><label>E-mail</label><input name="email" type="email" required></div>
-<div class="field"><label>Senha</label><input name="password" type="password" minlength="6" required></div>
-<div class="field"><label>Objetivo</label><select name="goal"><option>Hipertrofia</option><option>Emagrecimento</option><option>Condicionamento</option><option>Saúde</option></select></div>
-<div class="field"><label>Sexo (opcional)</label><select name="gender"><option value="">Prefiro não informar</option><option value="male">Masculino</option><option value="female">Feminino</option></select></div>
-<div class="field"><label>Como prefere ver a execução dos exercícios?</label><select name="demonstration_preference"><option value="">Escolher depois</option><option value="male">Com homem</option><option value="female">Com mulher</option></select></div>
-<button class="btn btn-primary btn-full">Criar minha conta</button>
-<p class="small">Confirme o e-mail antes do primeiro acesso, se solicitado.</p>
-</form></div></section>`}
+</div></section>`}
 function bindAuth(){
- $$(".tabs button").forEach(b=>b.onclick=()=>{$$(".tabs button").forEach(x=>x.classList.toggle("active",x===b));$("#loginForm").hidden=b.dataset.tab!=="login";$("#signupForm").hidden=b.dataset.tab!=="signup"});
+ $$(".tabs button").forEach(b=>b.onclick=()=>{if(b.dataset.tab==="signup")location.assign(new URL('./cadastro.html',location.href).href);});
  $("#loginForm").onsubmit=async e=>{
   e.preventDefault();
   const form=e.currentTarget, f=new FormData(form);
@@ -1131,7 +1122,7 @@ function bindAuth(){
    }
   }finally{if(btn){btn.disabled=false;btn.textContent=originalText;}}
  };
- $("#signupForm").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.currentTarget);let r=await supabase.auth.signUp({email:String(f.get("email")).trim(),password:String(f.get("password")),options:{data:{full_name:String(f.get("name")).trim(),goal:String(f.get("goal")),gender:String(f.get("gender")||"")||null,demonstration_preference:String(f.get("demonstration_preference")||"")||null},emailRedirectTo:location.origin+location.pathname}});if(r.error)return toast("Erro no cadastro: "+r.error.message,true);toast(r.data.session?"Conta criada com sucesso.":"Conta criada. Confira seu e-mail para confirmar.")};
+
  $("#forgot").onclick=async()=>{let email=prompt("Digite seu e-mail:");if(!email)return;let r=await supabase.auth.resetPasswordForEmail(email,{redirectTo:CANONICAL_APP_URL});toast(r.error?r.error.message:"Link de recuperação enviado.",!!r.error)};
 }
 

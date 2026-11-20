@@ -48,3 +48,5 @@ body .app:not(.student-app) .clinical-entry .coach-site-copy small{font-size:14p
 body.clinical-mode .topbar .user-chip{background:#f1f5f9!important;border:1px solid #d5e1e8!important;box-shadow:none!important}
 body.clinical-mode .topbar .avatar{background:#e7eff3!important;border:1px solid #cad9e2!important;box-shadow:none!important}
 body.clinical-mode .topbar .user-chip #logout{background:#fff!important;border:1px solid #c9d6e0!important;color:#284456!important;box-shadow:none!important}
+
+.cp-heading-actions{display:flex;gap:10px;flex-wrap:wrap}.cp-intake-details{margin:0}.cp-intake-details>div{padding:12px 0;border-bottom:1px solid #e4ebf1}.cp-intake-details dt{font-size:14px;color:#5b7181}.cp-intake-details dd{margin:4px 0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:16px;color:#223344}
