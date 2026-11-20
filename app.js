@@ -3,7 +3,7 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 import { createClinicalPanel } from "./clinical-panel.js?v=1.0.0";
 
-const APP_VERSION="10.11.0";
+const APP_VERSION="10.11.1";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -1139,7 +1139,7 @@ function shell(){
  const name=profile?.full_name||user.email;
  return `<div class="app${isCoach?"":" student-app"}"><header class="topbar">
  <div class="brand-wrap">${backTarget()?`<button type="button" class="top-back" data-back aria-label="Voltar">←</button>`:""}<img src="./coach-a-neon.svg" class="brand-mark" alt="Logo Evolução Corporal"><div><div class="small">Evolução Corporal <span class="version-badge">v${APP_VERSION}</span></div><div class="brand">${isCoach?"Painel do Coach":"Olá, "+esc(name.split(" ")[0])}</div></div></div>
- <div class="top-actions">${isCoach?`<button type="button" class="clinical-entry" id="openClinicalPanel">Fichas dos alunos</button>`:""}${isCoach&&selectedStudentId?`<div class="active-student-chip"><span>${studentInitials(selectedStudentName())}</span><div><small>Aluno ativo</small><strong>${esc(selectedStudentName().split(" ")[0])}</strong></div></div>`:""}<div class="user-chip"><span class="avatar">${esc(name[0])}</span><button id="logout" class="btn btn-ghost" style="padding:7px 10px">Sair</button></div></div></header>
+ <div class="top-actions">${isCoach&&selectedStudentId?`<div class="active-student-chip"><span>${studentInitials(selectedStudentName())}</span><div><small>Aluno ativo</small><strong>${esc(selectedStudentName().split(" ")[0])}</strong></div></div>`:""}<div class="user-chip"><span class="avatar">${esc(name[0])}</span><button id="logout" class="btn btn-ghost" style="padding:7px 10px">Sair</button></div></div></header>
  ${!isCoach&&paymentNoticeEnabled&&!paymentNoticeDismissed?`<section class="student-payment-notice" aria-label="Aviso de mensalidade pendente">
    <button type="button" class="student-payment-dismiss" id="dismissPaymentNotice" aria-label="Fechar aviso de mensalidade">×</button>
    <img src="./payment-notice.svg" alt="Mensalidade pendente. Entre em contato com seu coach para regularizar. Você pode continuar usando o aplicativo." draggable="false">
@@ -1151,7 +1151,6 @@ function shell(){
 function nav(r,i,l){return `<button class="navbtn ${route===r?"active":""}" data-route="${r}"><span class="ico">${i}</span>${l}</button>`}
 const clinicalPanel=createClinicalPanel({db:supabase,esc,fmt,today,authorized:()=>isCoach&&route==="clinical"?user?.id:null,notify:toast,exit:async()=>{route="home";await hydrate();render();},openStudent:async id=>{await hydrate();await chooseStudent(id,"student");}});
 function bindShell(){
- if($("#openClinicalPanel"))$("#openClinicalPanel").onclick=()=>{route="clinical";render();};
  $("#logout").onclick=()=>supabase.auth.signOut();
  if($("#dismissPaymentNotice"))$("#dismissPaymentNotice").onclick=()=>{paymentNoticeDismissed=true;$(".student-payment-notice")?.remove();};
  $$(".navbtn").forEach(b=>b.onclick=()=>{route=b.dataset.route;render()});
@@ -1256,6 +1255,10 @@ function coachHome(){
  <div class="coach-welcome">
    <div><div class="eyebrow">Área profissional</div><h2>Painel do Coach</h2><p class="sub">Gerencie seus alunos e acompanhe a evolução em um só lugar.</p></div>
    <div class="coach-total"><span>${data.students.length}</span><small>aluno(s)</small></div>
+   <button type="button" class="coach-site-button clinical-entry" data-go="clinical">
+     <span class="coach-site-icon" aria-hidden="true">▤</span>
+     <span class="coach-site-copy"><strong>Fichas dos alunos</strong><small>Cadastros, evolução, medidas e exames</small></span>
+   </button>
    <a class="coach-site-button" href="https://consultoria-andre-salles.ca-pacientes-andre.workers.dev/" target="_blank" rel="noopener noreferrer" aria-label="Abrir site da consultoria Evolução Corporal em nova aba">
      <span class="coach-site-icon" aria-hidden="true">↗</span>
      <span class="coach-site-copy"><strong>Abrir site da consultoria</strong><small>Visualizar o site Evolução Corporal</small></span>
