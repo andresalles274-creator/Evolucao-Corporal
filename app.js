@@ -1123,7 +1123,37 @@ function bindAuth(){
   }finally{if(btn){btn.disabled=false;btn.textContent=originalText;}}
  };
 
- $("#forgot").onclick=async()=>{let email=prompt("Digite seu e-mail:");if(!email)return;let r=await supabase.auth.resetPasswordForEmail(email,{redirectTo:CANONICAL_APP_URL});toast(r.error?r.error.message:"Link de recuperação enviado.",!!r.error)};
+ $("#forgot").onclick=async()=>{
+  const input=$("#loginForm input[name=email]");
+  const email=String(input?.value||"").trim().toLowerCase();
+  if(!email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){
+    toast("Informe primeiro seu e-mail cadastrado no campo E-mail.",true);
+    input?.focus();
+    return;
+  }
+  const button=$("#forgot");
+  button.disabled=true;
+  const original=button.textContent;
+  button.textContent="Solicitando recuperação...";
+  try{
+    const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:CANONICAL_APP_URL});
+    if(error){
+      const msg=String(error.message||"");
+      toast(/rate limit|too many requests|429/i.test(msg)
+        ?"Muitas solicitações. Aguarde alguns minutos antes de tentar novamente."
+        :/failed to fetch|network|load failed/i.test(msg)
+        ?"Falha de conexão. Confira sua internet e tente novamente."
+        :"Não foi possível solicitar o link: "+msg,true);
+      return;
+    }
+    toast("Solicitação recebida. Se o envio estiver disponível, verifique a caixa de entrada, Spam e Lixo Eletrônico do seu e-mail. Não crie outra conta.");
+  }catch(err){
+    toast("Não foi possível solicitar a recuperação. Verifique sua conexão e tente novamente.",true);
+  }finally{
+    button.disabled=false;
+    button.textContent=original;
+  }
+ };
 }
 
 function shell(){
