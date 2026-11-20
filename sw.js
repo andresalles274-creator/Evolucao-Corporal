@@ -1,5 +1,5 @@
-const CACHE="evolucao-corporal-v11.59-featured-exercise-editor";
-const STATIC=["./","./index.html","./styles.css?v=10.8.0","./payment-lock.css?v=1.0.0","./payment-notice.css?v=1.0.0","./payment-notice.svg","./theme-v11.css?v=11.11.3","./app.js?v=10.10.3","./exercise-media.css?v=10.9.1","./training-checkins.css?v=1.0.0","./theme-black-red.css?v=1.1.1","./billing-v11.js?v=11.1.0","./ui-neon-v11.js?v=11.13.0","./config.js","./chat-v1.js?v=1.0.7","./daily-checkin.js?v=1.0.4","./featured-exercise.js?v=1.0.1","./brand-background.jpg","./coach-a-neon.svg","./icon.svg","./coach-gym-neon.svg"];
+const CACHE="evolucao-corporal-v11.60-clinical-panel";
+const STATIC=["./clinical-panel.js?v=1.0.0","./clinical-panel.css?v=1.0.0","./","./index.html","./styles.css?v=10.8.0","./payment-lock.css?v=1.0.0","./payment-notice.css?v=1.0.0","./payment-notice.svg","./theme-v11.css?v=11.11.3","./app.js?v=10.11.0","./exercise-media.css?v=10.9.1","./training-checkins.css?v=1.0.0","./theme-black-red.css?v=1.1.1","./billing-v11.js?v=11.1.0","./ui-neon-v11.js?v=11.13.0","./config.js","./chat-v1.js?v=1.0.7","./daily-checkin.js?v=1.0.4","./featured-exercise.js?v=1.0.1","./brand-background.jpg","./coach-a-neon.svg","./icon.svg","./coach-gym-neon.svg"];
 
 self.addEventListener("install",event=>{
   self.skipWaiting();
@@ -37,6 +37,8 @@ self.addEventListener("fetch",event=>{
   }
 
   const isCore =
+    url.pathname.endsWith("/clinical-panel.js") ||
+    url.pathname.endsWith("/clinical-panel.css") ||
     url.pathname.endsWith("/app.js") ||
     url.pathname.endsWith("/theme-black-red.css") ||
     url.pathname.endsWith("/training-checkins.css") ||

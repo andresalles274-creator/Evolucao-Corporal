@@ -1,0 +1,91 @@
+// Fichas profissionais: o servidor verifica a permissão de coach por RLS.
+export function createClinicalPanel({db,esc,fmt,today,authorized,notify,exit,openStudent}){
+ const bucket='student-clinical-exams';
+ let host=null,owner=null,students=[],selected=null,tab='cadastro',q='',status='all',record={},exams=[],measures=[],folds=[],photos=[],error='',busy=false,loading=false,request=0;
+ const fields=[['weight','Peso','kg'],['waist','Cintura','cm'],['hip','Quadril','cm'],['glute','Glúteos','cm'],['chest','Tórax','cm'],['arm_right','Braço direito','cm'],['arm_left','Braço esquerdo','cm'],['forearm_right','Antebraço direito','cm'],['forearm_left','Antebraço esquerdo','cm'],['thigh_right','Coxa direita','cm'],['thigh_left','Coxa esquerda','cm'],['calf_right','Panturrilha direita','cm'],['calf_left','Panturrilha esquerda','cm']];
+ const tabs=[['cadastro','Cadastro'],['evolucao','Evolução'],['medidas','Medidas'],['exames','Exames'],['observacoes','Observações']];
+ const num=v=>v!==null&&v!==''&&v!==undefined&&Number.isFinite(Number(v))&&Number(v)>0;
+ const number=v=>Number(v).toLocaleString('pt-BR',{maximumFractionDigits:2});
+ const value=(v,unit='')=>num(v)?`${number(v)} ${unit}`:'—';
+ const student=()=>students.find(s=>s.user_id===selected);
+ const active=()=>host?.isConnected&&authorized()===owner;
+ function empty(message){return `<p class="cp-empty">${esc(message)}</p>`;}
+ function input(label,name,v='',type='text',extra=''){return `<label>${label}<input name="${name}" type="${type}" value="${esc(v??'')}" ${extra}></label>`;}
+ function area(label,name,v=''){return `<label>${label}<textarea name="${name}" rows="4" maxlength="12000">${esc(v)}</textarea></label>`;}
+ function header(){return `<header class="cp-heading"><div><p class="cp-kicker">EVOLUÇÃO CORPORAL · ÁREA DO COACH</p><h1>Fichas dos alunos</h1><p>Cadastro e acompanhamento em um só lugar.</p></div><button type="button" data-cp-exit>Voltar ao aplicativo</button></header>`;}
+ function skeleton(){return `<section class="clinical-panel">${header()}<p role="status">Carregando fichas…</p></section>`;}
+ function list(){
+  const filtered=students.filter(s=>(status==='all'||(status==='active'?s.is_active!==false:s.is_active===false))&&`${s.full_name} ${s.goal}`.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().includes(q.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()));
+  return `<aside class="cp-sidebar"><div class="cp-list-tools"><h2>Alunos <span>${students.length}</span></h2><label>Buscar aluno<input id="cp-search" type="search" value="${esc(q)}" placeholder="Nome ou objetivo"></label><label>Situação<select id="cp-status"><option value="all" ${status==='all'?'selected':''}>Todos os cadastros</option><option value="active" ${status==='active'?'selected':''}>Ativos</option><option value="inactive" ${status==='inactive'?'selected':''}>Inativos</option></select></label></div><div class="cp-students">${filtered.map(s=>`<button type="button" class="cp-student ${s.user_id===selected?'selected':''}" data-cp-student="${esc(s.user_id)}" aria-pressed="${s.user_id===selected}"><span class="cp-initial">${esc((s.full_name||'A').slice(0,1))}</span><span><strong>${esc(s.full_name||'Aluno')}</strong><small>${esc(s.goal||'Objetivo não informado')}</small><small>${s.is_active===false?'Inativo':'Ativo'}</small></span></button>`).join('')||empty('Nenhum aluno encontrado.')}</div></aside>`;
+ }
+ function profileForm(){const s=student();return `<form id="cp-profile" class="cp-card"><h3>Dados cadastrais</h3><div class="cp-form-grid">${input('Nome completo','full_name',s.full_name,'text','required maxlength="160"')}${input('Objetivo','goal',s.goal,'text','maxlength="200"')}${input('Idade','age',s.age,'number','min="1" max="120"')}${input('Altura (cm)','height_cm',s.height_cm,'number','min="30" max="250" step="0.1"')}${input('Telefone','phone',record.phone,'tel','maxlength="40"')}${input('Profissão','occupation',record.occupation,'text','maxlength="160"')}</div><p class="cp-muted">Cadastro em ${fmt(s.created_at)} · ${s.is_active===false?'Inativo':'Ativo'}</p><button class="cp-primary" type="submit">Salvar cadastro</button></form><form id="cp-health" class="cp-card"><h3>Histórico e cuidados</h3>${area('Histórico de saúde','health_history',record.health_history)}${area('Medicamentos informados','medications',record.medications)}${area('Lesões, limitações e cuidados no treino','limitations',record.limitations)}<button class="cp-primary" type="submit">Salvar histórico</button></form>`;}
+ function measuresView(){return `<section class="cp-card"><div class="cp-card-head"><h3>Histórico de medidas</h3><button type="button" data-cp-new-measure>Registrar medidas</button></div><form id="cp-measure" hidden><h3>Nova avaliação</h3><div class="cp-form-grid">${input('Data','assessment_date',today(),'date','required')}${fields.map(([key,label,unit])=>input(`${label} (${unit})`,key,'','number','min="0.1" step="0.1"')).join('')}</div><button type="submit" class="cp-primary">Salvar avaliação</button></form>${measures.length?`<div class="cp-table-wrap"><table><thead><tr><th scope="col">Medida</th>${measures.map(m=>`<th scope="col">${fmt(m.assessment_date)}</th>`).join('')}</tr></thead><tbody>${fields.map(([key,label,unit])=>`<tr><th scope="row">${label} (${unit})</th>${measures.map(m=>`<td>${value(m[key])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`:empty('Nenhuma avaliação registrada para este aluno.')}</section><section class="cp-card"><h3>Avaliações por dobras cutâneas</h3>${folds.length?`<div class="cp-table-wrap"><table><thead><tr><th>Data</th><th>Protocolo</th><th>Tríceps</th><th>Abdominal</th><th>Coxa</th></tr></thead><tbody>${folds.map(m=>`<tr><td>${fmt(m.assessment_date)}</td><td>${esc(m.protocol)}</td><td>${value(m.triceps,'mm')}</td><td>${value(m.abdominal,'mm')}</td><td>${value(m.thigh,'mm')}</td></tr>`).join('')}</tbody></table></div>`:empty('Nenhuma avaliação por dobras registrada.')}</section>`;}
+ function delta(key){const a=measures.filter(m=>num(m[key]));return a.length>1?`${Number(a[0][key])-Number(a.at(-1)[key])>0?'+':''}${number(Number(a[0][key])-Number(a.at(-1)[key]))} ${key==='weight'?'kg':'cm'}`:'—';}
+ function chart(){
+  const a=measures.filter(m=>num(m.weight)).slice().reverse();
+  if(a.length<2)return empty('Registre pelo menos duas avaliações com peso para ver o gráfico.');
+  const dates=a.map(m=>new Date(m.assessment_date+'T12:00:00').getTime()),minT=Math.min(...dates),maxT=Math.max(...dates);
+  const vals=a.map(m=>Number(m.weight)),min=Math.min(...vals)-1,max=Math.max(...vals)+1;
+  const points=a.map((m,i)=>[48+(maxT===minT?i/Math.max(1,a.length-1):(dates[i]-minT)/(maxT-minT))*670,170-(Number(m.weight)-min)/(max-min)*135]);
+  return `<svg class="cp-chart" viewBox="0 0 760 220" role="img" aria-label="Evolução do peso de ${fmt(a[0].assessment_date)} a ${fmt(a.at(-1).assessment_date)}"><line x1="48" x2="720" y1="170" y2="170" stroke="#cbd5e1"/><text x="4" y="36">${number(max)} kg</text><text x="4" y="170">${number(min)} kg</text><polyline points="${points.map(p=>p.join(',')).join(' ')}" fill="none" stroke="#087f8c" stroke-width="3"/>${points.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#087f8c"><title>${fmt(a[i].assessment_date)}: ${value(a[i].weight,'kg')}</title></circle>`).join('')}<text x="48" y="204">${fmt(a[0].assessment_date)}</text><text x="720" y="204" text-anchor="end">${fmt(a.at(-1).assessment_date)}</text></svg>`;
+ }
+ function evolution(){return `<div class="cp-metrics">${[['Peso atual',value(measures[0]?.weight,'kg')],['Variação de peso',delta('weight')],['Variação de cintura',delta('waist')],['Avaliações',measures.length]].map(([label,v])=>`<div class="cp-card"><small>${label}</small><strong>${v}</strong></div>`).join('')}</div><section class="cp-card"><h3>Evolução do peso</h3><p class="cp-muted">Variação entre o primeiro e o último registro válido. Valores não preenchidos não entram no cálculo.</p>${chart()}</section><section class="cp-card"><h3>Fotos de evolução</h3><p class="cp-muted">Registros originais organizados por data.</p>${photos.length?`<div class="cp-photos">${photos.map(p=>`<figure>${p.signed_url?`<a href="${esc(p.signed_url)}" target="_blank" rel="noopener noreferrer"><img src="${esc(p.signed_url)}" alt="${esc(p.photo_type)} em ${fmt(p.photo_date)}" loading="lazy"></a>`:empty('Foto indisponível.')}<figcaption>${fmt(p.photo_date)} · ${esc(({front:'Frente',side:'Lado',back:'Costas'})[p.photo_type]||p.photo_type)}${p.notes?`<p>${esc(p.notes)}</p>`:''}</figcaption></figure>`).join('')}</div>`:empty('Nenhuma foto de evolução salva.')}</section>`;}
+ function examsView(){return `<form id="cp-exam" class="cp-card"><h3>Adicionar exame</h3><div class="cp-form-grid">${input('Nome do exame','title','','text','required maxlength="160"')}${input('Data do exame','exam_date',today(),'date','required')}</div>${area('Observações sobre o exame','notes')}<label>Arquivo PDF ou imagem (até 15 MB)<input type="file" name="file" accept="application/pdf,image/jpeg,image/png,image/webp" required></label><button type="submit" class="cp-primary">Salvar exame</button></form><section class="cp-card"><h3>Exames arquivados</h3>${exams.map(e=>`<article class="cp-exam-row"><div><strong>${esc(e.title)}</strong><small>${fmt(e.exam_date)} · ${esc(e.file_name||'Sem anexo')}</small><p>${esc(e.notes)}</p></div><button type="button" data-cp-exam="${esc(e.id)}">Abrir arquivo</button></article>`).join('')||empty('Nenhum exame anexado para este aluno.')}</section>`;}
+ function paint(){if(!active())return;const s=student();host.innerHTML=`<section class="clinical-panel">${header()}<div class="cp-layout">${list()}<div class="cp-main">${s?`<div class="cp-student-head"><div><p class="cp-kicker">FICHA INDIVIDUAL</p><h2>${esc(s.full_name||'Aluno')}</h2><p>${esc(s.goal||'Objetivo não informado')}</p></div><button type="button" data-cp-training>Treino e dieta</button></div><nav class="cp-tabs" aria-label="Seções da ficha">${tabs.map(([id,label])=>`<button type="button" data-cp-tab="${id}" aria-current="${tab===id?'page':'false'}" class="${tab===id?'selected':''}">${label}</button>`).join('')}</nav>${loading?'<p role="status">Carregando dados do aluno…</p>':error?`<div class="cp-error" role="alert">${esc(error)}<button type="button" data-cp-retry>Tentar novamente</button></div>`:tab==='cadastro'?profileForm():tab==='evolucao'?evolution():tab==='medidas'?measuresView():tab==='exames'?examsView():`<form id="cp-notes" class="cp-card"><h3>Observações do acompanhamento</h3>${area('Anotações do coach','notes',record.notes)}<p class="cp-muted">Última atualização: ${fmt(record.updated_at)}. Visível apenas para coaches.</p><button type="submit" class="cp-primary">Salvar observações</button></form>`}`:empty('Selecione um aluno para abrir a ficha.')}</div></div></section>`;bind();}
+ async function loadStudent(){
+  const id=selected,token=++request;loading=true;error='';record={};exams=[];measures=[];folds=[];photos=[];paint();
+  try{
+   const results=await Promise.all([db.from('coach_student_records').select('*').eq('user_id',id).maybeSingle(),db.from('coach_student_exams').select('*').eq('user_id',id).order('exam_date',{ascending:false}),db.from('measurements').select('*').eq('user_id',id).order('assessment_date',{ascending:false}).order('created_at',{ascending:false}),db.from('skinfolds').select('*').eq('user_id',id).order('assessment_date',{ascending:false}),db.from('progress_photos').select('*').eq('user_id',id).order('photo_date',{ascending:false})]);
+   for(const r of results)if(r.error)throw r.error;
+   const signed=await Promise.all(results[4].data.map(async p=>{const r=await db.storage.from('evolution-photos').createSignedUrl(p.storage_path,3600);return {...p,signed_url:r.data?.signedUrl||''};}));
+   if(token!==request||!active())return;
+   record=results[0].data||{};exams=results[1].data;measures=results[2].data;folds=results[3].data;photos=signed;
+  }catch(e){if(token===request)error='Não foi possível carregar esta ficha. '+(e.message||'Verifique a conexão.');}
+  finally{if(token===request){loading=false;paint();}}
+ }
+ async function save(form,task){
+  if(busy||!active())return;busy=true;const id=selected,controls=[...host.querySelectorAll('button,input,select,textarea')];controls.forEach(b=>b.disabled=true);
+  try{await task(id);if(active()&&selected===id){notify('Salvo online com sucesso.');await loadStudent();}}
+  catch(e){if(active())notify('Não foi possível salvar: '+(e.message||e),true);}
+  finally{busy=false;if(active())controls.forEach(b=>b.disabled=false);}
+ }
+ const checked=async promise=>{const r=await promise;if(r.error)throw r.error;return r.data;};
+ async function saveRecord(id,values){await checked(db.from('coach_student_records').upsert({user_id:id,...values,updated_at:new Date().toISOString()},{onConflict:'user_id'}).select().single());}
+ function bind(){
+  host.querySelector('[data-cp-exit]')?.addEventListener('click',exit);
+  host.querySelector('[data-cp-training]')?.addEventListener('click',()=>openStudent(selected));
+  host.querySelector('[data-cp-retry]')?.addEventListener('click',loadStudent);
+  host.querySelectorAll('[data-cp-student]').forEach(b=>b.onclick=()=>{if(busy)return;selected=b.dataset.cpStudent;loadStudent();});
+  host.querySelectorAll('[data-cp-tab]').forEach(b=>b.onclick=()=>{if(busy)return;tab=b.dataset.cpTab;paint();});
+  const search=host.querySelector('#cp-search');if(search)search.oninput=()=>{const pos=search.selectionStart;q=search.value;paint();const next=host.querySelector('#cp-search');next.focus();next.setSelectionRange(pos,pos);};
+  const filter=host.querySelector('#cp-status');if(filter)filter.onchange=()=>{status=filter.value;paint();};
+  host.querySelector('[data-cp-new-measure]')?.addEventListener('click',()=>{host.querySelector('#cp-measure').hidden=false;host.querySelector('#cp-measure input').focus();});
+  const on=(id,fn)=>{const f=host.querySelector(id);if(f)f.onsubmit=e=>{e.preventDefault();const fd=new FormData(f);save(f,uid=>fn(fd,uid));};};
+  on('#cp-profile',async(fd,id)=>{
+   if(!String(fd.get('full_name')).trim())throw new Error('Preencha o nome completo.');
+   const updated=await checked(db.from('profiles').update({full_name:String(fd.get('full_name')).trim(),goal:String(fd.get('goal')).trim(),age:fd.get('age')?Number(fd.get('age')):null,height_cm:fd.get('height_cm')?Number(fd.get('height_cm')):null}).eq('user_id',id).select().single());
+   students=students.map(s=>s.user_id===id?updated:s);
+   await saveRecord(id,{phone:String(fd.get('phone')),occupation:String(fd.get('occupation'))});
+  });
+  on('#cp-health',async(fd,id)=>saveRecord(id,Object.fromEntries(['health_history','medications','limitations'].map(k=>[k,String(fd.get(k))]))));
+  on('#cp-notes',async(fd,id)=>saveRecord(id,{notes:String(fd.get('notes'))}));
+  on('#cp-measure',async(fd,id)=>{const row={user_id:id,assessment_date:String(fd.get('assessment_date'))};for(const [key]of fields)row[key]=fd.get(key)?Number(fd.get(key)):null;if(!fields.some(([key])=>num(row[key])))throw new Error('Preencha pelo menos uma medida.');await checked(db.from('measurements').insert(row).select().single());});
+  on('#cp-exam',async(fd,id)=>{
+   const file=fd.get('file');if(!file?.size)throw new Error('Selecione o arquivo do exame.');
+   const types={'application/pdf':'pdf','image/jpeg':'jpg','image/png':'png','image/webp':'webp'};
+   if(!types[file.type]||file.size>15*1024*1024)throw new Error('Use PDF, JPG, PNG ou WebP de até 15 MB.');
+   const path=`${id}/${crypto.randomUUID()}.${types[file.type]}`;
+   await checked(db.storage.from(bucket).upload(path,file,{contentType:file.type,upsert:false}));
+   try{await checked(db.from('coach_student_exams').insert({user_id:id,title:String(fd.get('title')).trim(),exam_date:String(fd.get('exam_date')),notes:String(fd.get('notes')),storage_path:path,file_name:file.name}).select().single());}
+   catch(e){await db.storage.from(bucket).remove([path]);throw e;}
+  });
+  host.querySelectorAll('[data-cp-exam]').forEach(b=>b.onclick=async()=>{if(!active())return;const exam=exams.find(e=>e.id===b.dataset.cpExam);if(!exam?.storage_path)return;const win=window.open('about:blank','_blank');if(win)win.opener=null;try{const r=await checked(db.storage.from(bucket).createSignedUrl(exam.storage_path,300));if(!active()){win?.close();return;}if(win)win.location=r.signedUrl;else{const a=document.createElement('a');a.href=r.signedUrl;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Abrir exame';b.after(a);}}catch(e){win?.close();notify('Não foi possível abrir o exame.',true);}});
+ }
+ async function mount(element){
+  host=element;owner=authorized();if(!owner)return;selected=null;error='';loading=true;host.innerHTML=skeleton();host.querySelector('[data-cp-exit]').onclick=exit;
+  const token=++request;
+  try{const r=await db.from('profiles').select('*').order('full_name');if(r.error)throw r.error;if(!active()||token!==request)return;students=(r.data||[]).filter(s=>s.user_id!==owner);q='';status='all';selected=students[0]?.user_id||null;if(selected)await loadStudent();else{loading=false;paint();}}
+  catch(e){if(active()&&token===request){host.innerHTML=`<section class="clinical-panel">${header()}<div role="alert" class="cp-error">Não foi possível carregar os cadastros.<button type="button" id="cp-load-retry">Tentar novamente</button></div></section>`;host.querySelector('[data-cp-exit]').onclick=exit;host.querySelector('#cp-load-retry').onclick=()=>mount(host);}}
+ }
+ return {mount};
+}
