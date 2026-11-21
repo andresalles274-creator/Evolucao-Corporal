@@ -1126,7 +1126,7 @@ function bindAuth(){
  $("#forgot").onclick=async()=>{
   const input=$("#loginForm input[name=email]");
   const email=String(input?.value||"").trim().toLowerCase();
-  if(!email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
     toast("Informe primeiro seu e-mail cadastrado no campo E-mail.",true);
     input?.focus();
     return;
