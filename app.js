@@ -2,6 +2,7 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 import { createClinicalPanel } from "./clinical-panel.js?v=1.1.0";
+import { createPresentialIntake } from "./presential-intake.js?v=1.0.0";
 
 const APP_VERSION="10.12.0";
 const PHOTO_BUCKET="evolution-photos";
@@ -1054,6 +1055,7 @@ function inactiveView(){
 function render(){
  const root=$("#app");
  document.body.classList.toggle("clinical-mode",!!user&&isCoach&&route==="clinical");
+ document.body.classList.toggle("presential-mode",!!user&&isCoach&&route==="presential");
  if(!user){root.innerHTML=authView();bindAuth();return}
  if(accountInactive){
   root.innerHTML=inactiveView();
@@ -1177,6 +1179,7 @@ function shell(){
  <nav class="bottomnav">${nav("home","⌂","Visão geral")}${nav("measures","▥","Medidas")}${nav("food","◉","Alimentação")}${nav("training","✦","Meu treino")}${nav("hormones","⌁","Uso hormonal")}${nav(isCoach?"coach":"profile","♟",isCoach?"Alunos":"Meu perfil")}</nav></div>`;
 }
 function nav(r,i,l){return `<button class="navbtn ${route===r?"active":""}" data-route="${r}"><span class="ico">${i}</span>${l}</button>`}
+const presentialPanel=createPresentialIntake({db:supabase,authorized:()=>isCoach&&route==="presential"?user?.id:null,notify:toast,exit:async()=>{route="home";await hydrate();render();}});
 const clinicalPanel=createClinicalPanel({db:supabase,esc,fmt,today,authorized:()=>isCoach&&route==="clinical"?user?.id:null,notify:toast,exit:async()=>{route="home";await hydrate();render();},openStudent:async id=>{await hydrate();await chooseStudent(id,"student");}});
 function bindShell(){
  $("#logout").onclick=()=>supabase.auth.signOut();
@@ -1186,6 +1189,7 @@ function bindShell(){
 }
 function drawRoute(){
  const c=$("#content");
+ if(route==="presential"&&isCoach){presentialPanel.mount(c);return;}
  if(route==="clinical"&&isCoach){clinicalPanel.mount(c);return;}
  c.innerHTML=route==="home"?(isCoach?coachHome():home()):route==="student"&&isCoach?studentDashboard():route==="photos"?photos():route==="measures"?measures():route==="food"?food():route==="training"?trainingView():route==="trainingDay"?trainingDayView():route==="workouts"?workouts():route==="hormones"?hormones():route==="coach"&&isCoach?coach():profileView();
  bindRoute();drawChart();
@@ -1283,6 +1287,7 @@ function coachHome(){
  <div class="coach-welcome">
    <div><div class="eyebrow">Área profissional</div><h2>Painel do Coach</h2><p class="sub">Gerencie seus alunos e acompanhe a evolução em um só lugar.</p></div>
    <div class="coach-total"><span>${data.students.length}</span><small>aluno(s)</small></div>
+   <button type="button" class="coach-site-button clinical-entry" data-go="presential"><span class="coach-site-icon" aria-hidden="true">✎</span><span class="coach-site-copy"><strong>Atendimento presencial</strong><small>Entrevista inicial, anamnese, medidas e anexos</small></span></button>
    <button type="button" class="coach-site-button clinical-entry" data-go="clinical">
      <span class="coach-site-icon" aria-hidden="true">▤</span>
      <span class="coach-site-copy"><strong>Fichas dos alunos</strong><small>Cadastros, evolução, medidas e exames</small></span>
