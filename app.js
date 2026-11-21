@@ -886,6 +886,13 @@ async function chooseStudent(id,nextRoute=null){
  await loadStudentData();
  if(nextRoute)route=nextRoute;
  render();
+ // Ao abrir a ficha de um aluno, começar sempre pelo cabeçalho da página.
+ // O navegador pode manter a posição da rolagem da lista anterior.
+ if(nextRoute==="student"){
+  window.scrollTo({top:0,left:0,behavior:"instant"});
+  const content=document.querySelector("#content");
+  if(content)content.scrollTop=0;
+ }
 }
 function selectedStudentName(){return selectedStudentProfile?.full_name||"Aluno"}
 function coachLoadWarning(){
