@@ -30,6 +30,9 @@ panel.querySelector("#chat-form").onsubmit=async e=>{e.preventDefault();const bo
 db.auth.onAuthStateChange(()=>setTimeout(init,100));init();setInterval(()=>{if(opened)refresh()},6000);
 
 function addChatNavigation(){
+ const inPresential=document.body.classList.contains("presential-mode");
+ launch.hidden=inPresential;
+ if(inPresential){panel.hidden=true;opened=false;return;}
  const nav=document.querySelector(".bottomnav");
  const main=document.querySelector("#content");
  if(!me||!main)return;
