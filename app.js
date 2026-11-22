@@ -310,12 +310,18 @@ function coachAttendanceOverview(){
  const all=data.training_checkins.filter(c=>activeIds.has(c.user_id));
  const completedToday=all.filter(c=>c.completed_on===attendanceDate());
  const studentsToday=new Set(completedToday.map(c=>c.user_id)).size;
- const recent=all.filter(c=>c.completed_on>=attendanceDate(-6)).slice(0,12);
+ const today=attendanceDate();
+ const [year,month,day]=today.split("-").map(Number);
+ const weekday=new Date(Date.UTC(year,month-1,day)).getUTCDay();
+ const weekOffset=(weekday+6)%7;
+ const weekStart=attendanceDate(-weekOffset);
+ const recent=all.filter(c=>c.completed_on>=weekStart&&c.completed_on<=today);
+ const previous=all.filter(c=>c.completed_on<weekStart).slice(0,100);
  return `<div class="card attendance-coach">
   <div class="attendance-head"><div><div class="eyebrow">Checklist dos alunos</div><h2>Treinos concluídos</h2></div>
    <button type="button" class="btn btn-ghost attendance-refresh">↻ Atualizar</button></div>
   <div class="attendance-total"><strong>${studentsToday}</strong><span>de ${data.students.length} alunos confirmaram treino hoje</span></div>
-  <p class="sub">Confirmações registradas pelos alunos e treinos finalizados no aplicativo.</p>
+  <p class="sub">Semana atual: ${fmt(weekStart)} a ${fmt(attendanceDate(6-weekOffset))}. Reinicia toda segunda-feira sem excluir registros.</p>
   <div class="attendance-feed">
    ${recent.length?recent.map(c=>{
     const student=data.students.find(s=>s.user_id===c.user_id);
@@ -324,8 +330,19 @@ function coachAttendanceOverview(){
      <span class="attendance-feed-copy"><strong>${esc(student?.full_name||"Aluno")}</strong>
       <small>${esc(c.training_title)} · ${fmt(c.completed_on)} às ${attendanceTime(c.completed_at)}</small></span>
     </button>`;
-   }).join(""):`<p class="sub">Nenhuma confirmação nos últimos 7 dias. As marcações aparecerão aqui.</p>`}
+   }).join(""):`<p class="sub">Nenhuma confirmação nesta semana. As marcações aparecerão aqui.</p>`}
   </div>
+  <details style="margin-top:16px">
+   <summary style="cursor:pointer;font-weight:600;padding:12px 0">Histórico anterior (${previous.length} registros recentes)</summary>
+   <div class="attendance-feed">
+    ${previous.length?previous.map(c=>{
+     const student=data.students.find(s=>s.user_id===c.user_id);
+     return `<button type="button" class="attendance-feed-row student-open" data-student="${esc(c.user_id)}" data-next="student">
+      <span class="attendance-feed-icon">✓</span><span class="attendance-feed-copy"><strong>${esc(student?.full_name||"Aluno")}</strong>
+      <small>${esc(c.training_title)} · ${fmt(c.completed_on)} às ${attendanceTime(c.completed_at)}</small></span></button>`;
+    }).join(""):`<p class="sub">Nenhum registro anterior disponível nos últimos 30 dias.</p>`}
+   </div>
+  </details>
  </div>`;
 }
 function coachStudentAttendance(){
