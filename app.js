@@ -1452,12 +1452,12 @@ function dietMealPicture(meal){
 function dietMealSections(description){
  const raw=String(description||"Sem descrição.");
  // Structured prescriptions use headings separated by periods, allowing a clean list.
- const pieces=raw.replace(/\\b(PROTEÍNA|CARBOIDRATO|ACOMPANHAMENTO|OPÇÃO A|OPÇÃO B)\\s*:/gi,"\\n$1:").split(/\\n/).map(x=>x.trim()).filter(Boolean);
+ const pieces=raw.replace(/\b(PROTEÍNA|CARBOIDRATO|ACOMPANHAMENTO|OPÇÃO A|OPÇÃO B)\s*:/gi,"\n$1:").split(/\n/).map(x=>x.trim()).filter(Boolean);
  return pieces.map(piece=>{
-   const match=piece.match(/^(PROTEÍNA|CARBOIDRATO|ACOMPANHAMENTO|OPÇÃO A|OPÇÃO B)\\s*:\\s*(.*)$/i);
+   const match=piece.match(/^(PROTEÍNA|CARBOIDRATO|ACOMPANHAMENTO|OPÇÃO A|OPÇÃO B)\s*:\s*(.*)$/i);
    if(!match)return '<div class="diet-food-line">'+esc(piece)+'</div>';
    const label=match[1];
-   const options=match[2].split(/\\s+OU\\s+/i).map(x=>x.trim().replace(/\\.$/,"")).filter(Boolean);
+   const options=match[2].split(/\s+OU\s+/i).map(x=>x.trim().replace(/\.$/,"")).filter(Boolean);
    return '<div class="diet-food-group"><div class="diet-food-label">'+esc(label)+'</div><div class="diet-food-options">'+options.map((x,i)=>'<div class="diet-food-option">'+(options.length>1?'<span class="diet-food-choice">'+(i+1)+'</span>':'')+'<span>'+esc(x)+'</span></div>').join('')+'</div></div>';
  }).join("");
 }
