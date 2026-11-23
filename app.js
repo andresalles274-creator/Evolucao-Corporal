@@ -1555,7 +1555,7 @@ function exerciseGuide(ex){
 function exerciseMotion(ex,gender){
  const selected=gender==="female"?"female":"male";
  const url=selected==="female"?ex?.female_video_url:ex?.male_video_url;
- if(!validExerciseMediaUrl(url)||!/\.(mp4|webm)(\?|$)/i.test(url))return "";
+ if(!validExerciseMediaUrl(url)||!/\.(mp4|webm)(\?|$)/i.test(url))return '<div class="exercise-video-pending" role="status"><small>Vídeo demonstrativo '+(selected==="female"?"feminino":"masculino")+' ainda não disponível para este exercício. Consulte as orientações e a imagem abaixo.</small></div>';
  const img=selected==="female"?ex?.female_image_url:ex?.male_image_url;
  const poster=validExerciseMediaUrl(img)?' poster="'+esc(img)+'"':"";
  const model=selected==="female"?"mulher":"homem";
