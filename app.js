@@ -1527,13 +1527,18 @@ function selectedDemoGender(ex){
 function validExerciseMediaUrl(value){
  return /^https:\/\/[^\s"'<>]+$/i.test(String(value||"").trim());
 }
+// Exibir apenas as ilustracoes anatomicas padronizadas; nao usar fotografias antigas como fallback.
+function standardizedAnatomyUrl(value){
+ const url=String(value||"").trim();
+ return validExerciseMediaUrl(url)&&/^https:\/\/pub-585d42eb1aa64a67aedf483ec328d3fe\.r2\.dev\/exercise-posters\/(male|female)\/[a-z0-9-]+\.jpg(?:\?.*)?$/i.test(url)?url:"";
+}
 function exerciseImage(ex,compact=false,gender=null){
  const selected=gender==="female"?"female":gender==="male"?"male":selectedDemoGender(ex);
  const specificRaw=selected==="female"?ex?.female_image_url:ex?.male_image_url;
- const specific=validExerciseMediaUrl(specificRaw)?String(specificRaw).trim():"";
- const general=validExerciseMediaUrl(ex?.thumbnail_url)?String(ex.thumbnail_url).trim():"";
+ const specific=standardizedAnatomyUrl(specificRaw);
+ const general=standardizedAnatomyUrl(ex?.thumbnail_url);
  const url=specific||general;
- if(!url)return '<div class="exercise-media-unavailable '+(compact?"compact":"")+'"><span aria-hidden="true">▧</span><small>Imagem demonstrativa em preparação</small></div>';
+ if(!url)return '<div class="exercise-media-unavailable '+(compact?"compact":"")+'"><span aria-hidden="true">▧</span><small>Ilustração anatômica padronizada em preparação</small></div>';
  const second=!specific&&/^https:\/\/raw\.githubusercontent\.com\/yuhonas\/free-exercise-db\/main\/exercises\/.+\/0\.jpg$/i.test(url)?url.replace(/\/0\.jpg$/i,"/1.jpg"):"";
  const pose=(src,title)=>'<figure class="exercise-pose"><img src="'+esc(src)+'" alt="'+esc(title+" — "+(ex?.name||"exercício"))+'" loading="lazy" decoding="async"><figcaption>'+esc(title)+'</figcaption></figure>';
  const mainTitle=specific?(selected==="female"?"Imagem de referência — mulher":"Imagem de referência — homem"):(second?"Posição inicial":"Demonstração geral");
