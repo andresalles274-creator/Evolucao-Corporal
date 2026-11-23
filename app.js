@@ -1441,18 +1441,53 @@ ${measurePair("Peso (kg)","weight","Cintura (cm)","waist",m)}${measurePair("Quad
 <button class="btn btn-primary btn-full">Salvar avaliação e atualizar gráfico</button></form>
 <div class="card"><div class="eyebrow">Histórico completo</div><h2>${data.measurements.length} avaliações registradas</h2>${history(data.measurements,"measurements","assessment_date","weight","kg")}</div>`}
 
+function dietMealPicture(meal){
+ const title=String(meal.title||"").toLowerCase();
+ const desc=String(meal.description||"").toLowerCase();
+ if(title.includes("lanche")||desc.includes("whey"))return "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=900&q=80";
+ if(title.includes("jantar")||desc.includes("hambúrguer"))return "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=900&q=80";
+ if(title.includes("primeira")||title.includes("café")||title.includes("complementar"))return "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=900&q=80";
+ return "https://images.unsplash.com/photo-1547592180-85f173990554?w=900&q=80";
+}
+function dietMealSections(description){
+ const raw=String(description||"Sem descrição.");
+ // Structured prescriptions use headings separated by periods, allowing a clean list.
+ const pieces=raw.replace(/\\b(PROTEÍNA|CARBOIDRATO|ACOMPANHAMENTO|OPÇÃO A|OPÇÃO B)\\s*:/gi,"\\n$1:").split(/\\n/).map(x=>x.trim()).filter(Boolean);
+ return pieces.map(piece=>{
+   const match=piece.match(/^(PROTEÍNA|CARBOIDRATO|ACOMPANHAMENTO|OPÇÃO A|OPÇÃO B)\\s*:\\s*(.*)$/i);
+   if(!match)return '<div class="diet-food-line">'+esc(piece)+'</div>';
+   const label=match[1];
+   const options=match[2].split(/\\s+OU\\s+/i).map(x=>x.trim().replace(/\\.$/,"")).filter(Boolean);
+   return '<div class="diet-food-group"><div class="diet-food-label">'+esc(label)+'</div><div class="diet-food-options">'+options.map((x,i)=>'<div class="diet-food-option">'+(options.length>1?'<span class="diet-food-choice">'+(i+1)+'</span>':'')+'<span>'+esc(x)+'</span></div>').join('')+'</div></div>';
+ }).join("");
+}
 function food(){
  const active=data.diet_plans.find(x=>x.is_active!==false)||null;
  const prescribed=active?data.diet_plan_meals.filter(x=>String(x.plan_id)===String(active.id)).sort((a,b)=>(a.position||0)-(b.position||0)):[];
  const macro=(label,v,unit="g")=>v!=null&&v!==""?`<div class="metric"><span class="small">${label}</span><strong>${esc(v)}${unit}</strong></div>`:"";
+ const dietStyle=`<style>
+ .diet-meals{display:grid;gap:18px;margin-top:18px}
+ .diet-meal{overflow:hidden;border:1px solid rgba(170,170,170,.23);border-radius:20px;background:rgba(255,255,255,.025)}
+ .diet-meal-photo{display:block;width:100%;height:180px;object-fit:cover;background:#222}
+ .diet-meal-body{padding:18px}
+ .diet-meal-head{display:flex;gap:12px;align-items:center;margin-bottom:15px}
+ .diet-meal-head strong{display:block;font-size:1.18rem;line-height:1.3}
+ .diet-food-group{margin:12px 0;padding:12px;border:1px solid rgba(255,255,255,.11);border-radius:12px;background:rgba(255,255,255,.035)}
+ .diet-food-label{font-size:.78rem;letter-spacing:.08em;font-weight:800;color:#ff596b;margin-bottom:8px}
+ .diet-food-options{display:grid;gap:7px}
+ .diet-food-option{display:flex;gap:9px;align-items:flex-start;line-height:1.45;font-size:.97rem}
+ .diet-food-choice{display:inline-flex;flex:0 0 23px;height:23px;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,55,75,.13);color:#ff6472;font-size:.75rem;font-weight:700}
+ .diet-food-line{padding:9px 2px;line-height:1.6;white-space:pre-line}
+ .diet-meal .diet-notes{display:block;margin-top:14px;line-height:1.5;opacity:.75}
+ .diet-meal-macros{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+ </style>`;
  const planHtml=active?`<div class="card diet-plan-card"><div class="eyebrow">Plano prescrito pelo Coach</div><h2>${esc(active.title)}</h2>${active.objective?`<p class="sub">${esc(active.objective)}</p>`:""}
  <div class="diet-macros">${macro("CALORIAS",active.target_calories," kcal")}${macro("PROTEÍNA",active.target_protein)}${macro("CARBOIDRATOS",active.target_carbs)}${macro("GORDURAS",active.target_fat)}</div>
- ${active.notes?`<div class="notice"><strong>Orientações</strong><br>${esc(active.notes)}</div>`:""}
- <div class="diet-meals">${prescribed.map((m,i)=>`<div class="diet-meal"><div class="diet-meal-head"><span class="diet-number">${i+1}</span><div><small>${esc(m.time_label||"")}</small><strong>${esc(m.title)}</strong></div></div><div class="diet-description">${esc(m.description||"Sem descrição.").replace(/\n/g,"<br>")}</div><div class="diet-meal-macros">${m.calories!=null?`<span>${esc(m.calories)} kcal</span>`:""}${m.protein!=null?`<span>P ${esc(m.protein)}g</span>`:""}${m.carbs!=null?`<span>C ${esc(m.carbs)}g</span>`:""}${m.fat!=null?`<span>G ${esc(m.fat)}g</span>`:""}</div>${m.notes?`<small class="diet-notes">${esc(m.notes)}</small>`:""}</div>`).join("")}</div></div>`:`<div class="card"><div class="empty-state"><strong>Nenhum plano alimentar ativo</strong><span>Quando o Coach prescrever uma dieta, ela aparecerá aqui organizada por refeições.</span></div></div>`;
- return `${pageBack()}${coachStudentBanner()}<div class="section-head"><div><div class="eyebrow">Prescrição e acompanhamento</div><h1>Alimentação</h1></div></div>${loadErrors.diet_plans?`<div class="notice error-notice"><strong>Plano alimentar indisponível.</strong><br><span class="small">${esc(loadErrors.diet_plans)}</span></div>`:""}${planHtml}
+ ${active.notes?`<details class="notice"><summary><strong>Orientações gerais do plano</strong></summary><p>${esc(active.notes)}</p></details>`:""}
+ <div class="diet-meals">${prescribed.map((m,i)=>`<article class="diet-meal"><img class="diet-meal-photo" src="${dietMealPicture(m)}" alt="Imagem ilustrativa da refeição ${esc(m.title)}" loading="lazy" onerror="this.style.display='none'"><div class="diet-meal-body"><div class="diet-meal-head"><span class="diet-number">${i+1}</span><div><small>${esc(m.time_label||"")}</small><strong>${esc(m.title)}</strong></div></div><div class="diet-food-content">${dietMealSections(m.description)}</div><div class="diet-meal-macros">${m.calories!=null?`<span>${esc(m.calories)} kcal</span>`:""}${m.protein!=null?`<span>P ${esc(m.protein)}g</span>`:""}${m.carbs!=null?`<span>C ${esc(m.carbs)}g</span>`:""}${m.fat!=null?`<span>G ${esc(m.fat)}g</span>`:""}</div>${m.notes?`<details class="diet-notes"><summary>Orientações da refeição</summary><p>${esc(m.notes)}</p></details>`:""}</div></article>`).join("")}</div></div>`:`<div class="card"><div class="empty-state"><strong>Nenhum plano alimentar ativo</strong><span>Quando o Coach prescrever uma dieta, ela aparecerá aqui organizada por refeições.</span></div></div>`;
+ return `${pageBack()}${coachStudentBanner()}${dietStyle}<div class="section-head"><div><div class="eyebrow">Prescrição e acompanhamento</div><h1>Alimentação</h1></div></div>${loadErrors.diet_plans?`<div class="notice error-notice"><strong>Plano alimentar indisponível.</strong><br><span class="small">${esc(loadErrors.diet_plans)}</span></div>`:""}${planHtml}
  <details class="card food-diary"><summary><strong>Registro diário de alimentação</strong><span class="small">Opcional — abrir histórico e registrar refeição</span></summary><form id="mealForm" style="margin-top:16px"><div class="eyebrow">Nova refeição</div>${studentSelect()}<div class="field"><label>Data</label><input type="date" name="meal_date" value="${today()}" required></div><div class="field"><label>Refeição</label><select name="meal_type"><option>Café da manhã</option><option>Almoço</option><option>Lanche</option><option>Jantar</option><option>Ceia</option></select></div><div class="field"><label>Descrição</label><textarea name="description"></textarea></div>${pair("Calorias","calories","Proteína (g)","protein")}${pair("Carboidratos (g)","carbs","Gorduras (g)","fat")}<button class="btn btn-primary btn-full">Salvar refeição do dia</button></form><div style="margin-top:18px"><h3>Histórico</h3>${history(data.meals,"meals","meal_date","calories","kcal","meal_type")}</div></details>`
 }
-
 
 function trainingSetupWarning(){
  const msg=loadErrors.training_plans||loadErrors.exercise_library||"";
