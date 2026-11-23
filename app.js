@@ -1537,11 +1537,14 @@ function exerciseImage(ex,compact=false,gender=null){
  const specificRaw=selected==="female"?ex?.female_image_url:ex?.male_image_url;
  const specific=standardizedAnatomyUrl(specificRaw);
  const general=standardizedAnatomyUrl(ex?.thumbnail_url);
- const url=specific||general;
+ // Nunca deixar a ficha sem imagem quando existe uma imagem de execução cadastrada.
+ // Prioridade absoluta para o modelo anatomico; fallback somente enquanto nao houver substituto equivalente.
+ const fallback=validExerciseMediaUrl(specificRaw)?String(specificRaw).trim():(validExerciseMediaUrl(ex?.thumbnail_url)?String(ex.thumbnail_url).trim():"");
+ const url=specific||general||fallback;
  if(!url)return '<div class="exercise-media-unavailable '+(compact?"compact":"")+'"><span aria-hidden="true">▧</span><small>Ilustração anatômica padronizada em preparação</small></div>';
  const second=!specific&&/^https:\/\/raw\.githubusercontent\.com\/yuhonas\/free-exercise-db\/main\/exercises\/.+\/0\.jpg$/i.test(url)?url.replace(/\/0\.jpg$/i,"/1.jpg"):"";
  const pose=(src,title)=>'<figure class="exercise-pose"><img src="'+esc(src)+'" alt="'+esc(title+" — "+(ex?.name||"exercício"))+'" loading="lazy" decoding="async"><figcaption>'+esc(title)+'</figcaption></figure>';
- const mainTitle=specific?(selected==="female"?"Imagem de referência — mulher":"Imagem de referência — homem"):(second?"Posição inicial":"Demonstração geral");
+ const mainTitle=specific?(selected==="female"?"Ilustração anatômica — mulher":"Ilustração anatômica — homem"):(second?"Posição inicial":"Imagem de execução provisória");
  const note=!specific&&general?'<p class="exercise-demo-fallback">Esta versão ainda não tem imagem específica; mostrando a demonstração geral.</p>':"";
  return '<div class="exercise-pose-gallery '+(compact?"compact":"")+'">'+pose(url,mainTitle)+(second?pose(second,"Posição final"):"")+'</div>'+note;
 }
