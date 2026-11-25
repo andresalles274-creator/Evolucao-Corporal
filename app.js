@@ -4,7 +4,7 @@ import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 import { createClinicalPanel } from "./clinical-panel.js?v=1.1.0";
 import { createPresentialIntake } from "./presential-intake.js?v=1.0.0";
 
-const APP_VERSION="10.12.0";
+const APP_VERSION="10.13.0";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -1540,7 +1540,7 @@ function exerciseImage(ex,compact=false,gender=null){
  // Nunca deixar a ficha sem imagem quando existe uma imagem de execução cadastrada.
  // Prioridade absoluta para o modelo anatomico; fallback somente enquanto nao houver substituto equivalente.
  const fallback=validExerciseMediaUrl(specificRaw)?String(specificRaw).trim():(validExerciseMediaUrl(ex?.thumbnail_url)?String(ex.thumbnail_url).trim():"");
- const url=specific||general||fallback;
+ const url=specific||fallback||general;
  if(!url)return '<div class="exercise-media-unavailable '+(compact?"compact":"")+'"><span aria-hidden="true">▧</span><small>Ilustração anatômica padronizada em preparação</small></div>';
  const second=!specific&&/^https:\/\/raw\.githubusercontent\.com\/yuhonas\/free-exercise-db\/main\/exercises\/.+\/0\.jpg$/i.test(url)?url.replace(/\/0\.jpg$/i,"/1.jpg"):"";
  const pose=(src,title)=>'<figure class="exercise-pose"><img src="'+esc(src)+'" alt="'+esc(title+" — "+(ex?.name||"exercício"))+'" loading="lazy" decoding="async"><figcaption>'+esc(title)+'</figcaption></figure>';
@@ -1562,12 +1562,13 @@ function exerciseGuide(ex){
 }
 function exerciseMotion(ex,gender){
  const selected=gender==="female"?"female":"male";
- const url=selected==="female"?ex?.female_video_url:ex?.male_video_url;
+ const specific=selected==="female"?ex?.female_video_url:ex?.male_video_url;
+ const url=specific||ex?.video_url;
  if(!validExerciseMediaUrl(url)||!/\.(mp4|webm)(\?|$)/i.test(url))return '<div class="exercise-video-pending" role="status"><small>Vídeo demonstrativo '+(selected==="female"?"feminino":"masculino")+' ainda não disponível para este exercício. Consulte as orientações e a imagem abaixo.</small></div>';
  const img=selected==="female"?ex?.female_image_url:ex?.male_image_url;
  const poster=validExerciseMediaUrl(img)?' poster="'+esc(img)+'"':"";
- const model=selected==="female"?"mulher":"homem";
- return '<details class="exercise-motion"><summary>▶ Ver movimento completo com '+model+'</summary>'+
+ const model=specific?(selected==="female"?"mulher":"homem"):"demonstração geral";
+ return '<details class="exercise-motion"><summary>▶ Ver movimento completo — '+model+'</summary>'+
  '<p>Assista à execução em movimento, não apenas à imagem parada.</p>'+
  '<video controls playsinline preload="none"'+poster+' src="'+esc(url)+'" aria-label="Demonstração do '+esc(ex.name)+' com '+model+'"></video>'+
  '<small>Ajuste a amplitude e a carga conforme a orientação do seu coach.</small></details>';
@@ -1582,6 +1583,66 @@ function exerciseDemoPanel(ex){
  return '<section class="exercise-demo" data-exercise="'+esc(id)+'"><div class="exercise-demo-head"><strong>Ver execução</strong><div class="exercise-demo-options" role="group" aria-label="Modelo da demonstração">'+option("male","Homem")+option("female","Mulher")+'</div></div><div class="exercise-media-slot">'+exerciseMediaBlock(ex,gender)+'</div></section>';
 }
 
+
+function coachExerciseUploadEditor(ex){
+ if(!isCoach||!ex?.id)return "";
+ return `<details class="exercise-upload-editor"><summary>📷 Trocar imagem ou vídeo</summary>
+ <p class="sub">A troca vale para todos os alunos que usam este exercício e para os próximos treinos. Séries, repetições e orientações continuam iguais.</p>
+ <form class="exercise-upload-form" data-exercise="${esc(ex.id)}">
+ <label>O que deseja enviar?<select name="kind"><option value="video">Vídeo (MP4 ou WebM, até 50 MB)</option><option value="image">Imagem (JPG, PNG ou WebP, até 10 MB)</option></select></label>
+ <label>Mostrar para<select name="audience"><option value="all">Todos — homens e mulheres</option><option value="male">Somente demonstração masculina</option><option value="female">Somente demonstração feminina</option></select></label>
+ <label>Arquivo do celular ou computador<input name="media" type="file" accept="video/mp4,video/webm" required></label>
+ <button type="submit" class="btn btn-primary">Enviar e publicar</button>
+ <p class="exercise-upload-status" role="status" aria-live="polite"></p></form></details>`;
+}
+async function uploadExerciseMedia(form){
+ if(!isCoach||!user?.id)return;
+ const ex=exById(form.dataset.exercise);
+ if(!ex)return;
+ const f=new FormData(form),kind=f.get("kind"),audience=f.get("audience"),file=f.get("media");
+ const status=form.querySelector(".exercise-upload-status"),button=form.querySelector('button[type="submit"]');
+ const imageTypes={"image/jpeg":"jpg","image/png":"png","image/webp":"webp"};
+ const videoTypes={"video/mp4":"mp4","video/webm":"webm"};
+ if(!["image","video"].includes(kind)||!["all","male","female"].includes(audience))return;
+ const types=kind==="image"?imageTypes:videoTypes;
+ if(!file?.size||!types[file.type]||file.size>(kind==="image"?10:50)*1024*1024){
+  status.textContent=kind==="image"?"Escolha JPG, PNG ou WebP com até 10 MB.":"Escolha MP4 ou WebM com até 50 MB.";return;
+ }
+ if(button.disabled)return;
+ button.disabled=true;
+ const inputs=[...form.querySelectorAll("input,select")];inputs.forEach(el=>el.disabled=true);
+ status.textContent="Enviando arquivo… Aguarde sem fechar esta tela.";
+ const path=user.id+"/"+ex.id+"/"+crypto.randomUUID()+"."+types[file.type];
+ let uploaded=false;
+ try{
+  const up=await supabase.storage.from("exercise-library-media").upload(path,file,{contentType:file.type,upsert:false,cacheControl:"3600"});
+  if(up.error)throw new Error("Não foi possível enviar: "+up.error.message);
+  uploaded=true;
+  const {data:publicData}=supabase.storage.from("exercise-library-media").getPublicUrl(path);
+  if(!validExerciseMediaUrl(publicData?.publicUrl))throw new Error("Não foi possível obter o endereço do arquivo.");
+  const url=publicData.publicUrl,patch={updated_at:new Date().toISOString()};
+  if(kind==="image"){
+   if(audience==="all")Object.assign(patch,{thumbnail_url:url,male_image_url:url,female_image_url:url});
+   else patch[audience+"_image_url"]=url;
+  }else{
+   if(audience==="all")Object.assign(patch,{video_url:url,male_video_url:null,female_video_url:null});
+   else patch[audience+"_video_url"]=url;
+  }
+  status.textContent="Publicando na biblioteca…";
+  const saved=await supabase.from("exercise_library").update(patch).eq("id",ex.id).select("id").maybeSingle();
+  if(saved.error||!saved.data){
+   await supabase.storage.from("exercise-library-media").remove([path]);uploaded=false;
+   throw new Error("Não foi possível publicar. Sua mídia anterior foi mantida. Verifique sua permissão de coach.");
+  }
+  Object.assign(ex,patch);
+  const y=window.scrollY;
+  render();requestAnimationFrame(()=>window.scrollTo(0,y));
+  toast(kind==="image"?"Imagem publicada para os alunos.":"Vídeo publicado para os alunos.");
+ }catch(e){
+  status.textContent=e.message||"Falha no envio. Verifique sua conexão.";
+  if(uploaded)status.textContent+=" Atualize a ficha para conferir se a publicação foi concluída antes de reenviar.";
+ }finally{button.disabled=false;inputs.forEach(el=>el.disabled=false)}
+}
 
 function coachExerciseImageEditor(){
  const image=(url,label)=>validExerciseMediaUrl(url)?'<figure class="coach-demo-thumb"><img src="'+esc(url)+'" loading="lazy" alt="'+esc(label)+'"><figcaption>'+esc(label)+'</figcaption></figure>':'<div class="coach-demo-thumb empty"><small>'+esc(label)+': pendente</small></div>';
@@ -1687,7 +1748,7 @@ function trainingDayView(){
 function trainingExerciseCard(it,idx,session){
  const ex=exById(it.exercise_id)||{name:"Exercício"};
  const logs=session?logsFor(session.id,it.exercise_id):[];
- return `<div class="card training-exercise-card"><div class="exercise-number">${idx+1}</div><h2>${esc(ex.name)}</h2><p class="sub">${esc(ex.muscle_group||"")}</p>${exerciseGuide(ex)}${exerciseDemoPanel(ex)}${ex.video_url?`<details class="training-video-details"><summary>▶ Assistir demonstração em vídeo</summary>${videoEmbed(ex,true)}</details>`:""}<div class="prescription-strip"><span><small>Séries</small><strong>${it.sets}</strong></span><span><small>Repetições</small><strong>${it.reps_min||"—"}${it.reps_max?`–${it.reps_max}`:""}</strong></span><span><small>Descanso</small><strong>${it.rest_seconds||0}s</strong></span></div>${it.notes?`<p class="training-note">${esc(it.notes)}</p>`:""}
+ return `<div class="card training-exercise-card"><div class="exercise-number">${idx+1}</div><h2>${esc(ex.name)}</h2><p class="sub">${esc(ex.muscle_group||"")}</p>${exerciseGuide(ex)}${exerciseDemoPanel(ex)}${ex.video_url&&!/\.(mp4|webm)(\?|$)/i.test(ex.video_url)?`<details class="training-video-details"><summary>▶ Assistir demonstração em vídeo</summary>${videoEmbed(ex,true)}</details>`:""}${coachExerciseUploadEditor(ex)}<div class="prescription-strip"><span><small>Séries</small><strong>${it.sets}</strong></span><span><small>Repetições</small><strong>${it.reps_min||"—"}${it.reps_max?`–${it.reps_max}`:""}</strong></span><span><small>Descanso</small><strong>${it.rest_seconds||0}s</strong></span></div>${it.notes?`<p class="training-note">${esc(it.notes)}</p>`:""}
  ${session&&!isCoach?`<div class="set-log-list">${Array.from({length:it.sets},(_,i)=>{const setNo=i+1;const log=logs.find(x=>Number(x.set_number)===setNo);return `<div class="set-log-row ${log?.completed?"done":""}" data-session="${session.id}" data-exercise="${it.exercise_id}" data-set="${setNo}"><span class="set-number">${setNo}</span><input class="set-weight" type="number" step="0.5" min="0" placeholder="kg" value="${log?.weight_kg??""}"><input class="set-reps" type="number" min="0" placeholder="reps" value="${log?.reps??""}"><button class="set-save ${log?.completed?"done":""}" type="button">${log?.completed?"✓":"Salvar"}</button></div>`}).join("")}</div>`:""}</div>`;
 }
 async function addExercise(form){
@@ -1807,6 +1868,13 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
   if(slot){slot.innerHTML=exerciseMediaBlock(ex,gender);slot.querySelectorAll(".exercise-pose img").forEach(img=>{img.onerror=()=>{const p=img.closest(".exercise-pose");if(p){const gallery=p.closest(".exercise-pose-gallery");p.remove();if(gallery&&!gallery.querySelector("img"))gallery.innerHTML='<p class="exercise-demo-fallback">Imagem temporariamente indisponível.</p>';}}});}
  });
 
+ document.querySelectorAll(".exercise-upload-form").forEach(form=>{
+  form.onsubmit=e=>{e.preventDefault();uploadExerciseMedia(form)};
+  form.querySelector('[name="kind"]').onchange=e=>{
+   const input=form.querySelector('[name="media"]');input.value="";
+   input.accept=e.target.value==="image"?"image/jpeg,image/png,image/webp":"video/mp4,video/webm";
+  };
+ });
  document.querySelectorAll(".exercise-image-form").forEach(f=>f.onsubmit=e=>{e.preventDefault();editExerciseImage(f)});
  document.querySelectorAll(".exercise-pose img").forEach(img=>img.onerror=()=>{img.closest(".exercise-pose")?.remove();});
  if($("#exerciseForm"))$("#exerciseForm").onsubmit=e=>{e.preventDefault();addExercise(e.currentTarget)};

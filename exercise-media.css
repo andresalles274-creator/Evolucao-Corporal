@@ -80,3 +80,5 @@
 .exercise-guide-editor label{display:block;font-size:11px;font-weight:700;color:#e7d2d5;margin:11px 0 5px}
 .exercise-guide-editor textarea{display:block;width:100%;min-height:74px;resize:vertical;border-radius:10px;background:#110d11;border:1px solid #48272e;color:#fff;font:inherit;font-size:12px;line-height:1.4;padding:10px}
 .exercise-guide-editor input{font-size:12px}
+
+.exercise-upload-editor{margin:16px 0;padding:14px;border:1px solid #666;border-radius:12px;background:#181818;color:#fff}.exercise-upload-editor summary{cursor:pointer;font-weight:700;min-height:36px}.exercise-upload-form{display:grid;gap:12px;margin-top:12px}.exercise-upload-form label{display:grid;gap:6px;font-size:14px}.exercise-upload-form select,.exercise-upload-form input{width:100%;min-width:0;max-width:100%;box-sizing:border-box;padding:10px;background:#222;color:#fff;border:1px solid #777;border-radius:8px}.exercise-upload-status{margin:0;font-size:14px;overflow-wrap:anywhere}
