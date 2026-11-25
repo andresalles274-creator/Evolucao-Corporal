@@ -4,7 +4,7 @@ import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 import { createClinicalPanel } from "./clinical-panel.js?v=1.1.0";
 import { createPresentialIntake } from "./presential-intake.js?v=1.0.0";
 
-const APP_VERSION="10.13.0";
+const APP_VERSION="10.13.1";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -1540,13 +1540,30 @@ function exerciseImage(ex,compact=false,gender=null){
  // Nunca deixar a ficha sem imagem quando existe uma imagem de execução cadastrada.
  // Prioridade absoluta para o modelo anatomico; fallback somente enquanto nao houver substituto equivalente.
  const fallback=validExerciseMediaUrl(specificRaw)?String(specificRaw).trim():(validExerciseMediaUrl(ex?.thumbnail_url)?String(ex.thumbnail_url).trim():"");
- const url=specific||fallback||general;
+ const url=specific||general||fallback;
  if(!url)return '<div class="exercise-media-unavailable '+(compact?"compact":"")+'"><span aria-hidden="true">▧</span><small>Ilustração anatômica padronizada em preparação</small></div>';
  const second=!specific&&/^https:\/\/raw\.githubusercontent\.com\/yuhonas\/free-exercise-db\/main\/exercises\/.+\/0\.jpg$/i.test(url)?url.replace(/\/0\.jpg$/i,"/1.jpg"):"";
  const pose=(src,title)=>'<figure class="exercise-pose"><img src="'+esc(src)+'" alt="'+esc(title+" — "+(ex?.name||"exercício"))+'" loading="lazy" decoding="async"><figcaption>'+esc(title)+'</figcaption></figure>';
  const mainTitle=specific?(selected==="female"?"Ilustração anatômica — mulher":"Ilustração anatômica — homem"):(second?"Posição inicial":"Imagem de execução provisória");
  const note=!specific&&general?'<p class="exercise-demo-fallback">Esta versão ainda não tem imagem específica; mostrando a demonstração geral.</p>':"";
  return '<div class="exercise-pose-gallery '+(compact?"compact":"")+'">'+pose(url,mainTitle)+(second?pose(second,"Posição final"):"")+'</div>'+note;
+}
+
+function bindExerciseImageFallbacks(root=document){
+ root.querySelectorAll(".exercise-pose img").forEach(img=>{
+  img.onerror=()=>{
+   const ex=exById(img.closest(".exercise-demo")?.dataset.exercise);
+   const fallback=String(ex?.thumbnail_url||"").trim();
+   if(!img.dataset.fallbackTried&&validExerciseMediaUrl(fallback)&&img.getAttribute("src")!==fallback){
+    img.dataset.fallbackTried="1";img.src=fallback;
+    const caption=img.closest("figure")?.querySelector("figcaption");if(caption)caption.textContent="Imagem de execução";
+   }else{
+    img.onerror=null;
+    const figure=img.closest("figure");
+    if(figure)figure.innerHTML='<p class="exercise-demo-fallback">Não foi possível carregar esta imagem. A mídia continua cadastrada; tente atualizar a página.</p>';
+   }
+  };
+ });
 }
 
 function exerciseGuide(ex){
@@ -1562,13 +1579,12 @@ function exerciseGuide(ex){
 }
 function exerciseMotion(ex,gender){
  const selected=gender==="female"?"female":"male";
- const specific=selected==="female"?ex?.female_video_url:ex?.male_video_url;
- const url=specific||ex?.video_url;
+ const url=selected==="female"?ex?.female_video_url:ex?.male_video_url;
  if(!validExerciseMediaUrl(url)||!/\.(mp4|webm)(\?|$)/i.test(url))return '<div class="exercise-video-pending" role="status"><small>Vídeo demonstrativo '+(selected==="female"?"feminino":"masculino")+' ainda não disponível para este exercício. Consulte as orientações e a imagem abaixo.</small></div>';
  const img=selected==="female"?ex?.female_image_url:ex?.male_image_url;
  const poster=validExerciseMediaUrl(img)?' poster="'+esc(img)+'"':"";
- const model=specific?(selected==="female"?"mulher":"homem"):"demonstração geral";
- return '<details class="exercise-motion"><summary>▶ Ver movimento completo — '+model+'</summary>'+
+ const model=selected==="female"?"mulher":"homem";
+ return '<details class="exercise-motion"><summary>▶ Ver movimento completo com '+model+'</summary>'+
  '<p>Assista à execução em movimento, não apenas à imagem parada.</p>'+
  '<video controls playsinline preload="none"'+poster+' src="'+esc(url)+'" aria-label="Demonstração do '+esc(ex.name)+' com '+model+'"></video>'+
  '<small>Ajuste a amplitude e a carga conforme a orientação do seu coach.</small></details>';
@@ -1625,7 +1641,7 @@ async function uploadExerciseMedia(form){
    if(audience==="all")Object.assign(patch,{thumbnail_url:url,male_image_url:url,female_image_url:url});
    else patch[audience+"_image_url"]=url;
   }else{
-   if(audience==="all")Object.assign(patch,{video_url:url,male_video_url:null,female_video_url:null});
+   if(audience==="all")Object.assign(patch,{video_url:url});
    else patch[audience+"_video_url"]=url;
   }
   status.textContent="Publicando na biblioteca…";
@@ -1748,7 +1764,7 @@ function trainingDayView(){
 function trainingExerciseCard(it,idx,session){
  const ex=exById(it.exercise_id)||{name:"Exercício"};
  const logs=session?logsFor(session.id,it.exercise_id):[];
- return `<div class="card training-exercise-card"><div class="exercise-number">${idx+1}</div><h2>${esc(ex.name)}</h2><p class="sub">${esc(ex.muscle_group||"")}</p>${exerciseGuide(ex)}${exerciseDemoPanel(ex)}${ex.video_url&&!/\.(mp4|webm)(\?|$)/i.test(ex.video_url)?`<details class="training-video-details"><summary>▶ Assistir demonstração em vídeo</summary>${videoEmbed(ex,true)}</details>`:""}${coachExerciseUploadEditor(ex)}<div class="prescription-strip"><span><small>Séries</small><strong>${it.sets}</strong></span><span><small>Repetições</small><strong>${it.reps_min||"—"}${it.reps_max?`–${it.reps_max}`:""}</strong></span><span><small>Descanso</small><strong>${it.rest_seconds||0}s</strong></span></div>${it.notes?`<p class="training-note">${esc(it.notes)}</p>`:""}
+ return `<div class="card training-exercise-card"><div class="exercise-number">${idx+1}</div><h2>${esc(ex.name)}</h2><p class="sub">${esc(ex.muscle_group||"")}</p>${exerciseGuide(ex)}${exerciseDemoPanel(ex)}${ex.video_url?`<details class="training-video-details"><summary>▶ Assistir demonstração em vídeo</summary>${videoEmbed(ex,true)}</details>`:""}${coachExerciseUploadEditor(ex)}<div class="prescription-strip"><span><small>Séries</small><strong>${it.sets}</strong></span><span><small>Repetições</small><strong>${it.reps_min||"—"}${it.reps_max?`–${it.reps_max}`:""}</strong></span><span><small>Descanso</small><strong>${it.rest_seconds||0}s</strong></span></div>${it.notes?`<p class="training-note">${esc(it.notes)}</p>`:""}
  ${session&&!isCoach?`<div class="set-log-list">${Array.from({length:it.sets},(_,i)=>{const setNo=i+1;const log=logs.find(x=>Number(x.set_number)===setNo);return `<div class="set-log-row ${log?.completed?"done":""}" data-session="${session.id}" data-exercise="${it.exercise_id}" data-set="${setNo}"><span class="set-number">${setNo}</span><input class="set-weight" type="number" step="0.5" min="0" placeholder="kg" value="${log?.weight_kg??""}"><input class="set-reps" type="number" min="0" placeholder="reps" value="${log?.reps??""}"><button class="set-save ${log?.completed?"done":""}" type="button">${log?.completed?"✓":"Salvar"}</button></div>`}).join("")}</div>`:""}</div>`;
 }
 async function addExercise(form){
@@ -1865,7 +1881,7 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
     btn.setAttribute("aria-pressed",String(selected));
   });
   const slot=wrap.querySelector(".exercise-media-slot");
-  if(slot){slot.innerHTML=exerciseMediaBlock(ex,gender);slot.querySelectorAll(".exercise-pose img").forEach(img=>{img.onerror=()=>{const p=img.closest(".exercise-pose");if(p){const gallery=p.closest(".exercise-pose-gallery");p.remove();if(gallery&&!gallery.querySelector("img"))gallery.innerHTML='<p class="exercise-demo-fallback">Imagem temporariamente indisponível.</p>';}}});}
+  if(slot){slot.innerHTML=exerciseMediaBlock(ex,gender);bindExerciseImageFallbacks(slot);}
  });
 
  document.querySelectorAll(".exercise-upload-form").forEach(form=>{
@@ -1876,7 +1892,7 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
   };
  });
  document.querySelectorAll(".exercise-image-form").forEach(f=>f.onsubmit=e=>{e.preventDefault();editExerciseImage(f)});
- document.querySelectorAll(".exercise-pose img").forEach(img=>img.onerror=()=>{img.closest(".exercise-pose")?.remove();});
+ bindExerciseImageFallbacks();
  if($("#exerciseForm"))$("#exerciseForm").onsubmit=e=>{e.preventDefault();addExercise(e.currentTarget)};
  $$(".exercise-delete").forEach(b=>b.onclick=()=>deleteExercise(b.dataset.exercise));
  if($("#trainingPlanForm"))$("#trainingPlanForm").onsubmit=e=>{e.preventDefault();addTrainingPlan(e.currentTarget)};
