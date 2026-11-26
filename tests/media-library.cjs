@@ -1,0 +1,30 @@
+const assert=require('node:assert/strict');
+const {readFileSync}=require('node:fs');
+const {runInNewContext}=require('node:vm');
+(async()=>{
+ const {publishMedia,similarExercises,normalizeName,validateMediaFile}=await import('../media-library.js');
+ assert.equal(normalizeName(' Extensão '),'extensao');
+ const rows=[{id:'a',name:'Leg press',muscle_group:'Quadríceps',updated_at:'2026-11-01T00:00:00Z'},{id:'b',name:'Leg press unilateral',muscle_group:'Quadríceps',updated_at:'2026-11-02T00:00:00Z'},{id:'c',name:'Supino reto',muscle_group:'Peito'}];
+ assert.deepEqual(similarExercises(rows[0],rows).map(e=>e.id),['b']);
+ for(const [key,file] of [['male_image_url',{size:1,type:'video/mp4'}],['female_video_url',{size:1,type:'image/png'}],['name',{size:1,type:'image/png'}],['male_image_url',{size:11*1024*1024,type:'image/png'}],['female_video_url',{size:51*1024*1024,type:'video/webm'}]])assert.throws(()=>validateMediaFile(key,file));
+ const files={female_image_url:{size:2,type:'image/png'},male_video_url:{size:4,type:'video/mp4'}};
+ let uploads=[],rpcCalls=0,args;
+ const db={storage:{from(bucket){assert.equal(bucket,'exercise-library-media');return {upload:async(path,file,opts)=>{uploads.push({path,file,opts});return {}},getPublicUrl:path=>({data:{publicUrl:'https://example.com/'+path}})};}},rpc:async(name,p)=>{rpcCalls++;assert.equal(name,'coach_replace_exercise_media');args=p;return {data:rows.slice(0,2)}}};
+ await publishMedia({db,userId:'coach',targets:rows.slice(0,2),files});
+ assert.equal(uploads.length,2);assert.equal(rpcCalls,1);assert.deepEqual(args.p_ids,['a','b']);assert.deepEqual(Object.keys(args.p_patch).sort(),['female_image_url','male_video_url']);assert.deepEqual(args.p_expected,{a:rows[0].updated_at,b:rows[1].updated_at});assert.ok(uploads.every(u=>u.opts.upsert===false));
+ assert.notEqual(uploads[0].path,uploads[1].path);
+ for(const params of [{userId:null,targets:rows,files},{userId:'coach',targets:[],files},{userId:'coach',targets:rows,files:{}},{userId:'coach',targets:rows,files:{male_video_url:{size:0,type:'video/mp4'}}}])await assert.rejects(()=>publishMedia({db,...params}));
+ assert.equal(rpcCalls,1);
+ db.rpc=async()=>({error:{message:'concurrent change'}});
+ await assert.rejects(()=>publishMedia({db,userId:'coach',targets:rows.slice(0,2),files}),/concurrent change/);
+ db.storage.from=()=>({upload:async()=>({error:{message:'offline'}})});
+ await assert.rejects(()=>publishMedia({db,userId:'coach',targets:rows,files}),/Nenhuma substituição/);
+ // Exercise rendering must show the coach's gender-specific upload before the anatomical general fallback.
+ const app=readFileSync('app.js','utf8');
+ const code=app.slice(app.indexOf('function validExerciseMediaUrl('),app.indexOf('function bindExerciseImageFallbacks('));
+ const context={selectedDemoGender:()=> 'female',esc:x=>String(x),URL};
+ runInNewContext(code+';this.image=exerciseImage;',context);
+ const html=context.image({name:'Leg press',female_image_url:'https://example.com/new.png',male_image_url:'https://example.com/male.png',thumbnail_url:'https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-posters/female/leg-press.jpg'});
+ assert.ok(html.includes('https://example.com/new.png'));assert.ok(!html.includes('exercise-posters'));assert.ok(!html.includes('male.png'));
+ console.log('Media library checks passed: matching, validation, gender isolation, atomic payload, no overwrites, failure handling and image precedence.');
+})().catch(e=>{console.error(e);process.exitCode=1});

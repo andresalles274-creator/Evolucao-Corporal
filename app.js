@@ -2,9 +2,10 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 import { createClinicalPanel } from "./clinical-panel.js?v=1.1.0";
+import { createMediaLibrary } from "./media-library.js?v=1.0.0";
 import { createPresentialIntake } from "./presential-intake.js?v=1.0.0";
 
-const APP_VERSION="10.13.1";
+const APP_VERSION="10.14.0";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -918,7 +919,7 @@ function coachLoadWarning(){
  return errs.length?`<div class="notice error-notice"><strong>Não foi possível carregar alguns dados do aluno.</strong><br><span class="small">O acesso do Coach ao banco precisa ser liberado no Supabase. Arquivo incluído nesta versão: LIBERAR_ACESSO_COACH.sql</span></div>`:"";
 }
 function backTarget(){
- if(route==="student"||route==="coach") return "home";
+ if(route==="mediaLibrary"||route==="student"||route==="coach") return "home";
  if(route==="trainingDay") return "training";
  if(["measures","food","workouts","hormones","photos","training"].includes(route)) return isCoach&&selectedStudentId?"student":"home";
  if(route==="profile") return "home";
@@ -1196,6 +1197,7 @@ function shell(){
  <nav class="bottomnav">${nav("home","⌂","Visão geral")}${nav("measures","▥","Medidas")}${nav("food","◉","Alimentação")}${nav("training","✦","Meu treino")}${nav("hormones","⌁","Uso hormonal")}${nav(isCoach?"coach":"profile","♟",isCoach?"Alunos":"Meu perfil")}</nav></div>`;
 }
 function nav(r,i,l){return `<button class="navbtn ${route===r?"active":""}" data-route="${r}"><span class="ico">${i}</span>${l}</button>`}
+const mediaLibrary=createMediaLibrary({db:supabase,authorized:()=>isCoach&&route==="mediaLibrary"?user?.id:null,esc,notify:toast,exit:()=>{route="home";render();},onSaved:updated=>{data.exercise_library=data.exercise_library.map(e=>updated.find(u=>u.id===e.id)||e);}});
 const presentialPanel=createPresentialIntake({db:supabase,authorized:()=>isCoach&&route==="presential"?user?.id:null,notify:toast,exit:async()=>{route="home";await hydrate();render();}});
 const clinicalPanel=createClinicalPanel({db:supabase,esc,fmt,today,authorized:()=>isCoach&&route==="clinical"?user?.id:null,notify:toast,exit:async()=>{route="home";await hydrate();render();},openStudent:async id=>{await hydrate();await chooseStudent(id,"student");}});
 function bindShell(){
@@ -1206,6 +1208,8 @@ function bindShell(){
 }
 function drawRoute(){
  const c=$("#content");
+ if(route==="mediaLibrary"&&isCoach){mediaLibrary.mount(c);return;}
+ mediaLibrary.dispose();
  if(route==="presential"&&isCoach){presentialPanel.mount(c);return;}
  if(route==="clinical"&&isCoach){clinicalPanel.mount(c);return;}
  c.innerHTML=route==="home"?(isCoach?coachHome():home()):route==="student"&&isCoach?studentDashboard():route==="photos"?photos():route==="measures"?measures():route==="food"?food():route==="training"?trainingView():route==="trainingDay"?trainingDayView():route==="workouts"?workouts():route==="hormones"?hormones():route==="coach"&&isCoach?coach():profileView();
@@ -1304,6 +1308,7 @@ function coachHome(){
  <div class="coach-welcome">
    <div><div class="eyebrow">Área profissional</div><h2>Painel do Coach</h2><p class="sub">Gerencie seus alunos e acompanhe a evolução em um só lugar.</p></div>
    <div class="coach-total"><span>${data.students.length}</span><small>aluno(s)</small></div>
+   <button type="button" class="coach-site-button clinical-entry" data-go="mediaLibrary"><span class="coach-site-icon" aria-hidden="true">▣</span><span class="coach-site-copy"><strong>Biblioteca de Mídias</strong><small>Imagens, vídeos e substituições em massa</small></span></button>
    <button type="button" class="coach-site-button clinical-entry" data-go="presential"><span class="coach-site-icon" aria-hidden="true">✎</span><span class="coach-site-copy"><strong>Atendimento presencial</strong><small>Entrevista inicial, anamnese, medidas e anexos</small></span></button>
    <button type="button" class="coach-site-button clinical-entry" data-go="clinical">
      <span class="coach-site-icon" aria-hidden="true">▤</span>
@@ -1527,7 +1532,7 @@ function selectedDemoGender(ex){
 function validExerciseMediaUrl(value){
  return /^https:\/\/[^\s"'<>]+$/i.test(String(value||"").trim());
 }
-// Exibir apenas as ilustracoes anatomicas padronizadas; nao usar fotografias antigas como fallback.
+// Recognize the existing anatomical posters without restricting coach uploads.
 function standardizedAnatomyUrl(value){
  const url=String(value||"").trim();
  return validExerciseMediaUrl(url)&&/^https:\/\/pub-585d42eb1aa64a67aedf483ec328d3fe\.r2\.dev\/exercise-posters\/(male|female)\/[a-z0-9-]+\.jpg(?:\?.*)?$/i.test(url)?url:"";
@@ -1538,14 +1543,14 @@ function exerciseImage(ex,compact=false,gender=null){
  const specific=standardizedAnatomyUrl(specificRaw);
  const general=standardizedAnatomyUrl(ex?.thumbnail_url);
  // Nunca deixar a ficha sem imagem quando existe uma imagem de execução cadastrada.
- // Prioridade absoluta para o modelo anatomico; fallback somente enquanto nao houver substituto equivalente.
+ // A specific coach-selected image takes priority over the general demonstration.
  const fallback=validExerciseMediaUrl(specificRaw)?String(specificRaw).trim():(validExerciseMediaUrl(ex?.thumbnail_url)?String(ex.thumbnail_url).trim():"");
- const url=specific||general||fallback;
+ const url=validExerciseMediaUrl(specificRaw)?String(specificRaw).trim():(general||fallback);
  if(!url)return '<div class="exercise-media-unavailable '+(compact?"compact":"")+'"><span aria-hidden="true">▧</span><small>Ilustração anatômica padronizada em preparação</small></div>';
  const second=!specific&&/^https:\/\/raw\.githubusercontent\.com\/yuhonas\/free-exercise-db\/main\/exercises\/.+\/0\.jpg$/i.test(url)?url.replace(/\/0\.jpg$/i,"/1.jpg"):"";
  const pose=(src,title)=>'<figure class="exercise-pose"><img src="'+esc(src)+'" alt="'+esc(title+" — "+(ex?.name||"exercício"))+'" loading="lazy" decoding="async"><figcaption>'+esc(title)+'</figcaption></figure>';
- const mainTitle=specific?(selected==="female"?"Ilustração anatômica — mulher":"Ilustração anatômica — homem"):(second?"Posição inicial":"Imagem de execução provisória");
- const note=!specific&&general?'<p class="exercise-demo-fallback">Esta versão ainda não tem imagem específica; mostrando a demonstração geral.</p>':"";
+ const mainTitle=validExerciseMediaUrl(specificRaw)?(selected==="female"?"Demonstração feminina":"Demonstração masculina"):(second?"Posição inicial":"Imagem de execução provisória");
+ const note=!validExerciseMediaUrl(specificRaw)&&general?'<p class="exercise-demo-fallback">Esta versão ainda não tem imagem específica; mostrando a demonstração geral.</p>':"";
  return '<div class="exercise-pose-gallery '+(compact?"compact":"")+'">'+pose(url,mainTitle)+(second?pose(second,"Posição final"):"")+'</div>'+note;
 }
 
@@ -1988,3 +1993,29 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden)refreshStu
 window.addEventListener("focus",()=>refreshStudentAccess());
 setInterval(refreshStudentAccess,30000);
 init();
+
+// Refresh only demonstrations, preserving the student's workout inputs and running videos.
+let exerciseMediaRefreshBusy=false;
+async function refreshExerciseMedia(){
+ if(exerciseMediaRefreshBusy||!user||accountInactive||document.hidden||!["training","trainingDay"].includes(route))return;
+ const accountId=user.id;
+ const visibleIds=[...new Set([...document.querySelectorAll(".exercise-demo")].map(el=>el.dataset.exercise))];
+ if(!visibleIds.length)return;
+ exerciseMediaRefreshBusy=true;
+ try{
+  const result=await supabase.from("exercise_library").select("*").in("id",visibleIds);
+  if(result.error||user?.id!==accountId)return;
+  for(const updated of result.data||[]){
+   const old=exById(updated.id);if(!old)continue;
+   const changed=["male_image_url","female_image_url","male_video_url","female_video_url"].some(k=>old[k]!==updated[k]);
+   if(!changed)continue;
+   const panels=[...document.querySelectorAll(".exercise-demo")].filter(el=>el.dataset.exercise===updated.id);
+   if(panels.some(panel=>[...panel.querySelectorAll("video")].some(video=>!video.paused)))continue;
+   Object.assign(old,updated);
+   panels.forEach(panel=>{const slot=panel.querySelector(".exercise-media-slot");if(slot){slot.innerHTML=exerciseMediaBlock(old,selectedDemoGender(old));bindExerciseImageFallbacks(slot);}});
+  }
+ }catch(_){}finally{exerciseMediaRefreshBusy=false;}
+}
+setInterval(refreshExerciseMedia,60000);
+window.addEventListener("focus",refreshExerciseMedia);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)refreshExerciseMedia();});
