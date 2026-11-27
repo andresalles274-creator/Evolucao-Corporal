@@ -938,7 +938,7 @@ async function toggleStudentSuspension(id,suspend){
  if(!student)return toast("Aluno não encontrado.",true);
  const name=student.full_name||"este aluno";
  const message=suspend
-  ?`Suspender temporariamente o acesso de ${name}?\n\nEle não poderá usar o aplicativo enquanto o pagamento estiver pendente. Os dados, dietas e treinos serão preservados.`
+  ?`Suspender temporariamente o acesso de ${name}?\n\nEle não poderá usar o aplicativo até sua autorização. Os dados, dietas e treinos serão preservados.`
   :`Reativar o acesso de ${name}?\n\nO aluno poderá voltar a acessar a mesma conta e todos os seus dados.`;
  if(!confirm(message))return;
  document.querySelectorAll(".student-suspend").forEach(b=>b.disabled=true);
@@ -1051,14 +1051,14 @@ function inactiveView(){
     </svg>
    </div>
    <div class="payment-lock__eyebrow">Aviso importante</div>
-   <h1 class="payment-lock__title">MENSALIDADE <strong>PENDENTE</strong></h1>
-   <p class="payment-lock__description">Seu acesso ao aplicativo está temporariamente pausado. Para continuar acompanhando seus treinos, dieta e evolução, regularize sua mensalidade com a consultoria.</p>
-   <div class="payment-lock__safe">Seus treinos, dietas, fotos e avaliações continuam salvos. O acesso será liberado após a confirmação do pagamento pelo coach.</div>
+   <h1 class="payment-lock__title">ACESSO <strong>BLOQUEADO</strong></h1>
+   <p class="payment-lock__description">Seu acesso ao aplicativo está temporariamente pausado. Para continuar acompanhando seus treinos, dieta e evolução, aguarde a autorização do seu coach.</p>
+   <div class="payment-lock__safe">Seus treinos, dietas, fotos e avaliações continuam salvos. O acesso será liberado após a autorização do coach.</div>
    <div class="payment-lock__actions">
     <button id="inactiveCheck" class="payment-lock__check" type="button">Verificar liberação</button>
     <button id="inactiveLogout" class="payment-lock__logout" type="button">Sair da conta</button>
    </div>
-   <small class="payment-lock__hint">Já realizou o pagamento? Avise seu coach e depois toque em "Verificar liberação".</small>
+   <small class="payment-lock__hint">Após falar com seu coach, toque em "Verificar liberação".</small>
   </div>
  </section>`;
  return `<section class="auth"><div class="authbox" style="text-align:center">
@@ -1427,7 +1427,7 @@ function studentList(){
    </button>
    <div class="student-row-controls">
      <button type="button" class="student-payment-toggle ${paymentNoticeStudentIds.has(s.user_id)?"access-reactivate":"access-suspend"}" data-student="${s.user_id}" data-show="${paymentNoticeStudentIds.has(s.user_id)?"0":"1"}">${paymentNoticeStudentIds.has(s.user_id)?"Retirar aviso":"Avisar mensalidade"}</button>
-     ${suspendedStudentIds.has(s.user_id)?`<button type="button" class="student-suspend access-reactivate" data-student="${s.user_id}" data-suspend="0">Reativar acesso</button>`:""}
+     <button type="button" class="student-suspend ${suspendedStudentIds.has(s.user_id)?"access-reactivate":"access-suspend"}" data-student="${s.user_id}" data-suspend="${suspendedStudentIds.has(s.user_id)?"0":"1"}">Permitir acesso: ${suspendedStudentIds.has(s.user_id)?"NÃO":"SIM"}</button>
      <button type="button" class="student-delete mini-danger" data-student="${s.user_id}" title="Excluir aluno">Excluir</button>
    </div>
  </div>`).join("")||`<div class="empty-state"><strong>Nenhum aluno cadastrado</strong><span>Os alunos aparecerão aqui depois do cadastro.</span></div>`}</div>`;
