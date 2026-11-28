@@ -43,7 +43,39 @@ export function bindExerciseVideos(root=document) {
   status.className='exercise-video-progress';
   if(video.parentElement?.classList.contains('training-video'))video.parentElement.after(status);
   else video.after(status);
+  const button=video.ownerDocument.createElement('button');
+  button.type='button';button.className='exercise-video-toggle';
+  button.textContent='▶ Reproduzir vídeo';
+  status.after(button);
+  let busy=false,failed=false;
+  const sync=()=>{button.textContent=video.paused?'▶ Reproduzir vídeo':'❚❚ Pausar vídeo';};
+  const unavailable=()=>{
+   failed=true;button.disabled=false;button.textContent='↻ Tentar reproduzir novamente';
+   status.textContent='Não foi possível carregar este vídeo. Tente novamente; se continuar, a origem pode estar indisponível.';
+  };
+  video.addEventListener('error',unavailable);
+  video.addEventListener('playing',()=>{failed=false;sync();});
+  video.addEventListener('pause',sync);
+  video.addEventListener('ended',sync);
+  button.onclick=async()=>{
+   if(busy)return;
+   if(!video.paused){video.pause();return;}
+   busy=true;button.disabled=true;
+   try{
+    // Refresh private links after the app has been left open for hours.
+    if(video.refreshExerciseSource)await video.refreshExerciseSource();
+    if(failed||video.error){failed=false;video.load();}
+    await video.play();sync();
+   }catch(error){
+    if(error?.name==='NotAllowedError'){
+     status.textContent='Toque novamente em Reproduzir vídeo para iniciar.';
+     button.textContent='▶ Reproduzir vídeo';
+    }else unavailable();
+   }finally{busy=false;button.disabled=false;}
+  };
+  if(video.error)unavailable();
   attachExerciseVideo(video,(seconds,finished)=>{
+   if(failed)return;
    const whole=Math.floor(seconds);
    const time=Math.floor(whole/60)+':'+String(whole%60).padStart(2,'0');
    status.textContent=finished?'Demonstração concluída · 1:30. Toque em reproduzir para repetir.':time+' / 1:30 · movimento em repetição';

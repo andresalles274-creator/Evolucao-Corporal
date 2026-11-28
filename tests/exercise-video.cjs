@@ -2,7 +2,7 @@ const assert=require('node:assert/strict');
 const {readFileSync}=require('node:fs');
 const {runInNewContext}=require('node:vm');
 (async()=>{
- const {attachExerciseVideo}=await import('../exercise-video.js');
+ const {attachExerciseVideo,bindExerciseVideos}=await import('../exercise-video.js');
  class Video extends EventTarget {
   currentTime=0;duration=6;paused=true;seeking=false;loop=true;plays=0;
   play(){this.paused=false;this.plays++;this.dispatchEvent(new Event('play'));return Promise.resolve();}
@@ -29,5 +29,21 @@ const {runInNewContext}=require('node:vm');
   const html=context.motion({name:'Leg press',male_video_url:'https://example.com/m.mp4',female_video_url:'https://example.com/f.webm'},gender);
   assert.ok(html.includes('<video data-exercise-repeat'));assert.ok(!html.includes('<details'));assert.ok(html.includes('preload="metadata"'));
  }
+ const nodes=[];
+ const clickable=new Video();clickable.dataset={};clickable.after=()=>{};clickable.load=()=>{};
+ clickable.ownerDocument={createElement:()=>{const el={textContent:'',after(){}};nodes.push(el);return el;},querySelectorAll:()=>[clickable]};
+ const root={querySelectorAll:selector=>selector.startsWith('iframe')?[]:[clickable]};
+ bindExerciseVideos(root);
+ const button=nodes[1],status=nodes[0];
+ assert.equal(button.textContent,'▶ Reproduzir vídeo');
+ await button.onclick();assert.equal(clickable.paused,false);assert.equal(button.disabled,false);
+ await button.onclick();assert.equal(clickable.paused,true);
+ let refreshed=0;clickable.refreshExerciseSource=async()=>{refreshed++};
+ await button.onclick();assert.equal(refreshed,1);assert.equal(clickable.paused,false);
+ clickable.pause();clickable.error={code:4};clickable.dispatchEvent(new Event('error'));
+ assert.match(status.textContent,/Não foi possível/);assert.match(button.textContent,/Tentar/);
+ clickable.play=async()=>{throw Object.assign(new Error('blocked'),{name:'NotAllowedError'})};
+ await button.onclick();assert.match(status.textContent,/Toque novamente/);assert.equal(button.disabled,false);
+ bindExerciseVideos(root);assert.equal(nodes.length,2);
  console.log('Video checks passed: 90-second loops, pause/resume, replay, seeking, long clip limit, visible male/female players.');
 })().catch(e=>{console.error(e);process.exitCode=1});

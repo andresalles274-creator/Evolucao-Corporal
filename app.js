@@ -5,9 +5,9 @@ import { createClinicalPanel } from "./clinical-panel.js?v=1.1.0";
 import { createMediaLibrary } from "./media-library.js?v=1.0.0";
 import { createPresentialIntake } from "./presential-intake.js?v=1.0.0";
 
-import { bindExerciseVideos } from "./exercise-video.js?v=1.0.0";
+import { bindExerciseVideos } from "./exercise-video.js?v=1.0.1";
 
-const APP_VERSION="10.15.0";
+const APP_VERSION="10.15.1";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
