@@ -1,0 +1,1220 @@
+{
+  "date": "2026-11-28",
+  "reason": "Recover workout demonstration videos after the upstream R2 endpoint started returning HTTP 401.",
+  "original_exercise_media": [
+    {
+      "id": "4797d33d-160e-4b29-a5d8-26d0f943bfae",
+      "name": "Abdominal Remador",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/v-up.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/v-up.mp4",
+      "video_url": null
+    },
+    {
+      "id": "2012e2d4-ef4f-442b-98f3-0dd93b2075a8",
+      "name": "Afundo",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-lunge.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-lunge.mp4",
+      "video_url": null
+    },
+    {
+      "id": "c025fd67-216c-4834-9bb6-17daf6c7d1eb",
+      "name": "Afundo (Smith ou Halteres)",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-lunge.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-lunge.mp4",
+      "video_url": null
+    },
+    {
+      "id": "ff943b82-a139-4366-aab7-7cfe9aa6fbc4",
+      "name": "Agachamento",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/classic-barbell-squat.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/classic-barbell-squat.mp4",
+      "video_url": null
+    },
+    {
+      "id": "1419e64b-2956-4e03-8a64-d3922b23f6a3",
+      "name": "Agachamento no Hack 45° (ou Smith)",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/sled-hack-squat.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/sled-hack-squat.mp4",
+      "video_url": null
+    },
+    {
+      "id": "0593125a-c2ea-412c-897b-0a5751e29dd7",
+      "name": "Agachamento ou Hack",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/sled-hack-squat.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/sled-hack-squat.mp4",
+      "video_url": null
+    },
+    {
+      "id": "de835cc3-6ad3-41d7-8439-7d94f55c6773",
+      "name": "Barra fixa / puxada",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/chin-ups-pull-ups.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/chin-ups-pull-ups.mp4",
+      "video_url": null
+    },
+    {
+      "id": "581ad6fc-f052-45aa-8620-694402ebf968",
+      "name": "Barra fixa ou puxada",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/chin-ups-pull-ups.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/chin-ups-pull-ups.mp4",
+      "video_url": null
+    },
+    {
+      "id": "f035aa82-2478-4297-a4ea-1202eb41deb1",
+      "name": "Bicicleta ergométrica leve (baixo impacto)",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/stationary-bike.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/stationary-bike.mp4",
+      "video_url": null
+    },
+    {
+      "id": "aaa0469e-8422-47e8-bb55-6690f2fc3572",
+      "name": "Cadeira abdutora",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-seated-hip-abduction.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-seated-hip-abduction.mp4",
+      "video_url": null
+    },
+    {
+      "id": "23fc2c8f-7f3c-42f7-bdfb-426382b8eb87",
+      "name": "Cadeira Abdutora – Dropset Final",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-seated-hip-abduction.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-seated-hip-abduction.mp4",
+      "video_url": null
+    },
+    {
+      "id": "15cb43f7-4533-4504-a245-b6501ba73e85",
+      "name": "Cadeira extensora",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-leg-extension.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-leg-extension.mp4",
+      "video_url": null
+    },
+    {
+      "id": "a67535ed-27c4-41f9-a613-a97c2aa38086",
+      "name": "Cadeira Extensora – Cluster Set",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-leg-extension.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-leg-extension.mp4",
+      "video_url": null
+    },
+    {
+      "id": "ffb48557-73a2-46d4-884e-a56c9d85f79c",
+      "name": "Cadeira flexora",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-seated-leg-curl.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-seated-leg-curl.mp4",
+      "video_url": null
+    },
+    {
+      "id": "f59bc4da-d6b7-4619-9261-31972c31af3b",
+      "name": "Cadeira Flexora – Rest-Pause",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-seated-leg-curl.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-seated-leg-curl.mp4",
+      "video_url": null
+    },
+    {
+      "id": "924df5cf-9fb8-442a-9950-d042a5da4744",
+      "name": "Cadeira Flexora Unilateral",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-kneeling-leg-curl.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-kneeling-leg-curl.mp4",
+      "video_url": null
+    },
+    {
+      "id": "ef6d99bc-cc68-4c14-b510-15b4573f9665",
+      "name": "Crucifixo / crossover",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-standing-fly-crossover-fly.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-standing-fly-crossover-fly.mp4",
+      "video_url": null
+    },
+    {
+      "id": "81b78110-40e9-4767-9009-fd1b52348a75",
+      "name": "Crucifixo inverso",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-crossover-reverse-fly.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-crossover-reverse-fly.mp4",
+      "video_url": null
+    },
+    {
+      "id": "14680e0f-c3f8-46e9-8641-20c7433cc8ca",
+      "name": "Crucifixo Inverso (Máquina)",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-seated-reverse-fly.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-seated-reverse-fly.mp4",
+      "video_url": null
+    },
+    {
+      "id": "fbe01830-83ad-48c8-86b4-486793e9f3eb",
+      "name": "Desenvolvimento",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-bench-seated-press.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-bench-seated-press.mp4",
+      "video_url": null
+    },
+    {
+      "id": "c64ff99d-b08f-41c4-9b82-bacb19bdd801",
+      "name": "Desenvolvimento Arnold (Halteres)",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-arnold-press.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-arnold-press.mp4",
+      "video_url": null
+    },
+    {
+      "id": "28fbf7e2-76ab-4e9f-857d-3c8e998507db",
+      "name": "Elevação lateral",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-lateral-raise.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-lateral-raise.mp4",
+      "video_url": null
+    },
+    {
+      "id": "cd5a7ec8-9125-46af-ab6b-f982d46a6da5",
+      "name": "Elevação Lateral com Halteres – Cluster Set",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-lateral-raise.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-lateral-raise.mp4",
+      "video_url": null
+    },
+    {
+      "id": "53764652-2091-485c-b172-e66909190efb",
+      "name": "Extensão de Quadril no Banco Romano (Pés Abduzidos)",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/45-degree-hyperextension.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/45-degree-hyperextension.mp4",
+      "video_url": null
+    },
+    {
+      "id": "c1fb3137-7b63-4db5-95db-e33b9c2ed171",
+      "name": "Flexora unilateral",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-kneeling-leg-curl.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-kneeling-leg-curl.mp4",
+      "video_url": null
+    },
+    {
+      "id": "97248d75-f4d2-4181-a65e-4811e1a490d9",
+      "name": "Flexora Unilateral (em pé ou deitado)",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-kneeling-leg-curl.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-kneeling-leg-curl.mp4",
+      "video_url": null
+    },
+    {
+      "id": "f3e7a74b-8eb3-44ae-92c4-861540a209b6",
+      "name": "Gêmeos em Pé (Smith)",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/smith-calf-raise.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/smith-calf-raise.mp4",
+      "video_url": null
+    },
+    {
+      "id": "dcf969e0-887f-4f8a-9aad-98458082c7bc",
+      "name": "Gêmeos Sentado",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-seated-calf-raise.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-seated-calf-raise.mp4",
+      "video_url": null
+    },
+    {
+      "id": "017b62dc-8db4-46de-b9ae-f527c644513d",
+      "name": "Hack squat",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/sled-hack-squat.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/sled-hack-squat.mp4",
+      "video_url": null
+    },
+    {
+      "id": "ed7c5c45-6fd0-4532-995f-672337ed37d7",
+      "name": "Leg press",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-horizontal-leg-press.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-horizontal-leg-press.mp4",
+      "video_url": null
+    },
+    {
+      "id": "baff9d5e-d61c-440a-b950-082269da4200",
+      "name": "Leg press — ênfase posteriores",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/sled-45-degree-leg-wide-press.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/sled-45-degree-leg-wide-press.mp4",
+      "video_url": null
+    },
+    {
+      "id": "74e83e1f-0edd-422b-b0ad-a3d5ea655a53",
+      "name": "Leg press 45°",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/sled-45-degree-leg-wide-press.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/sled-45-degree-leg-wide-press.mp4",
+      "video_url": null
+    },
+    {
+      "id": "49f96471-a784-4450-a594-72575f7ed37b",
+      "name": "Mesa flexora",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-lying-leg-curl.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-lying-leg-curl.mp4",
+      "video_url": null
+    },
+    {
+      "id": "77fa9e54-d6b2-466c-80fa-25e1dd22c12b",
+      "name": "Mesa Flexora – Cluster Set",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-lying-leg-curl.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-lying-leg-curl.mp4",
+      "video_url": null
+    },
+    {
+      "id": "83dec347-d135-4621-87f7-d605f1f4c96d",
+      "name": "Panturrilha",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-standing-calf-raise.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-standing-calf-raise.mp4",
+      "video_url": null
+    },
+    {
+      "id": "c8e94bf1-5e78-44b0-94e0-0e46f9e39fce",
+      "name": "Panturrilha em pé",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-standing-calf-raise.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-standing-calf-raise.mp4",
+      "video_url": null
+    },
+    {
+      "id": "df76242c-f17d-46b1-85d7-f9b76256027c",
+      "name": "Panturrilha Livre Unilateral",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-single-leg-calf-raise.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-single-leg-calf-raise.mp4",
+      "video_url": null
+    },
+    {
+      "id": "b5e06045-f929-41f1-84b6-1d5978120c2e",
+      "name": "Panturrilha no Leg 45°",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/sled-45-degree-calf-press.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/sled-45-degree-calf-press.mp4",
+      "video_url": null
+    },
+    {
+      "id": "adc0e614-712e-49e9-8dca-c37699d6cdbd",
+      "name": "Panturrilha sentado",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-seated-calf-raise.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-seated-calf-raise.mp4",
+      "video_url": null
+    },
+    {
+      "id": "e4ddaada-b579-4261-a19e-87c312a62ed6",
+      "name": "Paralelas ou máquina",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/chest-dips.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/chest-dips.mp4",
+      "video_url": null
+    },
+    {
+      "id": "19c8e6e2-cccb-46fd-ada3-ec8400d27ae4",
+      "name": "Paralelas ou máquina convergente",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-seated-dips.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-seated-dips.mp4",
+      "video_url": null
+    },
+    {
+      "id": "adbeb599-9a6a-42cc-9c46-60d16f2482c1",
+      "name": "Passada",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/barbell-lunge.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/barbell-lunge.mp4",
+      "video_url": null
+    },
+    {
+      "id": "6109f1fc-31a8-4217-8ecb-225d00b0b458",
+      "name": "Pull-Down com Corda",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-straight-arm-pulldown.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-straight-arm-pulldown.mp4",
+      "video_url": null
+    },
+    {
+      "id": "6fe765d3-47d5-4f4a-8277-295b0a29e263",
+      "name": "Puxada Alta – Pegada Supinada",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-bar-lateral-pulldown-reverse-grip.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-bar-lateral-pulldown-reverse-grip.mp4",
+      "video_url": null
+    },
+    {
+      "id": "da1ef233-c577-49a9-8d90-e4928843f323",
+      "name": "Puxada unilateral",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-one-arm-lateral-pulldown.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-one-arm-lateral-pulldown.mp4",
+      "video_url": null
+    },
+    {
+      "id": "d0ada98f-e52f-44d6-877b-409dcf20d97f",
+      "name": "Remada baixa",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-straight-back-seated-row-v-grip.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-straight-back-seated-row-v-grip.mp4",
+      "video_url": null
+    },
+    {
+      "id": "183ce82b-f30d-4261-aa68-01d7248f0ec4",
+      "name": "Remada Baixa na Polia",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-straight-back-seated-row-v-grip.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-straight-back-seated-row-v-grip.mp4",
+      "video_url": null
+    },
+    {
+      "id": "de4575d9-99b2-44d2-a216-8fa5c3c905ed",
+      "name": "Remada curvada",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-bent-over-row.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-bent-over-row.mp4",
+      "video_url": null
+    },
+    {
+      "id": "45da0646-e75a-4729-83ae-3987c9cc8b12",
+      "name": "Rosca direta",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/barbell-curl.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/barbell-curl.mp4",
+      "video_url": null
+    },
+    {
+      "id": "24f3ed00-0b08-45ef-83f5-9c5e348684b0",
+      "name": "Rosca Direta no Banco Inclinado (Halteres)",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-incline-curl.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-incline-curl.mp4",
+      "video_url": null
+    },
+    {
+      "id": "0c8f12ce-5f4b-4db1-a211-dc2faf0f0f47",
+      "name": "Rosca inclinada",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-incline-curl.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-incline-curl.mp4",
+      "video_url": null
+    },
+    {
+      "id": "d4e0b11d-afe2-4555-a0cc-eb9619336d49",
+      "name": "Rosca martelo",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-cross-body-hammer-curl.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-cross-body-hammer-curl.mp4",
+      "video_url": null
+    },
+    {
+      "id": "524b280a-f77c-470e-8e5f-e83085e12171",
+      "name": "Rosca Martelo com Halter – Drop-Set",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-cross-body-hammer-curl.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-cross-body-hammer-curl.mp4",
+      "video_url": null
+    },
+    {
+      "id": "824f34b0-ffb3-4ec5-be46-187d290f55a1",
+      "name": "Rosca Scott",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-preacher-curl.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-preacher-curl.mp4",
+      "video_url": null
+    },
+    {
+      "id": "4d2c9ebe-7921-4c71-809a-6f37b8762e66",
+      "name": "Stiff",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/barbell-straight-leg-deadlift.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/barbell-straight-leg-deadlift.mp4",
+      "video_url": null
+    },
+    {
+      "id": "27d81f8d-2322-4fe0-be2d-a057767cad38",
+      "name": "Stiff / RDL",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/barbell-straight-leg-deadlift.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/barbell-straight-leg-deadlift.mp4",
+      "video_url": null
+    },
+    {
+      "id": "d64ad62e-ea45-49fb-b0a1-bfa6bdce7da6",
+      "name": "Stiff com Barra (RDL – joelho semi-flexionado)",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/barbell-straight-leg-deadlift.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/barbell-straight-leg-deadlift.mp4",
+      "video_url": null
+    },
+    {
+      "id": "2094d67b-388a-48a5-9845-868a6150d38f",
+      "name": "Supino inclinado",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/barbell-incline-bench-press.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/barbell-incline-bench-press.mp4",
+      "video_url": null
+    },
+    {
+      "id": "a330c0f9-2e75-442b-af7f-3169cd4ff3d7",
+      "name": "Supino Inclinado com Halteres",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-incline-bench-press.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-incline-bench-press.mp4",
+      "video_url": null
+    },
+    {
+      "id": "2779799e-efd2-485a-9e53-bbaadfc8a7b7",
+      "name": "Supino reto",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/barbell-bench-press.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/barbell-bench-press.mp4",
+      "video_url": null
+    },
+    {
+      "id": "1a80e17d-34e0-48c2-9a9a-c4cbd1f61353",
+      "name": "Supino reto 1",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/barbell-bench-press.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/barbell-bench-press.mp4",
+      "video_url": null
+    },
+    {
+      "id": "551e2da4-1ffc-4e9d-997d-ef89bb0197ec",
+      "name": "Tríceps corda",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-pushdown-rope-attachment.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-pushdown-rope-attachment.mp4",
+      "video_url": null
+    },
+    {
+      "id": "2b257884-854d-4087-a1e9-e5fdc83d852f",
+      "name": "Tríceps francês",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-one-arm-triceps-extension.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-one-arm-triceps-extension.mp4",
+      "video_url": "https://youtube.com/shorts/8u8qb4V3no4?is=nvuLCEWuf84jB5KO"
+    },
+    {
+      "id": "5a240743-11dc-47c6-b5be-3e1f6e80f21e",
+      "name": "Tríceps Francês na Polia (Corda)",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-rope-high-pulley-overhead-triceps-extension.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-rope-high-pulley-overhead-triceps-extension.mp4",
+      "video_url": null
+    },
+    {
+      "id": "59c54054-93e5-43ec-964a-c5cbe50aaa4f",
+      "name": "Tríceps na Polia com Barra Reta",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-triceps-pushdown.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-triceps-pushdown.mp4",
+      "video_url": null
+    },
+    {
+      "id": "ec514894-b09a-4c0e-9910-add107eb64fe",
+      "name": "Tríceps polia",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-triceps-pushdown.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-triceps-pushdown.mp4",
+      "video_url": null
+    },
+    {
+      "id": "ef58255a-5a83-4e2c-979f-f2bebcd875ff",
+      "name": "Tríceps pulley",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-triceps-pushdown.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-triceps-pushdown.mp4",
+      "video_url": "https://youtube.com/shorts/_nQKcW-Dc4o?is=RmjweAkUpacWHYMY"
+    },
+    {
+      "id": "1bb7d8bd-e585-446d-8a92-ecbc5f6cf99f",
+      "name": "Tríceps testa",
+      "male_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/ez-barbell-lying-triceps-extension.mp4",
+      "female_video_url": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/ez-barbell-lying-triceps-extension.mp4",
+      "video_url": "https://youtu.be/VakpIeaaeXA?is=w80b0Eu81auRZQl1"
+    }
+  ],
+  "files": [
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/v-up.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__v-up.mp4",
+      "bytes": 155294,
+      "path": "public/exercise-videos/male/v-up.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/v-up.mp4",
+      "git_blob_sha": "a2dfd7364dd0e5c79f884f23c09eedfa11aa00a7"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/v-up.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__v-up.mp4",
+      "bytes": 184767,
+      "path": "public/exercise-videos/female/v-up.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/v-up.mp4",
+      "git_blob_sha": "28487de7f1b955b92dad984bbb3f6b3bea14d720"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-lunge.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__dumbbell-lunge.mp4",
+      "bytes": 94149,
+      "path": "public/exercise-videos/male/dumbbell-lunge.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/dumbbell-lunge.mp4",
+      "git_blob_sha": "a67513e8ada239f6fd120155f9b4134807fd6c2e"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-lunge.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__dumbbell-lunge.mp4",
+      "bytes": 103853,
+      "path": "public/exercise-videos/female/dumbbell-lunge.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/dumbbell-lunge.mp4",
+      "git_blob_sha": "0fbc575c0c63096e9b9990e79e7b6fe63f681e49"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/classic-barbell-squat.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__classic-barbell-squat.mp4",
+      "bytes": 87311,
+      "path": "public/exercise-videos/male/classic-barbell-squat.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/classic-barbell-squat.mp4",
+      "git_blob_sha": "9111211737ac434843ee229ae892eaadf2aec093"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/classic-barbell-squat.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__classic-barbell-squat.mp4",
+      "bytes": 81305,
+      "path": "public/exercise-videos/female/classic-barbell-squat.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/classic-barbell-squat.mp4",
+      "git_blob_sha": "5c8de22e227298289ce1b6c79eae1f5075607a36"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/sled-hack-squat.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__sled-hack-squat.mp4",
+      "bytes": 74924,
+      "path": "public/exercise-videos/male/sled-hack-squat.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/sled-hack-squat.mp4",
+      "git_blob_sha": "3bf9d53e463ffd32dfc2afae0316765a8484ac01"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/sled-hack-squat.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__sled-hack-squat.mp4",
+      "bytes": 72884,
+      "path": "public/exercise-videos/female/sled-hack-squat.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/sled-hack-squat.mp4",
+      "git_blob_sha": "78229f31a972ea4ff49a51fd9570dd5eaa7d4c18"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/chin-ups-pull-ups.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__chin-ups-pull-ups.mp4",
+      "bytes": 59686,
+      "path": "public/exercise-videos/male/chin-ups-pull-ups.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/chin-ups-pull-ups.mp4",
+      "git_blob_sha": "cbd3a48dbba0665fa102dc6457542b5701a113df"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/chin-ups-pull-ups.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__chin-ups-pull-ups.mp4",
+      "bytes": 53987,
+      "path": "public/exercise-videos/female/chin-ups-pull-ups.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/chin-ups-pull-ups.mp4",
+      "git_blob_sha": "6342162507e775d50e08beea4f8246e822c60e6f"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/stationary-bike.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__stationary-bike.mp4",
+      "bytes": 70196,
+      "path": "public/exercise-videos/male/stationary-bike.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/stationary-bike.mp4",
+      "git_blob_sha": "433f458804311df113f0686ba909d8332898bcd1"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/stationary-bike.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__stationary-bike.mp4",
+      "bytes": 217724,
+      "path": "public/exercise-videos/female/stationary-bike.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/stationary-bike.mp4",
+      "git_blob_sha": "003449a1f1285630ffaf5ef0e6de37d82d716989"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-seated-hip-abduction.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__lever-seated-hip-abduction.mp4",
+      "bytes": 68389,
+      "path": "public/exercise-videos/male/lever-seated-hip-abduction.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/lever-seated-hip-abduction.mp4",
+      "git_blob_sha": "01e35368ccc1389167cbc131a2e6018576f83429"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-seated-hip-abduction.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__lever-seated-hip-abduction.mp4",
+      "bytes": 69031,
+      "path": "public/exercise-videos/female/lever-seated-hip-abduction.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/lever-seated-hip-abduction.mp4",
+      "git_blob_sha": "eb997fc5d981c8001a94f128c9fe6feeeb0d8da8"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-leg-extension.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__lever-leg-extension.mp4",
+      "bytes": 73400,
+      "path": "public/exercise-videos/male/lever-leg-extension.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/lever-leg-extension.mp4",
+      "git_blob_sha": "cc28d14ea9c7d42f108a362361961a33a3cd573f"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-leg-extension.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__lever-leg-extension.mp4",
+      "bytes": 68977,
+      "path": "public/exercise-videos/female/lever-leg-extension.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/lever-leg-extension.mp4",
+      "git_blob_sha": "bc8d1562572116b8e93c64bb6f5cf8f2710baa96"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-seated-leg-curl.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__lever-seated-leg-curl.mp4",
+      "bytes": 76400,
+      "path": "public/exercise-videos/male/lever-seated-leg-curl.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/lever-seated-leg-curl.mp4",
+      "git_blob_sha": "402f393b8fbef534f3ee2ae2436fd0fa5e8ff38a"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-seated-leg-curl.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__lever-seated-leg-curl.mp4",
+      "bytes": 73275,
+      "path": "public/exercise-videos/female/lever-seated-leg-curl.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/lever-seated-leg-curl.mp4",
+      "git_blob_sha": "7599fcae003be346d25b7836a8ba5201f436368e"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-kneeling-leg-curl.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__lever-kneeling-leg-curl.mp4",
+      "bytes": 62648,
+      "path": "public/exercise-videos/male/lever-kneeling-leg-curl.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/lever-kneeling-leg-curl.mp4",
+      "git_blob_sha": "2173b95a6a6f4573d385e24595b21168a536c7d2"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-kneeling-leg-curl.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__lever-kneeling-leg-curl.mp4",
+      "bytes": 72466,
+      "path": "public/exercise-videos/female/lever-kneeling-leg-curl.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/lever-kneeling-leg-curl.mp4",
+      "git_blob_sha": "293944e5862e96a3ed35c42425f275c244746c8e"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-standing-fly-crossover-fly.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__cable-standing-fly-crossover-fly.mp4",
+      "bytes": 80982,
+      "path": "public/exercise-videos/male/cable-standing-fly-crossover-fly.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/cable-standing-fly-crossover-fly.mp4",
+      "git_blob_sha": "d64595664da2968ca9d29f9079ac462e056f14d8"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-standing-fly-crossover-fly.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__cable-standing-fly-crossover-fly.mp4",
+      "bytes": 79689,
+      "path": "public/exercise-videos/female/cable-standing-fly-crossover-fly.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/cable-standing-fly-crossover-fly.mp4",
+      "git_blob_sha": "dbad48178bbd07f21916b29cb05ef0bd999fae1c"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-crossover-reverse-fly.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__cable-crossover-reverse-fly.mp4",
+      "bytes": 79819,
+      "path": "public/exercise-videos/male/cable-crossover-reverse-fly.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/cable-crossover-reverse-fly.mp4",
+      "git_blob_sha": "fc0193cfb9944f7c9f97fe26e52c2f42aee624ab"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-crossover-reverse-fly.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__cable-crossover-reverse-fly.mp4",
+      "bytes": 72997,
+      "path": "public/exercise-videos/female/cable-crossover-reverse-fly.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/cable-crossover-reverse-fly.mp4",
+      "git_blob_sha": "d78c3bcc25a8c9f4c6ec7d6c51add371d4391e5b"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-seated-reverse-fly.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__lever-seated-reverse-fly.mp4",
+      "bytes": 65963,
+      "path": "public/exercise-videos/male/lever-seated-reverse-fly.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/lever-seated-reverse-fly.mp4",
+      "git_blob_sha": "d6922ab343e2bc1b4bf164c57ae1577622c4310f"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-seated-reverse-fly.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__lever-seated-reverse-fly.mp4",
+      "bytes": 67523,
+      "path": "public/exercise-videos/female/lever-seated-reverse-fly.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/lever-seated-reverse-fly.mp4",
+      "git_blob_sha": "9723fc8eafa7a967e2ad198ce5765e324fc1a5fa"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-bench-seated-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__dumbbell-bench-seated-press.mp4",
+      "bytes": 53705,
+      "path": "public/exercise-videos/male/dumbbell-bench-seated-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/dumbbell-bench-seated-press.mp4",
+      "git_blob_sha": "b0500517738c499f0e6cce566187e3d5bd33887f"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-bench-seated-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__dumbbell-bench-seated-press.mp4",
+      "bytes": 56836,
+      "path": "public/exercise-videos/female/dumbbell-bench-seated-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/dumbbell-bench-seated-press.mp4",
+      "git_blob_sha": "16a21396326937e7982eb87bdff171e9d4a972a2"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-arnold-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__dumbbell-arnold-press.mp4",
+      "bytes": 63893,
+      "path": "public/exercise-videos/male/dumbbell-arnold-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/dumbbell-arnold-press.mp4",
+      "git_blob_sha": "cb8848d21f227f95f4749cb3b8859390e4c7cd0c"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-arnold-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__dumbbell-arnold-press.mp4",
+      "bytes": 78334,
+      "path": "public/exercise-videos/female/dumbbell-arnold-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/dumbbell-arnold-press.mp4",
+      "git_blob_sha": "ce054aa2dd3127684e0bf16924fa7f531739890f"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-lateral-raise.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__dumbbell-lateral-raise.mp4",
+      "bytes": 57846,
+      "path": "public/exercise-videos/male/dumbbell-lateral-raise.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/dumbbell-lateral-raise.mp4",
+      "git_blob_sha": "13e4e8265f43ae0d5af8fbb49be4721f4f3fc088"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-lateral-raise.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__dumbbell-lateral-raise.mp4",
+      "bytes": 53515,
+      "path": "public/exercise-videos/female/dumbbell-lateral-raise.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/dumbbell-lateral-raise.mp4",
+      "git_blob_sha": "41888ef7e5377df39aa60f454f30381f243d9913"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/45-degree-hyperextension.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__45-degree-hyperextension.mp4",
+      "bytes": 72248,
+      "path": "public/exercise-videos/male/45-degree-hyperextension.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/45-degree-hyperextension.mp4",
+      "git_blob_sha": "6e7624d5eda030c0d5cd271ad2cc63f53d78689d"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/45-degree-hyperextension.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__45-degree-hyperextension.mp4",
+      "bytes": 59044,
+      "path": "public/exercise-videos/female/45-degree-hyperextension.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/45-degree-hyperextension.mp4",
+      "git_blob_sha": "aeb7b4bc57a9b3d5c27cc6690c8b915f95b5421d"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/smith-calf-raise.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__smith-calf-raise.mp4",
+      "bytes": 43393,
+      "path": "public/exercise-videos/male/smith-calf-raise.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/smith-calf-raise.mp4",
+      "git_blob_sha": "dc20d3d3073696f8da20b8e42db1a02e9bc26244"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/smith-calf-raise.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__smith-calf-raise.mp4",
+      "bytes": 45604,
+      "path": "public/exercise-videos/female/smith-calf-raise.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/smith-calf-raise.mp4",
+      "git_blob_sha": "3c48fb32ef27eb46731e32476eb752ea9b36b184"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-seated-calf-raise.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__lever-seated-calf-raise.mp4",
+      "bytes": 49577,
+      "path": "public/exercise-videos/male/lever-seated-calf-raise.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/lever-seated-calf-raise.mp4",
+      "git_blob_sha": "b9d5cdfe3d8464bd38a7e05e128ca61db2268d77"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-seated-calf-raise.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__lever-seated-calf-raise.mp4",
+      "bytes": 62911,
+      "path": "public/exercise-videos/female/lever-seated-calf-raise.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/lever-seated-calf-raise.mp4",
+      "git_blob_sha": "3be391883f35b902014f5f10e61dc6f5100f19a4"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-horizontal-leg-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__lever-horizontal-leg-press.mp4",
+      "bytes": 83636,
+      "path": "public/exercise-videos/male/lever-horizontal-leg-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/lever-horizontal-leg-press.mp4",
+      "git_blob_sha": "6b259bb918f05ce6d13dc75de3fba2843be66a5b"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-horizontal-leg-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__lever-horizontal-leg-press.mp4",
+      "bytes": 75561,
+      "path": "public/exercise-videos/female/lever-horizontal-leg-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/lever-horizontal-leg-press.mp4",
+      "git_blob_sha": "19092c12576c4682c7e60ffd0e1d047884de249a"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/sled-45-degree-leg-wide-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__sled-45-degree-leg-wide-press.mp4",
+      "bytes": 62171,
+      "path": "public/exercise-videos/male/sled-45-degree-leg-wide-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/sled-45-degree-leg-wide-press.mp4",
+      "git_blob_sha": "d9b8b9492bea29049e943558115a26bd7d347174"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/sled-45-degree-leg-wide-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__sled-45-degree-leg-wide-press.mp4",
+      "bytes": 70988,
+      "path": "public/exercise-videos/female/sled-45-degree-leg-wide-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/sled-45-degree-leg-wide-press.mp4",
+      "git_blob_sha": "d562a0b36f70ec85beec93fdc36d9eddb55b97cb"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-lying-leg-curl.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__lever-lying-leg-curl.mp4",
+      "bytes": 54994,
+      "path": "public/exercise-videos/male/lever-lying-leg-curl.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/lever-lying-leg-curl.mp4",
+      "git_blob_sha": "c5aa0638857a22e4d9a2466f50c1b06098727353"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-lying-leg-curl.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__lever-lying-leg-curl.mp4",
+      "bytes": 69124,
+      "path": "public/exercise-videos/female/lever-lying-leg-curl.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/lever-lying-leg-curl.mp4",
+      "git_blob_sha": "3ae3e057385605e8a68081e8bd8f4cce2b875ce5"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-standing-calf-raise.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__dumbbell-standing-calf-raise.mp4",
+      "bytes": 41705,
+      "path": "public/exercise-videos/male/dumbbell-standing-calf-raise.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/dumbbell-standing-calf-raise.mp4",
+      "git_blob_sha": "e9b487122a24395b024354c3d7012e31ada4caeb"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-standing-calf-raise.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__dumbbell-standing-calf-raise.mp4",
+      "bytes": 37569,
+      "path": "public/exercise-videos/female/dumbbell-standing-calf-raise.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/dumbbell-standing-calf-raise.mp4",
+      "git_blob_sha": "9e1f5a0b80516ca8cc0586127b5d8ee85e50f52e"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-single-leg-calf-raise.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__dumbbell-single-leg-calf-raise.mp4",
+      "bytes": 46025,
+      "path": "public/exercise-videos/male/dumbbell-single-leg-calf-raise.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/dumbbell-single-leg-calf-raise.mp4",
+      "git_blob_sha": "df877b92b0154995f1ed7d003d78fdb95ac05043"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-single-leg-calf-raise.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__dumbbell-single-leg-calf-raise.mp4",
+      "bytes": 42816,
+      "path": "public/exercise-videos/female/dumbbell-single-leg-calf-raise.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/dumbbell-single-leg-calf-raise.mp4",
+      "git_blob_sha": "8bf06c25f2a2fbe89b902e66c4b80554d15d52a2"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/sled-45-degree-calf-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__sled-45-degree-calf-press.mp4",
+      "bytes": 40685,
+      "path": "public/exercise-videos/male/sled-45-degree-calf-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/sled-45-degree-calf-press.mp4",
+      "git_blob_sha": "241e24251b49b622fa4f241ebb5b6b717ec443b3"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/sled-45-degree-calf-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__sled-45-degree-calf-press.mp4",
+      "bytes": 44951,
+      "path": "public/exercise-videos/female/sled-45-degree-calf-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/sled-45-degree-calf-press.mp4",
+      "git_blob_sha": "db2790707a19f8ed63a936074477e3087a09828f"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/chest-dips.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__chest-dips.mp4",
+      "bytes": 63235,
+      "path": "public/exercise-videos/male/chest-dips.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/chest-dips.mp4",
+      "git_blob_sha": "e3230643f5968eaee9d806734101b84b77368b31"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/chest-dips.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__chest-dips.mp4",
+      "bytes": 59213,
+      "path": "public/exercise-videos/female/chest-dips.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/chest-dips.mp4",
+      "git_blob_sha": "6ba38f5ae89592781b808780051b7f6cca68577b"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-seated-dips.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__lever-seated-dips.mp4",
+      "bytes": 52687,
+      "path": "public/exercise-videos/male/lever-seated-dips.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/lever-seated-dips.mp4",
+      "git_blob_sha": "a8d655e311d2f380878e06d1cb8a904ce3ed7ae4"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-seated-dips.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__lever-seated-dips.mp4",
+      "bytes": 55048,
+      "path": "public/exercise-videos/female/lever-seated-dips.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/lever-seated-dips.mp4",
+      "git_blob_sha": "e4a5f24f7c9ed68eb0d983b11cebd2fce0a271b6"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/barbell-lunge.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__barbell-lunge.mp4",
+      "bytes": 102053,
+      "path": "public/exercise-videos/male/barbell-lunge.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/barbell-lunge.mp4",
+      "git_blob_sha": "54e4fc6185111ca3733d3d4c0eef9a1dd97d99b6"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/barbell-lunge.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__barbell-lunge.mp4",
+      "bytes": 105506,
+      "path": "public/exercise-videos/female/barbell-lunge.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/barbell-lunge.mp4",
+      "git_blob_sha": "2ff14f03bf2c640a263115ba45c5be4d2a68c390"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-straight-arm-pulldown.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__cable-straight-arm-pulldown.mp4",
+      "bytes": 54617,
+      "path": "public/exercise-videos/male/cable-straight-arm-pulldown.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/cable-straight-arm-pulldown.mp4",
+      "git_blob_sha": "4f9ea60d81914d25c7f6c48f308f02a5bbb3cff6"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-straight-arm-pulldown.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__cable-straight-arm-pulldown.mp4",
+      "bytes": 64354,
+      "path": "public/exercise-videos/female/cable-straight-arm-pulldown.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/cable-straight-arm-pulldown.mp4",
+      "git_blob_sha": "3e36309bf6c0465aec2d802d003ef4a561ed7ed1"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-bar-lateral-pulldown-reverse-grip.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__cable-bar-lateral-pulldown-reverse-grip.mp4",
+      "bytes": 62159,
+      "path": "public/exercise-videos/male/cable-bar-lateral-pulldown-reverse-grip.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/cable-bar-lateral-pulldown-reverse-grip.mp4",
+      "git_blob_sha": "ed17aea06e48ddc2300f45295910f7421c1c401b"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-bar-lateral-pulldown-reverse-grip.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__cable-bar-lateral-pulldown-reverse-grip.mp4",
+      "bytes": 68312,
+      "path": "public/exercise-videos/female/cable-bar-lateral-pulldown-reverse-grip.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/cable-bar-lateral-pulldown-reverse-grip.mp4",
+      "git_blob_sha": "eaf266f7f4810ba4244b178674f6e50c8112d702"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-one-arm-lateral-pulldown.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__cable-one-arm-lateral-pulldown.mp4",
+      "bytes": 54647,
+      "path": "public/exercise-videos/male/cable-one-arm-lateral-pulldown.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/cable-one-arm-lateral-pulldown.mp4",
+      "git_blob_sha": "88641e2911068b1cf5b868be541857b111a3b01c"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-one-arm-lateral-pulldown.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__cable-one-arm-lateral-pulldown.mp4",
+      "bytes": 57049,
+      "path": "public/exercise-videos/female/cable-one-arm-lateral-pulldown.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/cable-one-arm-lateral-pulldown.mp4",
+      "git_blob_sha": "cfd592d967392518aa253adbce326b7b1595f394"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-straight-back-seated-row-v-grip.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__cable-straight-back-seated-row-v-grip.mp4",
+      "bytes": 39743,
+      "path": "public/exercise-videos/male/cable-straight-back-seated-row-v-grip.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/cable-straight-back-seated-row-v-grip.mp4",
+      "git_blob_sha": "2893cebe848e6fc86dd1a93345573d38d5f49222"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-straight-back-seated-row-v-grip.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__cable-straight-back-seated-row-v-grip.mp4",
+      "bytes": 42504,
+      "path": "public/exercise-videos/female/cable-straight-back-seated-row-v-grip.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/cable-straight-back-seated-row-v-grip.mp4",
+      "git_blob_sha": "abffe24ecec88ece496d3c036e2d790492adef17"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-bent-over-row.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__dumbbell-bent-over-row.mp4",
+      "bytes": 64556,
+      "path": "public/exercise-videos/male/dumbbell-bent-over-row.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/dumbbell-bent-over-row.mp4",
+      "git_blob_sha": "fe4e32734ae45d855e04b070694ce527d79f8dd9"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-bent-over-row.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__dumbbell-bent-over-row.mp4",
+      "bytes": 77351,
+      "path": "public/exercise-videos/female/dumbbell-bent-over-row.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/dumbbell-bent-over-row.mp4",
+      "git_blob_sha": "6a922b51762b2f297cfb301266d0e7b04e3e1f59"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/barbell-curl.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__barbell-curl.mp4",
+      "bytes": 80162,
+      "path": "public/exercise-videos/male/barbell-curl.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/barbell-curl.mp4",
+      "git_blob_sha": "e85d2df29010b24b1e5c5f7dff184dafef7fd46e"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/barbell-curl.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__barbell-curl.mp4",
+      "bytes": 76268,
+      "path": "public/exercise-videos/female/barbell-curl.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/barbell-curl.mp4",
+      "git_blob_sha": "94c05c2991e951c86b63b7d4f724742a7b255a46"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-incline-curl.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__dumbbell-incline-curl.mp4",
+      "bytes": 65317,
+      "path": "public/exercise-videos/male/dumbbell-incline-curl.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/dumbbell-incline-curl.mp4",
+      "git_blob_sha": "9587f8d8833e121d1e15eed5a0aa345c4a208659"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-incline-curl.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__dumbbell-incline-curl.mp4",
+      "bytes": 57040,
+      "path": "public/exercise-videos/female/dumbbell-incline-curl.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/dumbbell-incline-curl.mp4",
+      "git_blob_sha": "800dcea5ba26281efb4240f4a9e75918cbd18f27"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-cross-body-hammer-curl.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__dumbbell-cross-body-hammer-curl.mp4",
+      "bytes": 68928,
+      "path": "public/exercise-videos/male/dumbbell-cross-body-hammer-curl.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/dumbbell-cross-body-hammer-curl.mp4",
+      "git_blob_sha": "44f42e4ce71b9658b9b852fd28fcd1121d3f13f6"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-cross-body-hammer-curl.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__dumbbell-cross-body-hammer-curl.mp4",
+      "bytes": 75186,
+      "path": "public/exercise-videos/female/dumbbell-cross-body-hammer-curl.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/dumbbell-cross-body-hammer-curl.mp4",
+      "git_blob_sha": "0353403d70bff9b565f77ceb23b9368fdb1e4a85"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/lever-preacher-curl.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__lever-preacher-curl.mp4",
+      "bytes": 66404,
+      "path": "public/exercise-videos/male/lever-preacher-curl.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/lever-preacher-curl.mp4",
+      "git_blob_sha": "230acbc63cf85525db9ba85c8ec547e27e63d66c"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/lever-preacher-curl.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__lever-preacher-curl.mp4",
+      "bytes": 88092,
+      "path": "public/exercise-videos/female/lever-preacher-curl.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/lever-preacher-curl.mp4",
+      "git_blob_sha": "869e0df9771bf2368c55ffcf206a59ae42cebd6b"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/barbell-straight-leg-deadlift.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__barbell-straight-leg-deadlift.mp4",
+      "bytes": 101849,
+      "path": "public/exercise-videos/male/barbell-straight-leg-deadlift.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/barbell-straight-leg-deadlift.mp4",
+      "git_blob_sha": "25a85434807f9302399df2d8181ca8a754b16cf7"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/barbell-straight-leg-deadlift.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__barbell-straight-leg-deadlift.mp4",
+      "bytes": 88553,
+      "path": "public/exercise-videos/female/barbell-straight-leg-deadlift.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/barbell-straight-leg-deadlift.mp4",
+      "git_blob_sha": "fa8113d54de9cc2aaf5dc1b9e8acfeca6dce9104"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/barbell-incline-bench-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__barbell-incline-bench-press.mp4",
+      "bytes": 70042,
+      "path": "public/exercise-videos/male/barbell-incline-bench-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/barbell-incline-bench-press.mp4",
+      "git_blob_sha": "eace54b647e9845bd1238092bdd95e2d8a99098b"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/barbell-incline-bench-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__barbell-incline-bench-press.mp4",
+      "bytes": 57619,
+      "path": "public/exercise-videos/female/barbell-incline-bench-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/barbell-incline-bench-press.mp4",
+      "git_blob_sha": "a4670e1b57c936fae2e72e2c7d9ee2e5f45b8fc6"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-incline-bench-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__dumbbell-incline-bench-press.mp4",
+      "bytes": 60009,
+      "path": "public/exercise-videos/male/dumbbell-incline-bench-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/dumbbell-incline-bench-press.mp4",
+      "git_blob_sha": "8edabe5f9f68087d1bc0e8de42c5ed604154056d"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-incline-bench-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__dumbbell-incline-bench-press.mp4",
+      "bytes": 55717,
+      "path": "public/exercise-videos/female/dumbbell-incline-bench-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/dumbbell-incline-bench-press.mp4",
+      "git_blob_sha": "24c044826ebd530a4e5f643ff0035afed95bffc4"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/barbell-bench-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__barbell-bench-press.mp4",
+      "bytes": 62123,
+      "path": "public/exercise-videos/male/barbell-bench-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/barbell-bench-press.mp4",
+      "git_blob_sha": "2e1dc9ffde5a63c492b0306c81bc880766261662"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/barbell-bench-press.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__barbell-bench-press.mp4",
+      "bytes": 61665,
+      "path": "public/exercise-videos/female/barbell-bench-press.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/barbell-bench-press.mp4",
+      "git_blob_sha": "26ac39e242adf096adee43def3bca2b610fc9083"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-pushdown-rope-attachment.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__cable-pushdown-rope-attachment.mp4",
+      "bytes": 42573,
+      "path": "public/exercise-videos/male/cable-pushdown-rope-attachment.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/cable-pushdown-rope-attachment.mp4",
+      "git_blob_sha": "86246a0f29167b71401fe84fc622374a1d38cccf"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-pushdown-rope-attachment.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__cable-pushdown-rope-attachment.mp4",
+      "bytes": 38894,
+      "path": "public/exercise-videos/female/cable-pushdown-rope-attachment.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/cable-pushdown-rope-attachment.mp4",
+      "git_blob_sha": "700a94abdafc4ff52bdf30da7de8bdb0d8655195"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/dumbbell-one-arm-triceps-extension.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__dumbbell-one-arm-triceps-extension.mp4",
+      "bytes": 31499,
+      "path": "public/exercise-videos/male/dumbbell-one-arm-triceps-extension.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/dumbbell-one-arm-triceps-extension.mp4",
+      "git_blob_sha": "8e6e709cfa2674093ecdb9fac75d4078276129e4"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/dumbbell-one-arm-triceps-extension.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__dumbbell-one-arm-triceps-extension.mp4",
+      "bytes": 41195,
+      "path": "public/exercise-videos/female/dumbbell-one-arm-triceps-extension.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/dumbbell-one-arm-triceps-extension.mp4",
+      "git_blob_sha": "02c286bfed11ac5321f9878b2ca4ff78ec4d5e07"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-rope-high-pulley-overhead-triceps-extension.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__cable-rope-high-pulley-overhead-triceps-extension.mp4",
+      "bytes": 62284,
+      "path": "public/exercise-videos/male/cable-rope-high-pulley-overhead-triceps-extension.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/cable-rope-high-pulley-overhead-triceps-extension.mp4",
+      "git_blob_sha": "0f4bf094f9af2dc94b44dda2bea308552678f3a1"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-rope-high-pulley-overhead-triceps-extension.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__cable-rope-high-pulley-overhead-triceps-extension.mp4",
+      "bytes": 47501,
+      "path": "public/exercise-videos/female/cable-rope-high-pulley-overhead-triceps-extension.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/cable-rope-high-pulley-overhead-triceps-extension.mp4",
+      "git_blob_sha": "87eda0dd4189316847e8aa88c46d0673826d04b3"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/cable-triceps-pushdown.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__cable-triceps-pushdown.mp4",
+      "bytes": 45027,
+      "path": "public/exercise-videos/male/cable-triceps-pushdown.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/cable-triceps-pushdown.mp4",
+      "git_blob_sha": "462767286abe1d8b0cbf76f50590e2c9cda4ddb3"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/cable-triceps-pushdown.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__cable-triceps-pushdown.mp4",
+      "bytes": 45885,
+      "path": "public/exercise-videos/female/cable-triceps-pushdown.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/cable-triceps-pushdown.mp4",
+      "git_blob_sha": "8d06739b3389c72d7f17f2aa6d601ae765f14851"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/male/ez-barbell-lying-triceps-extension.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-men-1/men__ez-barbell-lying-triceps-extension.mp4",
+      "bytes": 75190,
+      "path": "public/exercise-videos/male/ez-barbell-lying-triceps-extension.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/male/ez-barbell-lying-triceps-extension.mp4",
+      "git_blob_sha": "b63adaa468a5ece1f73676e0cce67778abd07932"
+    },
+    {
+      "old": "https://pub-585d42eb1aa64a67aedf483ec328d3fe.r2.dev/exercise-videos/female/ez-barbell-lying-triceps-extension.mp4",
+      "url": "https://github.com/mrudulraval74/fitdecoded-media/releases/download/videos-girl-1/girl__ez-barbell-lying-triceps-extension.mp4",
+      "bytes": 59864,
+      "path": "public/exercise-videos/female/ez-barbell-lying-triceps-extension.mp4",
+      "new_url": "https://andresalles274-creator.github.io/Evolucao-Corporal/public/exercise-videos/female/ez-barbell-lying-triceps-extension.mp4",
+      "git_blob_sha": "1b4ab3114e90d76612c174ee7554647099a889c4"
+    }
+  ]
+}
