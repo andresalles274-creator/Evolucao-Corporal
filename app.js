@@ -134,6 +134,7 @@ async function init(){
    if(!user){
      profile=null;isCoach=false;accountInactive=false;accountSuspended=false;suspendedStudentIds=new Set();paymentNoticeStudentIds=new Set();paymentNoticeEnabled=false;paymentNoticeDismissed=false;
      selectedStudentId=null;selectedStudentProfile=null;studentBillingPlans=new Map();
+     studentDataLoading=false;studentSelectionRequest++;
      data={measurements:[],meals:[],workouts:[],hormone_logs:[],students:[],skinfolds:[],progress_photos:[],exercise_library:[],training_plans:[],training_days:[],training_day_exercises:[],training_sessions:[],training_set_logs:[],training_checkins:[],diet_plans:[],diet_plan_meals:[]};
      clearPhotoDraft();
      render();
