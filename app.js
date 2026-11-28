@@ -5,7 +5,9 @@ import { createClinicalPanel } from "./clinical-panel.js?v=1.1.0";
 import { createMediaLibrary } from "./media-library.js?v=1.0.0";
 import { createPresentialIntake } from "./presential-intake.js?v=1.0.0";
 
-const APP_VERSION="10.14.0";
+import { bindExerciseVideos } from "./exercise-video.js?v=1.0.0";
+
+const APP_VERSION="10.15.0";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -1515,8 +1517,8 @@ function videoEmbed(ex,compact=false){
  const url=String(ex?.video_url||"").trim();
  if(!url)return `<div class="training-video-empty"><span>▶</span><small>Sem vídeo demonstrativo</small></div>`;
  const yt=youtubeEmbed(url);
- if(yt)return `<div class="training-video ${compact?"compact":""}"><iframe src="${esc(yt)}" title="Vídeo de ${esc(ex.name)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
- if(/\.(mp4|webm|ogg)(\?|$)/i.test(url))return `<div class="training-video ${compact?"compact":""}"><video controls preload="metadata" playsinline src="${esc(url)}"></video></div>`;
+ if(yt)return `<div class="training-video ${compact?"compact":""}"><iframe data-exercise-youtube src="${esc(yt)}?enablejsapi=1&amp;playsinline=1&amp;origin=${encodeURIComponent(location.origin)}" title="Vídeo de ${esc(ex.name)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+ if(/\.(mp4|webm|ogg)(\?|$)/i.test(url))return `<div class="training-video ${compact?"compact":""}"><video data-exercise-repeat controls preload="metadata" playsinline src="${esc(url)}"></video></div>`;
  return `<div class="training-video-link"><a class="btn btn-ghost btn-full" href="${esc(url)}" target="_blank" rel="noopener">▶ Abrir vídeo demonstrativo</a></div>`;
 }
 
@@ -1589,10 +1591,10 @@ function exerciseMotion(ex,gender){
  const img=selected==="female"?ex?.female_image_url:ex?.male_image_url;
  const poster=validExerciseMediaUrl(img)?' poster="'+esc(img)+'"':"";
  const model=selected==="female"?"mulher":"homem";
- return '<details class="exercise-motion"><summary>▶ Ver movimento completo com '+model+'</summary>'+
- '<p>Assista à execução em movimento, não apenas à imagem parada.</p>'+
- '<video controls playsinline preload="none"'+poster+' src="'+esc(url)+'" aria-label="Demonstração do '+esc(ex.name)+' com '+model+'"></video>'+
- '<small>Ajuste a amplitude e a carga conforme a orientação do seu coach.</small></details>';
+ return '<section class="exercise-motion"><h3>Execução com '+model+'</h3>'+
+ '<p>Repetição do movimento por até 1min30s, na velocidade original.</p>'+
+ '<video data-exercise-repeat controls playsinline preload="metadata"'+poster+' src="'+esc(url)+'" aria-label="Demonstração do '+esc(ex.name)+' com '+model+'"></video>'+
+ '<small>Ajuste a amplitude e a carga conforme a orientação do seu coach.</small></section>';
 }
 function exerciseMediaBlock(ex,gender){
  return exerciseMotion(ex,gender)+exerciseImage(ex,false,gender);
@@ -1769,7 +1771,7 @@ function trainingDayView(){
 function trainingExerciseCard(it,idx,session){
  const ex=exById(it.exercise_id)||{name:"Exercício"};
  const logs=session?logsFor(session.id,it.exercise_id):[];
- return `<div class="card training-exercise-card"><div class="exercise-number">${idx+1}</div><h2>${esc(ex.name)}</h2><p class="sub">${esc(ex.muscle_group||"")}</p>${exerciseGuide(ex)}${exerciseDemoPanel(ex)}${ex.video_url?`<details class="training-video-details"><summary>▶ Assistir demonstração em vídeo</summary>${videoEmbed(ex,true)}</details>`:""}${coachExerciseUploadEditor(ex)}<div class="prescription-strip"><span><small>Séries</small><strong>${it.sets}</strong></span><span><small>Repetições</small><strong>${it.reps_min||"—"}${it.reps_max?`–${it.reps_max}`:""}</strong></span><span><small>Descanso</small><strong>${it.rest_seconds||0}s</strong></span></div>${it.notes?`<p class="training-note">${esc(it.notes)}</p>`:""}
+ return `<div class="card training-exercise-card"><div class="exercise-number">${idx+1}</div><h2>${esc(ex.name)}</h2><p class="sub">${esc(ex.muscle_group||"")}</p>${exerciseGuide(ex)}${exerciseDemoPanel(ex)}${ex.video_url?`<section class="training-video-details"><h3>Demonstração em vídeo</h3>${videoEmbed(ex,true)}</section>`:""}${coachExerciseUploadEditor(ex)}<div class="prescription-strip"><span><small>Séries</small><strong>${it.sets}</strong></span><span><small>Repetições</small><strong>${it.reps_min||"—"}${it.reps_max?`–${it.reps_max}`:""}</strong></span><span><small>Descanso</small><strong>${it.rest_seconds||0}s</strong></span></div>${it.notes?`<p class="training-note">${esc(it.notes)}</p>`:""}
  ${session&&!isCoach?`<div class="set-log-list">${Array.from({length:it.sets},(_,i)=>{const setNo=i+1;const log=logs.find(x=>Number(x.set_number)===setNo);return `<div class="set-log-row ${log?.completed?"done":""}" data-session="${session.id}" data-exercise="${it.exercise_id}" data-set="${setNo}"><span class="set-number">${setNo}</span><input class="set-weight" type="number" step="0.5" min="0" placeholder="kg" value="${log?.weight_kg??""}"><input class="set-reps" type="number" min="0" placeholder="reps" value="${log?.reps??""}"><button class="set-save ${log?.completed?"done":""}" type="button">${log?.completed?"✓":"Salvar"}</button></div>`}).join("")}</div>`:""}</div>`;
 }
 async function addExercise(form){
@@ -1886,7 +1888,7 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
     btn.setAttribute("aria-pressed",String(selected));
   });
   const slot=wrap.querySelector(".exercise-media-slot");
-  if(slot){slot.innerHTML=exerciseMediaBlock(ex,gender);bindExerciseImageFallbacks(slot);}
+  if(slot){slot.innerHTML=exerciseMediaBlock(ex,gender);bindExerciseImageFallbacks(slot);bindExerciseVideos(slot);}
  });
 
  document.querySelectorAll(".exercise-upload-form").forEach(form=>{
@@ -1898,6 +1900,7 @@ $$(".record-open").forEach(b=>b.onclick=()=>openRecordDetail(b.dataset.table,b.d
  });
  document.querySelectorAll(".exercise-image-form").forEach(f=>f.onsubmit=e=>{e.preventDefault();editExerciseImage(f)});
  bindExerciseImageFallbacks();
+ bindExerciseVideos();
  if($("#exerciseForm"))$("#exerciseForm").onsubmit=e=>{e.preventDefault();addExercise(e.currentTarget)};
  $$(".exercise-delete").forEach(b=>b.onclick=()=>deleteExercise(b.dataset.exercise));
  if($("#trainingPlanForm"))$("#trainingPlanForm").onsubmit=e=>{e.preventDefault();addTrainingPlan(e.currentTarget)};
@@ -2012,7 +2015,7 @@ async function refreshExerciseMedia(){
    const panels=[...document.querySelectorAll(".exercise-demo")].filter(el=>el.dataset.exercise===updated.id);
    if(panels.some(panel=>[...panel.querySelectorAll("video")].some(video=>!video.paused)))continue;
    Object.assign(old,updated);
-   panels.forEach(panel=>{const slot=panel.querySelector(".exercise-media-slot");if(slot){slot.innerHTML=exerciseMediaBlock(old,selectedDemoGender(old));bindExerciseImageFallbacks(slot);}});
+   panels.forEach(panel=>{const slot=panel.querySelector(".exercise-media-slot");if(slot){slot.innerHTML=exerciseMediaBlock(old,selectedDemoGender(old));bindExerciseImageFallbacks(slot);bindExerciseVideos(slot);}});
   }
  }catch(_){}finally{exerciseMediaRefreshBusy=false;}
 }

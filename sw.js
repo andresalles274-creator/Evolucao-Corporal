@@ -1,5 +1,5 @@
-const CACHE="evolucao-corporal-v11.72-coach-media-library";
-const STATIC=["./media-library.js?v=1.0.0","./media-library.css?v=1.0.0","./cadastro.html","./cadastro.js?v=1.0.0","./student-registration.js?v=1.0.0","./intake-fields.js?v=1.0.0","./student-registration.css?v=1.0.0","./clinical-panel.js?v=1.1.0","./clinical-panel.css?v=1.1.0","./","./index.html","./styles.css?v=10.8.0","./payment-lock.css?v=1.0.0","./payment-notice.css?v=1.0.0","./payment-notice.svg","./theme-v11.css?v=11.11.3","./app.js?v=10.14.0","./presential-intake.js?v=1.0.0","./presential-intake.css?v=1.0.1","./exercise-media.css?v=10.13.1","./training-checkins.css?v=1.0.0","./theme-black-red.css?v=1.1.1","./billing-v11.js?v=11.1.0","./ui-neon-v11.js?v=11.14.0","./config.js","./chat-v1.js?v=1.0.8","./daily-checkin.js?v=1.0.4","./featured-exercise.js?v=10.12.5","./brand-background.jpg","./coach-a-neon.svg","./icon.svg","./coach-gym-neon.svg"];
+const CACHE="evolucao-corporal-v11.73-inline-video-90s";
+const STATIC=["./exercise-video.js?v=1.0.0","./media-library.js?v=1.0.0","./media-library.css?v=1.0.0","./cadastro.html","./cadastro.js?v=1.0.0","./student-registration.js?v=1.0.0","./intake-fields.js?v=1.0.0","./student-registration.css?v=1.0.0","./clinical-panel.js?v=1.1.0","./clinical-panel.css?v=1.1.0","./","./index.html","./styles.css?v=10.8.0","./payment-lock.css?v=1.0.0","./payment-notice.css?v=1.0.0","./payment-notice.svg","./theme-v11.css?v=11.11.3","./app.js?v=10.15.0","./presential-intake.js?v=1.0.0","./presential-intake.css?v=1.0.1","./exercise-media.css?v=10.15.0","./training-checkins.css?v=1.0.0","./theme-black-red.css?v=1.1.1","./billing-v11.js?v=11.1.0","./ui-neon-v11.js?v=11.14.0","./config.js","./chat-v1.js?v=1.0.8","./daily-checkin.js?v=1.0.4","./featured-exercise.js?v=10.15.0","./brand-background.jpg","./coach-a-neon.svg","./icon.svg","./coach-gym-neon.svg"];
 
 self.addEventListener("install",event=>{
   self.skipWaiting();
@@ -51,6 +51,7 @@ self.addEventListener("fetch",event=>{
     url.pathname.endsWith("/clinical-panel.js") ||
     url.pathname.endsWith("/clinical-panel.css") ||
     url.pathname.endsWith("/app.js") ||
+    url.pathname.endsWith("/exercise-video.js") ||
     url.pathname.endsWith("/presential-intake.js") ||
     url.pathname.endsWith("/presential-intake.css") ||
     url.pathname.endsWith("/theme-black-red.css") ||

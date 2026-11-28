@@ -82,3 +82,7 @@
 .exercise-guide-editor input{font-size:12px}
 
 .exercise-upload-editor{margin:16px 0;padding:14px;border:1px solid #666;border-radius:12px;background:#181818;color:#fff}.exercise-upload-editor summary{cursor:pointer;font-weight:700;min-height:36px}.exercise-upload-form{display:grid;gap:12px;margin-top:12px}.exercise-upload-form label{display:grid;gap:6px;font-size:14px}.exercise-upload-form select,.exercise-upload-form input{width:100%;min-width:0;max-width:100%;box-sizing:border-box;padding:10px;background:#222;color:#fff;border:1px solid #777;border-radius:8px}.exercise-upload-status{margin:0;font-size:14px;overflow-wrap:anywhere}
+
+/* Inline execution players */
+.exercise-motion h3,.training-video-details h3{margin:0;padding:14px 13px;font-size:1rem;line-height:1.3;color:inherit}
+.exercise-video-progress{display:block;font-size:.875rem;line-height:1.5;padding:8px 12px;color:inherit}
