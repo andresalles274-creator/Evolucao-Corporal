@@ -7,7 +7,7 @@ import { createPresentialIntake } from "./presential-intake.js?v=1.0.0";
 
 import { bindExerciseVideos } from "./exercise-video.js?v=1.0.1";
 
-const APP_VERSION="10.15.1";
+const APP_VERSION="10.16.0";
 const PHOTO_BUCKET="evolution-photos";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -30,6 +30,8 @@ let paymentNoticeEnabled=false,paymentNoticeDismissed=false;
 let selectedTrainingDayId=null;
 const demoGenderOverrides=new Map();
 let selectedStudentId=null,selectedStudentProfile=null;
+let studentDataLoading=false,studentSelectionRequest=0;
+let lastRenderedScreenKey="";
 let studentBillingPlans=new Map();
 let loadErrors={};
 let data={measurements:[],meals:[],workouts:[],hormone_logs:[],students:[],skinfolds:[],progress_photos:[],
@@ -198,6 +200,7 @@ async function hydrate(){
 async function loadTable(table,targetId){
  const col={measurements:"assessment_date",meals:"meal_date",workouts:"workout_date",hormone_logs:"start_date",skinfolds:"assessment_date"}[table];
  const r=await supabase.from(table).select("*").eq("user_id",targetId).order(col,{ascending:false});
+ if(!isCurrentDataTarget(targetId))return;
  if(r.error){
    loadErrors[table]=r.error.message;
    data[table]=[];
@@ -222,37 +225,29 @@ async function loadStudentData(){
 
 
 async function loadTrainingData(targetId){
-  if(!targetId){
-    ["training_plans","training_days","training_day_exercises","training_sessions","training_set_logs"].forEach(k=>data[k]=[]);
-    return;
-  }
-  const lib=await supabase.from("exercise_library").select("*").order("name");
-  if(lib.error){loadErrors.exercise_library=lib.error.message;data.exercise_library=[];}
-  else {delete loadErrors.exercise_library;data.exercise_library=(lib.data||[]).filter(x=>x.is_active!==false);}
-
-  const plans=await supabase.from("training_plans").select("*").eq("user_id",targetId).order("created_at",{ascending:false});
-  if(plans.error){loadErrors.training_plans=plans.error.message;data.training_plans=[];}
-  else {delete loadErrors.training_plans;data.training_plans=plans.data||[];}
-
-  const planIds=data.training_plans.map(x=>x.id);
-  if(planIds.length){
-    const days=await supabase.from("training_days").select("*").in("plan_id",planIds).order("position").order("created_at");
-    if(days.error){loadErrors.training_days=days.error.message;data.training_days=[];} else {delete loadErrors.training_days;data.training_days=days.data||[];}
-  }else data.training_days=[];
-
-  const dayIds=data.training_days.map(x=>x.id);
-  if(dayIds.length){
-    const ex=await supabase.from("training_day_exercises").select("*").in("training_day_id",dayIds).order("position").order("created_at");
-    if(ex.error){loadErrors.training_day_exercises=ex.error.message;data.training_day_exercises=[];} else {delete loadErrors.training_day_exercises;data.training_day_exercises=ex.data||[];}
-  }else data.training_day_exercises=[];
-
-  const sessions=await supabase.from("training_sessions").select("*").eq("user_id",targetId).order("started_at",{ascending:false}).limit(100);
-  if(sessions.error){loadErrors.training_sessions=sessions.error.message;data.training_sessions=[];} else {delete loadErrors.training_sessions;data.training_sessions=sessions.data||[];}
-  const sessionIds=data.training_sessions.map(x=>x.id);
-  if(sessionIds.length){
-    const logs=await supabase.from("training_set_logs").select("*").in("session_id",sessionIds).order("set_number");
-    if(logs.error){loadErrors.training_set_logs=logs.error.message;data.training_set_logs=[];} else {delete loadErrors.training_set_logs;data.training_set_logs=logs.data||[];}
-  }else data.training_set_logs=[];
+ const keys=["training_plans","training_days","training_day_exercises","training_sessions","training_set_logs"];
+ if(!targetId){keys.forEach(k=>data[k]=[]);return;}
+ // Three independent requests start together instead of delaying the whole chain.
+ const [lib,plans,sessions]=await Promise.all([
+  supabase.from("exercise_library").select("*").order("name"),
+  supabase.from("training_plans").select("*").eq("user_id",targetId).order("created_at",{ascending:false}),
+  supabase.from("training_sessions").select("*").eq("user_id",targetId).order("started_at",{ascending:false}).limit(100)
+ ]);
+ if(!isCurrentDataTarget(targetId))return;
+ const planIds=(plans.data||[]).map(x=>x.id),sessionIds=(sessions.data||[]).map(x=>x.id);
+ const [days,logs]=await Promise.all([
+  planIds.length?supabase.from("training_days").select("*").in("plan_id",planIds).order("position").order("created_at"):Promise.resolve({data:[]}),
+  sessionIds.length?supabase.from("training_set_logs").select("*").in("session_id",sessionIds).order("set_number"):Promise.resolve({data:[]})
+ ]);
+ if(!isCurrentDataTarget(targetId))return;
+ const dayIds=(days.data||[]).map(x=>x.id);
+ const exercises=dayIds.length?await supabase.from("training_day_exercises").select("*").in("training_day_id",dayIds).order("position").order("created_at"):{data:[]};
+ if(!isCurrentDataTarget(targetId))return;
+ // Commit only the current student's complete response set.
+ for(const [key,result] of Object.entries({exercise_library:lib,training_plans:plans,training_days:days,training_sessions:sessions,training_set_logs:logs,training_day_exercises:exercises})){
+  if(result.error){loadErrors[key]=result.error.message;data[key]=[];}
+  else{delete loadErrors[key];data[key]=key==="exercise_library"?(result.data||[]).filter(x=>x.is_active!==false):result.data||[];}
+ }
 }
 
 async function loadTrainingCheckins(){
@@ -413,17 +408,20 @@ async function toggleTrainingCheckin(button){
 async function loadDietData(targetId){
  if(!targetId){data.diet_plans=[];data.diet_plan_meals=[];return;}
  const plans=await supabase.from("diet_plans").select("*").eq("user_id",targetId).order("created_at",{ascending:false});
+ if(!isCurrentDataTarget(targetId))return;
  if(plans.error){loadErrors.diet_plans=plans.error.message;data.diet_plans=[];data.diet_plan_meals=[];return;}
  delete loadErrors.diet_plans; data.diet_plans=plans.data||[];
  const ids=data.diet_plans.map(x=>x.id);
  if(!ids.length){data.diet_plan_meals=[];return;}
  const meals=await supabase.from("diet_plan_meals").select("*").in("plan_id",ids).order("position");
+ if(!isCurrentDataTarget(targetId))return;
  if(meals.error){loadErrors.diet_plan_meals=meals.error.message;data.diet_plan_meals=[];} else {delete loadErrors.diet_plan_meals;data.diet_plan_meals=meals.data||[];}
 }
 
 async function loadPhotos(targetId){
  const r=await supabase.from("progress_photos").select("*").eq("user_id",targetId)
    .order("photo_date",{ascending:false}).order("created_at",{ascending:false});
+ if(!isCurrentDataTarget(targetId))return;
  if(r.error){
    loadErrors.progress_photos=r.error.message;
    data.progress_photos=[];
@@ -431,10 +429,11 @@ async function loadPhotos(targetId){
  }
  delete loadErrors.progress_photos;
  const rows=r.data||[];
- data.progress_photos=await Promise.all(rows.map(async row=>{
+ const photos=await Promise.all(rows.map(async row=>{
    const s=await supabase.storage.from(PHOTO_BUCKET).createSignedUrl(row.storage_path,3600);
    return {...row,signed_url:s.data?.signedUrl||""};
  }));
+ if(isCurrentDataTarget(targetId))data.progress_photos=photos;
 }
 function photoTargetId(){
  return isCoach?selectedStudentId:user.id;
@@ -897,22 +896,44 @@ function bindPhotoPreviews(){
  updateStatusIdle();
 }
 
+function resetNavigationScroll(){
+ const key=[route,selectedStudentId||user?.id||"",route==="trainingDay"?selectedTrainingDayId||"":""].join(":");
+ if(key===lastRenderedScreenKey)return;
+ lastRenderedScreenKey=key;
+ const reset=()=>{
+  if(lastRenderedScreenKey!==key)return;
+  window.scrollTo({top:0,left:0,behavior:"instant"});
+  for(const el of [document.scrollingElement,document.body,document.querySelector("#content")]){
+   if(el){el.scrollTop=0;el.scrollLeft=0;}
+  }
+ };
+ reset();
+ // Run after the layout decorators as well, so navigation cannot inherit an old anchor.
+ requestAnimationFrame(()=>{reset();requestAnimationFrame(reset);});
+}
+function isCurrentDataTarget(targetId){
+ return !!user&&targetId===(isCoach?(selectedStudentId||user.id):user.id);
+}
 async function chooseStudent(id,nextRoute=null){
  if(!isCoach||!id)return;
- if(selectedStudentId && selectedStudentId!==id) clearPhotoDraft();
+ const request=++studentSelectionRequest;
+ if(selectedStudentId!==id){
+  if(selectedStudentId)clearPhotoDraft();
+  for(const key of ["measurements","meals","workouts","hormone_logs","skinfolds","progress_photos","training_plans","training_days","training_day_exercises","training_sessions","training_set_logs","diet_plans","diet_plan_meals"]){data[key]=[];delete loadErrors[key];}
+ }
  selectedStudentId=id;
  selectedTrainingDayId=null;
  selectedStudentProfile=data.students.find(s=>s.user_id===id)||null;
  sessionStorage.setItem("evolucao_selected_student",id);
- await loadStudentData();
  if(nextRoute)route=nextRoute;
+ studentDataLoading=true;
  render();
- // Ao abrir a ficha de um aluno, começar sempre pelo cabeçalho da página.
- // O navegador pode manter a posição da rolagem da lista anterior.
- if(nextRoute==="student"){
-  window.scrollTo({top:0,left:0,behavior:"instant"});
-  const content=document.querySelector("#content");
-  if(content)content.scrollTop=0;
+ try{
+  await loadStudentData();
+ }catch(error){
+  if(request===studentSelectionRequest)toast("Não foi possível carregar a ficha. Tente novamente.",true);
+ }finally{
+  if(request===studentSelectionRequest&&selectedStudentId===id){studentDataLoading=false;render();}
  }
 }
 function selectedStudentName(){return selectedStudentProfile?.full_name||"Aluno"}
@@ -1076,7 +1097,7 @@ function render(){
  const root=$("#app");
  document.body.classList.toggle("clinical-mode",!!user&&isCoach&&route==="clinical");
  document.body.classList.toggle("presential-mode",!!user&&isCoach&&route==="presential");
- if(!user){root.innerHTML=authView();bindAuth();return}
+ if(!user){lastRenderedScreenKey="";root.innerHTML=authView();bindAuth();return}
  if(accountInactive){
   root.innerHTML=inactiveView();
   $("#inactiveLogout").onclick=()=>supabase.auth.signOut();
@@ -1088,7 +1109,7 @@ function render(){
   };
   return;
  }
- root.innerHTML=shell();bindShell();drawRoute();
+ root.innerHTML=shell();bindShell();drawRoute();resetNavigationScroll();
 }
 
 const CANONICAL_APP_URL="https://andresalles274-creator.github.io/Evolucao-Corporal/";
@@ -1210,6 +1231,10 @@ function bindShell(){
 }
 function drawRoute(){
  const c=$("#content");
+ if(studentDataLoading&&isCoach&&["student","training","trainingDay","measures","food","photos","workouts","hormones"].includes(route)){
+  c.innerHTML=`${pageBack()}<section class="card" aria-busy="true" role="status"><div class="eyebrow">Aluno selecionado</div><h1>${esc(selectedStudentName())}</h1><p class="sub">Carregando ficha do aluno...</p></section>`;
+  bindRoute();return;
+ }
  if(route==="mediaLibrary"&&isCoach){mediaLibrary.mount(c);return;}
  mediaLibrary.dispose();
  if(route==="presential"&&isCoach){presentialPanel.mount(c);return;}
